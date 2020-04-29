@@ -69,6 +69,7 @@ pub struct UnOp {
 pub enum UnOpKind {
     Deref,
     Not,
+    Neg,
 }
 
 #[derive(Copy, Clone, Debug)]
@@ -121,6 +122,7 @@ impl fmt::Debug for UnOpKind {
         match self {
             Self::Deref => write!(fmt, "*"),
             Self::Not => write!(fmt, "!"),
+            Self::Neg => write!(fmt, "-"),
         }
     }
 }

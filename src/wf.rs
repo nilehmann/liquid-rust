@@ -134,6 +134,12 @@ impl<'a, 'lr, 'tcx> TypeChecker<'a, 'lr, 'tcx> {
         match (op.kind, &ty.kind) {
             (UnOpKind::Deref, TyKind::Ref(_, ty, _)) => ty,
             (UnOpKind::Not, TyKind::Bool) => ty,
+            // We don't need to do any unification here because the negation
+            // of an integer type is that same integer type.
+            (UnOpKind::Neg, TyKind::Int(_)) => ty,
+            (UnOpKind::Neg, TyKind::Float(_)) => ty,
+            (UnOpKind::Neg, ty::Infer(ty::IntVar(_))) => ty,
+            (UnOpKind::Neg, ty::Infer(ty::FloatVar(_))) => ty,
             _ => {
                 lint_un_op_err(self.cx, op, e, ty);
                 self.types.err
@@ -148,6 +154,8 @@ impl<'a, 'lr, 'tcx> TypeChecker<'a, 'lr, 'tcx> {
             return self.types.err;
         }
 
+        // We have to unify types here to reconcile differences in inferred
+        // number types (e.g. what's the type of 0 + 1.0)
         match op.kind {
             BinOpKind::Lt | BinOpKind::Gt | BinOpKind::Eq | BinOpKind::Ge => {
                 match self.infer_ctxt.unify(ty1, ty2) {
@@ -245,6 +253,14 @@ impl<'tcx> InferCtxt<'tcx> {
         self.float_unification_table.new_key(None)
     }
 
+    // Unification returns the "least common denominator" of two types
+    // For example, if we have number literals of different inferred types,
+    // for example 0 + 1.0, we need to figure out what type to return from this
+    // operation (float); this is unification.
+    //
+    // We might not always succeed - for instance, if we're adding two numbers
+    // with explicitly different types (i.e. not literals with inferred types),
+    // we have to type error - so we return None.
     fn unify(&mut self, ty1: Ty<'tcx>, ty2: Ty<'tcx>) -> Option<Ty<'tcx>> {
         if ty1 == ty2 {
             return Some(ty1);
@@ -350,6 +366,7 @@ fn un_op_err_msg(op: UnOp, ty: Ty) -> String {
     match op.kind {
         UnOpKind::Deref => format!("type `{:?}` cannot be dereferenced", ty),
         UnOpKind::Not => format!("cannot apply unary operator `!` to type `{:?}`", ty),
+        UnOpKind::Neg => format!("cannot apply negation operator `-` to type `{:?}`", ty),
     }
 }
 

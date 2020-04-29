@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.17.2"
-// sha256: 5bc120aeabdd86519653ba9d7cb57a9b8ef9e0efd8104264eae04930aab4dfa4
+// sha256: c1c164cb4de1e4c9c0922acb244daabe2f1355d159e31113d2769d7be91
 #![allow(clippy::all)]
 #![allow(unused_parens)]
 use std::str::FromStr;
@@ -77,17 +77,17 @@ mod __parse__FnAnnot {
         // State 15
         0, 0, 0, -5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -5,
         // State 16
-        35, 0, 36, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        35, 0, 36, 0, 37, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 17
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11,
         // State 18
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 0, 0, 0,
         // State 19
         0, 0, 0, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28, -28, 0, 0, 0,
         // State 20
         0, -30, 0, -30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -30, -30, 0, 0, 0,
         // State 21
-        0, -16, 0, -16, 0, 0, 0, 0, 0, 0, 0, 0, 46, 47, 48, 49, 0, 0, 0, 0, -16, -16, 0, 0, 0,
+        0, -16, 0, -16, 0, 0, 0, 0, 0, 0, 0, 0, 47, 48, 49, 50, 0, 0, 0, 0, -16, -16, 0, 0, 0,
         // State 22
         0, -32, 0, -32, 0, -32, 0, -32, 0, 0, 0, 0, -32, -32, -32, -32, 0, 0, 0, 0, -32, -32, 0, 0, 0,
         // State 23
@@ -97,101 +97,103 @@ mod __parse__FnAnnot {
         // State 25
         0, -40, 0, -40, -40, -40, 0, -40, 0, -40, 0, 0, -40, -40, -40, -40, 0, 0, 0, 0, -40, -40, 0, 0, 0,
         // State 26
-        0, 0, 0, -13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, -13, 0, 0, 0,
+        0, 0, 0, -13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 53, -13, 0, 0, 0,
         // State 27
-        0, 55, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -14, -14, 0, 0, 0,
+        0, 56, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -14, -14, 0, 0, 0,
         // State 28
-        0, -17, 0, -17, 0, 58, 0, 59, 0, 0, 0, 0, -17, -17, -17, -17, 0, 0, 0, 0, -17, -17, 0, 0, 0,
+        0, -17, 0, -17, 0, 59, 0, 60, 0, 0, 0, 0, -17, -17, -17, -17, 0, 0, 0, 0, -17, -17, 0, 0, 0,
         // State 29
-        0, -18, 0, -18, 62, -18, 0, -18, 0, 63, 0, 0, -18, -18, -18, -18, 0, 0, 0, 0, -18, -18, 0, 0, 0,
+        0, -18, 0, -18, 63, -18, 0, -18, 0, 64, 0, 0, -18, -18, -18, -18, 0, 0, 0, 0, -18, -18, 0, 0, 0,
         // State 30
         0, -22, 0, -22, -22, -22, 0, -22, 0, -22, 0, 0, -22, -22, -22, -22, 0, 0, 0, 0, -22, -22, 0, 0, 0,
         // State 31
         0, -21, 0, -21, -21, -21, 0, -21, 0, -21, 0, 0, -21, -21, -21, -21, 0, 0, 0, 0, -21, -21, 0, 0, 0,
         // State 32
-        0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 33
         0, 0, -58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -58, -58, 0, 0, 0, -58, -58, -58,
         // State 34
         0, 0, -59, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -59, -59, 0, 0, 0, -59, -59, -59,
         // State 35
-        35, 0, 36, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        35, 0, 36, 0, 37, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 36
         0, 0, -60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -60, -60, 0, 0, 0, -60, -60, -60,
         // State 37
-        0, -38, 0, -38, -38, -38, 0, -38, 0, -38, 0, 0, -38, -38, -38, -38, 0, 0, 0, 0, -38, -38, 0, 0, 0,
+        0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -61, -61, 0, 0, 0, -61, -61, -61,
         // State 38
-        0, -37, 0, -37, -37, -37, 0, -37, 0, -37, 0, 0, -37, -37, -37, -37, 0, 0, 0, 0, -37, -37, 0, 0, 0,
+        0, -38, 0, -38, -38, -38, 0, -38, 0, -38, 0, 0, -38, -38, -38, -38, 0, 0, 0, 0, -38, -38, 0, 0, 0,
         // State 39
-        0, -36, 0, -36, -36, -36, 0, -36, 0, -36, 0, 0, -36, -36, -36, -36, 0, 0, 0, 0, -36, -36, 0, 0, 0,
+        0, -37, 0, -37, -37, -37, 0, -37, 0, -37, 0, 0, -37, -37, -37, -37, 0, 0, 0, 0, -37, -37, 0, 0, 0,
         // State 40
-        0, -35, 0, -35, -35, -35, 0, -35, 0, -35, 0, 0, -35, -35, -35, -35, 0, 0, 0, 0, -35, -35, 0, 0, 0,
+        0, -36, 0, -36, -36, -36, 0, -36, 0, -36, 0, 0, -36, -36, -36, -36, 0, 0, 0, 0, -36, -36, 0, 0, 0,
         // State 41
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -25, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, -35, 0, -35, -35, -35, 0, -35, 0, -35, 0, 0, -35, -35, -35, -35, 0, 0, 0, 0, -35, -35, 0, 0, 0,
         // State 42
-        0, 0, 0, -51, 0, 0, -51, 0, 0, 0, 0, 0, 0, 0, 0, 0, -51, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -25, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 43
-        35, 0, 36, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        0, 0, 0, -51, 0, 0, -51, 0, 0, 0, 0, 0, 0, 0, 0, 0, -51, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 44
-        -10, 0, -10, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, -10, 0, 0, 0, -10, -10, -10,
+        35, 0, 36, 0, 37, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 45
-        -43, 0, -43, 0, -43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -43, -43, 0, 0, 0, -43, -43, -43,
+        -10, 0, -10, 0, -10, 0, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, -10, 0, 0, 0, -10, -10, -10,
         // State 46
-        -46, 0, -46, 0, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46, -46, 0, 0, 0, -46, -46, -46,
+        -43, 0, -43, 0, -43, 0, 0, -43, 0, 0, 0, 0, 0, 0, 0, 0, 0, -43, -43, 0, 0, 0, -43, -43, -43,
         // State 47
-        -44, 0, -44, 0, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44, -44, 0, 0, 0, -44, -44, -44,
+        -46, 0, -46, 0, -46, 0, 0, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46, -46, 0, 0, 0, -46, -46, -46,
         // State 48
-        -45, 0, -45, 0, -45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45, -45, 0, 0, 0, -45, -45, -45,
+        -44, 0, -44, 0, -44, 0, 0, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44, -44, 0, 0, 0, -44, -44, -44,
         // State 49
-        35, 0, 36, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        -45, 0, -45, 0, -45, 0, 0, -45, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45, -45, 0, 0, 0, -45, -45, -45,
         // State 50
-        -8, 0, -8, 0, -8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -8, 0, 0, 0, -8, -8, -8,
+        35, 0, 36, 0, 37, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 51
-        -41, 0, -41, 0, -41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -41, -41, 0, 0, 0, -41, -41, -41,
+        -8, 0, -8, 0, -8, 0, 0, -8, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -8, 0, 0, 0, -8, -8, -8,
         // State 52
-        35, 0, 36, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        -41, 0, -41, 0, -41, 0, 0, -41, 0, 0, 0, 0, 0, 0, 0, 0, 0, -41, -41, 0, 0, 0, -41, -41, -41,
         // State 53
-        -9, 0, -9, 0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, -9, 0, 0, 0, -9, -9, -9,
+        35, 0, 36, 0, 37, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 54
-        -42, 0, -42, 0, -42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -42, -42, 0, 0, 0, -42, -42, -42,
+        -9, 0, -9, 0, -9, 0, 0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, -9, 0, 0, 0, -9, -9, -9,
         // State 55
-        35, 0, 36, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        -42, 0, -42, 0, -42, 0, 0, -42, 0, 0, 0, 0, 0, 0, 0, 0, 0, -42, -42, 0, 0, 0, -42, -42, -42,
         // State 56
-        -11, 0, -11, 0, -11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -11, -11, 0, 0, 0, -11, -11, -11,
+        35, 0, 36, 0, 37, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 57
-        -47, 0, -47, 0, -47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -47, -47, 0, 0, 0, -47, -47, -47,
+        -11, 0, -11, 0, -11, 0, 0, -11, 0, 0, 0, 0, 0, 0, 0, 0, 0, -11, -11, 0, 0, 0, -11, -11, -11,
         // State 58
-        -48, 0, -48, 0, -48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, -48, 0, 0, 0, -48, -48, -48,
+        -47, 0, -47, 0, -47, 0, 0, -47, 0, 0, 0, 0, 0, 0, 0, 0, 0, -47, -47, 0, 0, 0, -47, -47, -47,
         // State 59
-        35, 0, 36, 0, 37, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 38, 39, 0, 0, 0, 40, 41, 11,
+        -48, 0, -48, 0, -48, 0, 0, -48, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, -48, 0, 0, 0, -48, -48, -48,
         // State 60
-        -12, 0, -12, 0, -12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -12, -12, 0, 0, 0, -12, -12, -12,
+        35, 0, 36, 0, 37, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 39, 40, 0, 0, 0, 41, 42, 11,
         // State 61
-        -49, 0, -49, 0, -49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, -49, 0, 0, 0, -49, -49, -49,
+        -12, 0, -12, 0, -12, 0, 0, -12, 0, 0, 0, 0, 0, 0, 0, 0, 0, -12, -12, 0, 0, 0, -12, -12, -12,
         // State 62
-        -50, 0, -50, 0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -50, -50, 0, 0, 0, -50, -50, -50,
+        -49, 0, -49, 0, -49, 0, 0, -49, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, -49, 0, 0, 0, -49, -49, -49,
         // State 63
-        0, -19, 0, -19, -19, -19, 0, -19, 0, -19, 0, 0, -19, -19, -19, -19, 0, 0, 0, 0, -19, -19, 0, 0, 0,
+        -50, 0, -50, 0, -50, 0, 0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, -50, -50, 0, 0, 0, -50, -50, -50,
         // State 64
-        0, 0, 0, 71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, -19, 0, -19, -19, -19, 0, -19, 0, -19, 0, 0, -19, -19, -19, -19, 0, 0, 0, 0, -19, -19, 0, 0, 0,
         // State 65
-        0, -15, 0, -15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, -15, 0, 0, 0,
+        0, 0, 0, 72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 66
-        0, 0, 0, -27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -27, -27, 0, 0, 0,
+        0, -15, 0, -15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, -15, 0, 0, 0,
         // State 67
-        0, -29, 0, -29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -29, -29, 0, 0, 0,
+        0, 0, 0, -27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -27, -27, 0, 0, 0,
         // State 68
-        0, -31, 0, -31, 0, -31, 0, -31, 0, 0, 0, 0, -31, -31, -31, -31, 0, 0, 0, 0, -31, -31, 0, 0, 0,
+        0, -29, 0, -29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -29, -29, 0, 0, 0,
         // State 69
-        0, -33, 0, -33, -33, -33, 0, -33, 0, -33, 0, 0, -33, -33, -33, -33, 0, 0, 0, 0, -33, -33, 0, 0, 0,
+        0, -31, 0, -31, 0, -31, 0, -31, 0, 0, 0, 0, -31, -31, -31, -31, 0, 0, 0, 0, -31, -31, 0, 0, 0,
         // State 70
+        0, -33, 0, -33, -33, -33, 0, -33, 0, -33, 0, 0, -33, -33, -33, -33, 0, 0, 0, 0, -33, -33, 0, 0, 0,
+        // State 71
         0, -23, 0, -23, -23, -23, 0, -23, 0, -23, 0, 0, -23, -23, -23, -23, 0, 0, 0, 0, -23, -23, 0, 0, 0,
     ];
     const __EOF_ACTION: &'static [i8] = &[
         // State 0
         0,
         // State 1
-        -61,
+        -62,
         // State 2
         0,
         // State 3
@@ -330,6 +332,8 @@ mod __parse__FnAnnot {
         0,
         // State 70
         0,
+        // State 71
+        0,
     ];
     const __GOTO: &'static [i8] = &[
         // State 0
@@ -367,7 +371,7 @@ mod __parse__FnAnnot {
         // State 16
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 19, 20, 21, 22, 23, 24, 25, 0, 0, 26, 27, 28, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
         // State 17
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, 0, 0, 0, 0, 0, 0,
         // State 18
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 19
@@ -375,7 +379,7 @@ mod __parse__FnAnnot {
         // State 20
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 21
-        0, 0, 0, 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 22
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 23
@@ -385,25 +389,25 @@ mod __parse__FnAnnot {
         // State 25
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 26
-        0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 27
-        0, 0, 0, 0, 0, 0, 53, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 54, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 28
-        0, 0, 0, 0, 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 57, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 29
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0,
         // State 30
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 31
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 32
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 64, 0, 0, 26, 0, 0, 0, 0, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 26, 0, 0, 0, 0, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 33
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 34
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 35
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 20, 21, 22, 23, 24, 25, 0, 0, 26, 27, 28, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 20, 21, 22, 23, 24, 25, 0, 0, 26, 27, 28, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
         // State 36
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 37
@@ -419,9 +423,9 @@ mod __parse__FnAnnot {
         // State 42
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 43
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 23, 24, 25, 0, 0, 26, 0, 0, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
-        // State 44
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 44
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 23, 24, 25, 0, 0, 26, 0, 0, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
         // State 45
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 46
@@ -431,29 +435,29 @@ mod __parse__FnAnnot {
         // State 48
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 49
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 67, 21, 22, 23, 24, 25, 0, 0, 26, 0, 28, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
-        // State 50
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 50
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 21, 22, 23, 24, 25, 0, 0, 26, 0, 28, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
         // State 51
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 52
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 22, 23, 24, 25, 0, 0, 26, 0, 0, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
-        // State 53
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 53
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69, 22, 23, 24, 25, 0, 0, 26, 0, 0, 29, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
         // State 54
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 55
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 69, 24, 25, 0, 0, 26, 0, 0, 0, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
-        // State 56
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 56
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 24, 25, 0, 0, 26, 0, 0, 0, 30, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
         // State 57
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 58
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 59
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 70, 25, 0, 0, 26, 0, 0, 0, 0, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
-        // State 60
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 60
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 25, 0, 0, 26, 0, 0, 0, 0, 31, 0, 32, 0, 0, 0, 0, 0, 0, 0, 0, 33, 34, 0, 0,
         // State 61
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 62
@@ -473,6 +477,8 @@ mod __parse__FnAnnot {
         // State 69
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 70
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 71
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
     fn __expected_tokens(__state: usize) -> Vec<::std::string::String> {
@@ -1142,8 +1148,14 @@ mod __parse__FnAnnot {
                     nonterminal_produced: 36,
                 }
             }
-            60 => __state_machine::SimulatedReduce::Accept,
-            61 => {
+            60 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
+                    nonterminal_produced: 36,
+                }
+            }
+            61 => __state_machine::SimulatedReduce::Accept,
+            62 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
                     nonterminal_produced: 38,
@@ -1395,6 +1407,9 @@ mod __parse__FnAnnot {
                 __reduce59(offset, ctxt, next_expr_id, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), F)>)
             }
             60 => {
+                __reduce60(offset, ctxt, next_expr_id, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), F)>)
+            }
+            61 => {
                 // __FnAnnot = FnAnnot => ActionFn(0);
                 let __sym0 = __pop_Variant6(__symbols);
                 let __start = __sym0.0.clone();
@@ -1402,8 +1417,8 @@ mod __parse__FnAnnot {
                 let __nt = super::__action0::<F>(offset, ctxt, next_expr_id, input, __sym0);
                 return Some(Ok(__nt));
             }
-            61 => {
-                __reduce61(offset, ctxt, next_expr_id, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), F)>)
+            62 => {
+                __reduce62(offset, ctxt, next_expr_id, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), F)>)
             }
             _ => panic!("invalid action code {}", __action)
         };
@@ -1597,12 +1612,12 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",") = Reft, "," => ActionFn(52);
+        // (<Reft> ",") = Reft, "," => ActionFn(53);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action52::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action53::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (2, 0)
     }
@@ -1624,10 +1639,10 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")* =  => ActionFn(50);
+        // (<Reft> ",")* =  => ActionFn(51);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action50::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action51::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (0, 1)
     }
@@ -1649,11 +1664,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")* = (<Reft> ",")+ => ActionFn(51);
+        // (<Reft> ",")* = (<Reft> ",")+ => ActionFn(52);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action51::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action52::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -1675,12 +1690,12 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")+ = Reft, "," => ActionFn(59);
+        // (<Reft> ",")+ = Reft, "," => ActionFn(60);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action59::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action60::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (2, 2)
     }
@@ -1702,13 +1717,13 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")+ = (<Reft> ",")+, Reft, "," => ActionFn(60);
+        // (<Reft> ",")+ = (<Reft> ",")+, Reft, "," => ActionFn(61);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action60::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action61::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (3, 2)
     }
@@ -1730,10 +1745,10 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // @L =  => ActionFn(47);
+        // @L =  => ActionFn(48);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action47::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action48::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (0, 3)
     }
@@ -1755,10 +1770,10 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // @R =  => ActionFn(46);
+        // @R =  => ActionFn(47);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action46::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action47::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (0, 4)
     }
@@ -1780,11 +1795,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup1> = OpGroup1 => ActionFn(83);
+        // BinOp<OpGroup1> = OpGroup1 => ActionFn(84);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action83::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action84::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 5)
     }
@@ -1806,11 +1821,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup2> = OpGroup2 => ActionFn(84);
+        // BinOp<OpGroup2> = OpGroup2 => ActionFn(85);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action84::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action85::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 6)
     }
@@ -1832,11 +1847,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup3> = OpGroup3 => ActionFn(85);
+        // BinOp<OpGroup3> = OpGroup3 => ActionFn(86);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action85::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action86::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 7)
     }
@@ -1858,11 +1873,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup4> = OpGroup4 => ActionFn(86);
+        // BinOp<OpGroup4> = OpGroup4 => ActionFn(87);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action86::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action87::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 8)
     }
@@ -1884,11 +1899,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup5> = OpGroup5 => ActionFn(87);
+        // BinOp<OpGroup5> = OpGroup5 => ActionFn(88);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action87::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action88::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 9)
     }
@@ -1962,13 +1977,13 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel3 = ExprLevel4, BinOp<OpGroup3>, ExprLevel4 => ActionFn(88);
+        // ExprLevel3 = ExprLevel4, BinOp<OpGroup3>, ExprLevel4 => ActionFn(89);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action88::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action89::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 12)
     }
@@ -2068,12 +2083,12 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel6 = UnOp, ExprLevel7 => ActionFn(89);
+        // ExprLevel6 = UnOp, ExprLevel7 => ActionFn(90);
         let __sym1 = __pop_Variant5(__symbols);
         let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action89::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action90::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (2, 15)
     }
@@ -2121,11 +2136,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel7 = Name => ActionFn(90);
+        // ExprLevel7 = Name => ActionFn(91);
         let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action90::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action91::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 16)
     }
@@ -2147,11 +2162,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel7 = Lit => ActionFn(91);
+        // ExprLevel7 = Lit => ActionFn(92);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action91::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action92::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 16)
     }
@@ -2259,11 +2274,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Ident = r#"[a-zA-Z][a-zA-Z0-9_]*"# => ActionFn(92);
+        // Ident = r#"[a-zA-Z][a-zA-Z0-9_]*"# => ActionFn(93);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action92::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action93::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (1, 19)
     }
@@ -2285,13 +2300,13 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup1, ExprLevel2> = LeftAssoc<OpGroup1, ExprLevel2>, BinOp<OpGroup1>, ExprLevel2 => ActionFn(93);
+        // LeftAssoc<OpGroup1, ExprLevel2> = LeftAssoc<OpGroup1, ExprLevel2>, BinOp<OpGroup1>, ExprLevel2 => ActionFn(94);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action93::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action94::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 20)
     }
@@ -2313,11 +2328,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup1, ExprLevel2> = ExprLevel2 => ActionFn(45);
+        // LeftAssoc<OpGroup1, ExprLevel2> = ExprLevel2 => ActionFn(46);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action45::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action46::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 20)
     }
@@ -2339,13 +2354,13 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup2, ExprLevel3> = LeftAssoc<OpGroup2, ExprLevel3>, BinOp<OpGroup2>, ExprLevel3 => ActionFn(94);
+        // LeftAssoc<OpGroup2, ExprLevel3> = LeftAssoc<OpGroup2, ExprLevel3>, BinOp<OpGroup2>, ExprLevel3 => ActionFn(95);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action94::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action95::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 21)
     }
@@ -2367,11 +2382,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup2, ExprLevel3> = ExprLevel3 => ActionFn(43);
+        // LeftAssoc<OpGroup2, ExprLevel3> = ExprLevel3 => ActionFn(44);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action43::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action44::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 21)
     }
@@ -2393,13 +2408,13 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup4, ExprLevel5> = LeftAssoc<OpGroup4, ExprLevel5>, BinOp<OpGroup4>, ExprLevel5 => ActionFn(95);
+        // LeftAssoc<OpGroup4, ExprLevel5> = LeftAssoc<OpGroup4, ExprLevel5>, BinOp<OpGroup4>, ExprLevel5 => ActionFn(96);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action95::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action96::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 22)
     }
@@ -2421,11 +2436,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup4, ExprLevel5> = ExprLevel5 => ActionFn(40);
+        // LeftAssoc<OpGroup4, ExprLevel5> = ExprLevel5 => ActionFn(41);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action40::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action41::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 22)
     }
@@ -2447,13 +2462,13 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup5, ExprLevel6> = LeftAssoc<OpGroup5, ExprLevel6>, BinOp<OpGroup5>, ExprLevel6 => ActionFn(96);
+        // LeftAssoc<OpGroup5, ExprLevel6> = LeftAssoc<OpGroup5, ExprLevel6>, BinOp<OpGroup5>, ExprLevel6 => ActionFn(97);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action96::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action97::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 23)
     }
@@ -2475,11 +2490,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup5, ExprLevel6> = ExprLevel6 => ActionFn(38);
+        // LeftAssoc<OpGroup5, ExprLevel6> = ExprLevel6 => ActionFn(39);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action38::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action39::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 23)
     }
@@ -2501,11 +2516,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = r#"[0-9]+"# => ActionFn(97);
+        // Lit = r#"[0-9]+"# => ActionFn(98);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action97::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action98::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -2527,11 +2542,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = r#"[0-9]*\\.[0-9]+"# => ActionFn(98);
+        // Lit = r#"[0-9]*\\.[0-9]+"# => ActionFn(99);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action98::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action99::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -2553,11 +2568,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = "true" => ActionFn(99);
+        // Lit = "true" => ActionFn(100);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action99::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action100::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -2579,11 +2594,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = "false" => ActionFn(100);
+        // Lit = "false" => ActionFn(101);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action100::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action101::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -2633,11 +2648,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Name = Ident => ActionFn(34);
+        // Name = Ident => ActionFn(35);
         let __sym0 = __pop_Variant7(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action34::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action35::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant9(__nt), __end));
         (1, 26)
     }
@@ -2919,7 +2934,7 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Reft = Ident, ":", "{", ExprLevel1, "}" => ActionFn(101);
+        // Reft = Ident, ":", "{", ExprLevel1, "}" => ActionFn(102);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant5(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
@@ -2927,7 +2942,7 @@ mod __parse__FnAnnot {
         let __sym0 = __pop_Variant7(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym4.2.clone();
-        let __nt = super::__action101::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2, __sym3, __sym4);
+        let __nt = super::__action102::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2, __sym3, __sym4);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (5, 32)
     }
@@ -2949,11 +2964,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Reft? = Reft => ActionFn(48);
+        // Reft? = Reft => ActionFn(49);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action48::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action49::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant11(__nt), __end));
         (1, 33)
     }
@@ -2975,10 +2990,10 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Reft? =  => ActionFn(49);
+        // Reft? =  => ActionFn(50);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action49::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action50::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant11(__nt), __end));
         (0, 33)
     }
@@ -3000,11 +3015,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList = Reft => ActionFn(103);
+        // ReftList = Reft => ActionFn(104);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action103::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action104::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 34)
     }
@@ -3026,10 +3041,10 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList =  => ActionFn(104);
+        // ReftList =  => ActionFn(105);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action104::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action105::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (0, 34)
     }
@@ -3051,12 +3066,12 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList = (<Reft> ",")+, Reft => ActionFn(105);
+        // ReftList = (<Reft> ",")+, Reft => ActionFn(106);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action105::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action106::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (2, 34)
     }
@@ -3078,11 +3093,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList = (<Reft> ",")+ => ActionFn(106);
+        // ReftList = (<Reft> ",")+ => ActionFn(107);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action106::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action107::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 34)
     }
@@ -3104,11 +3119,11 @@ mod __parse__FnAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // UnOp = UnOpKind => ActionFn(102);
+        // UnOp = UnOpKind => ActionFn(103);
         let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action102::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action103::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (1, 35)
     }
@@ -3164,7 +3179,33 @@ mod __parse__FnAnnot {
         __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 36)
     }
-    pub(crate) fn __reduce61<
+    pub(crate) fn __reduce60<
+        'input,
+        F,
+    >(
+        offset: BytePos,
+        ctxt: SyntaxContext,
+        next_expr_id: F,
+        input: &'input str,
+        __action: i8,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i8>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), F)>,
+    ) -> (usize, usize)
+    where
+        F: Fn() -> ExprId,
+        F: Copy,
+    {
+        // UnOpKind = "-" => ActionFn(30);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action30::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 36)
+    }
+    pub(crate) fn __reduce62<
         'input,
         F,
     >(
@@ -3243,15 +3284,15 @@ mod __parse__LocalAnnot {
         // State 7
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 8
-        26, 0, 27, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        26, 0, 27, 0, 28, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 9
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 33, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0,
         // State 10
         0, 0, 0, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28, -28, 0, 0, 0,
         // State 11
         0, -30, 0, -30, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -30, -30, 0, 0, 0,
         // State 12
-        0, -16, 0, -16, 0, 0, 0, 0, 0, 0, 0, 0, 36, 37, 38, 39, 0, 0, 0, 0, -16, -16, 0, 0, 0,
+        0, -16, 0, -16, 0, 0, 0, 0, 0, 0, 0, 0, 37, 38, 39, 40, 0, 0, 0, 0, -16, -16, 0, 0, 0,
         // State 13
         0, -32, 0, -32, 0, -32, 0, -32, 0, 0, 0, 0, -32, -32, -32, -32, 0, 0, 0, 0, -32, -32, 0, 0, 0,
         // State 14
@@ -3261,99 +3302,101 @@ mod __parse__LocalAnnot {
         // State 16
         0, -40, 0, -40, -40, -40, 0, -40, 0, -40, 0, 0, -40, -40, -40, -40, 0, 0, 0, 0, -40, -40, 0, 0, 0,
         // State 17
-        0, 0, 0, -13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, -13, 0, 0, 0,
+        0, 0, 0, -13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 43, -13, 0, 0, 0,
         // State 18
-        0, 45, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -14, -14, 0, 0, 0,
+        0, 46, 0, -14, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -14, -14, 0, 0, 0,
         // State 19
-        0, -17, 0, -17, 0, 48, 0, 49, 0, 0, 0, 0, -17, -17, -17, -17, 0, 0, 0, 0, -17, -17, 0, 0, 0,
+        0, -17, 0, -17, 0, 49, 0, 50, 0, 0, 0, 0, -17, -17, -17, -17, 0, 0, 0, 0, -17, -17, 0, 0, 0,
         // State 20
-        0, -18, 0, -18, 52, -18, 0, -18, 0, 53, 0, 0, -18, -18, -18, -18, 0, 0, 0, 0, -18, -18, 0, 0, 0,
+        0, -18, 0, -18, 53, -18, 0, -18, 0, 54, 0, 0, -18, -18, -18, -18, 0, 0, 0, 0, -18, -18, 0, 0, 0,
         // State 21
         0, -22, 0, -22, -22, -22, 0, -22, 0, -22, 0, 0, -22, -22, -22, -22, 0, 0, 0, 0, -22, -22, 0, 0, 0,
         // State 22
         0, -21, 0, -21, -21, -21, 0, -21, 0, -21, 0, 0, -21, -21, -21, -21, 0, 0, 0, 0, -21, -21, 0, 0, 0,
         // State 23
-        0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        0, 0, 27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 24
         0, 0, -58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -58, -58, 0, 0, 0, -58, -58, -58,
         // State 25
         0, 0, -59, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -59, -59, 0, 0, 0, -59, -59, -59,
         // State 26
-        26, 0, 27, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        26, 0, 27, 0, 28, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 27
         0, 0, -60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -60, -60, 0, 0, 0, -60, -60, -60,
         // State 28
-        0, -38, 0, -38, -38, -38, 0, -38, 0, -38, 0, 0, -38, -38, -38, -38, 0, 0, 0, 0, -38, -38, 0, 0, 0,
+        0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -61, -61, 0, 0, 0, -61, -61, -61,
         // State 29
-        0, -37, 0, -37, -37, -37, 0, -37, 0, -37, 0, 0, -37, -37, -37, -37, 0, 0, 0, 0, -37, -37, 0, 0, 0,
+        0, -38, 0, -38, -38, -38, 0, -38, 0, -38, 0, 0, -38, -38, -38, -38, 0, 0, 0, 0, -38, -38, 0, 0, 0,
         // State 30
-        0, -36, 0, -36, -36, -36, 0, -36, 0, -36, 0, 0, -36, -36, -36, -36, 0, 0, 0, 0, -36, -36, 0, 0, 0,
+        0, -37, 0, -37, -37, -37, 0, -37, 0, -37, 0, 0, -37, -37, -37, -37, 0, 0, 0, 0, -37, -37, 0, 0, 0,
         // State 31
-        0, -35, 0, -35, -35, -35, 0, -35, 0, -35, 0, 0, -35, -35, -35, -35, 0, 0, 0, 0, -35, -35, 0, 0, 0,
+        0, -36, 0, -36, -36, -36, 0, -36, 0, -36, 0, 0, -36, -36, -36, -36, 0, 0, 0, 0, -36, -36, 0, 0, 0,
         // State 32
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -51, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, -35, 0, -35, -35, -35, 0, -35, 0, -35, 0, 0, -35, -35, -35, -35, 0, 0, 0, 0, -35, -35, 0, 0, 0,
         // State 33
-        26, 0, 27, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -51, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 34
-        -10, 0, -10, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, -10, 0, 0, 0, -10, -10, -10,
+        26, 0, 27, 0, 28, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 35
-        -43, 0, -43, 0, -43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -43, -43, 0, 0, 0, -43, -43, -43,
+        -10, 0, -10, 0, -10, 0, 0, -10, 0, 0, 0, 0, 0, 0, 0, 0, 0, -10, -10, 0, 0, 0, -10, -10, -10,
         // State 36
-        -46, 0, -46, 0, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46, -46, 0, 0, 0, -46, -46, -46,
+        -43, 0, -43, 0, -43, 0, 0, -43, 0, 0, 0, 0, 0, 0, 0, 0, 0, -43, -43, 0, 0, 0, -43, -43, -43,
         // State 37
-        -44, 0, -44, 0, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44, -44, 0, 0, 0, -44, -44, -44,
+        -46, 0, -46, 0, -46, 0, 0, -46, 0, 0, 0, 0, 0, 0, 0, 0, 0, -46, -46, 0, 0, 0, -46, -46, -46,
         // State 38
-        -45, 0, -45, 0, -45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45, -45, 0, 0, 0, -45, -45, -45,
+        -44, 0, -44, 0, -44, 0, 0, -44, 0, 0, 0, 0, 0, 0, 0, 0, 0, -44, -44, 0, 0, 0, -44, -44, -44,
         // State 39
-        26, 0, 27, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        -45, 0, -45, 0, -45, 0, 0, -45, 0, 0, 0, 0, 0, 0, 0, 0, 0, -45, -45, 0, 0, 0, -45, -45, -45,
         // State 40
-        -8, 0, -8, 0, -8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -8, 0, 0, 0, -8, -8, -8,
+        26, 0, 27, 0, 28, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 41
-        -41, 0, -41, 0, -41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -41, -41, 0, 0, 0, -41, -41, -41,
+        -8, 0, -8, 0, -8, 0, 0, -8, 0, 0, 0, 0, 0, 0, 0, 0, 0, -8, -8, 0, 0, 0, -8, -8, -8,
         // State 42
-        26, 0, 27, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        -41, 0, -41, 0, -41, 0, 0, -41, 0, 0, 0, 0, 0, 0, 0, 0, 0, -41, -41, 0, 0, 0, -41, -41, -41,
         // State 43
-        -9, 0, -9, 0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, -9, 0, 0, 0, -9, -9, -9,
+        26, 0, 27, 0, 28, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 44
-        -42, 0, -42, 0, -42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -42, -42, 0, 0, 0, -42, -42, -42,
+        -9, 0, -9, 0, -9, 0, 0, -9, 0, 0, 0, 0, 0, 0, 0, 0, 0, -9, -9, 0, 0, 0, -9, -9, -9,
         // State 45
-        26, 0, 27, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        -42, 0, -42, 0, -42, 0, 0, -42, 0, 0, 0, 0, 0, 0, 0, 0, 0, -42, -42, 0, 0, 0, -42, -42, -42,
         // State 46
-        -11, 0, -11, 0, -11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -11, -11, 0, 0, 0, -11, -11, -11,
+        26, 0, 27, 0, 28, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 47
-        -47, 0, -47, 0, -47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -47, -47, 0, 0, 0, -47, -47, -47,
+        -11, 0, -11, 0, -11, 0, 0, -11, 0, 0, 0, 0, 0, 0, 0, 0, 0, -11, -11, 0, 0, 0, -11, -11, -11,
         // State 48
-        -48, 0, -48, 0, -48, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, -48, 0, 0, 0, -48, -48, -48,
+        -47, 0, -47, 0, -47, 0, 0, -47, 0, 0, 0, 0, 0, 0, 0, 0, 0, -47, -47, 0, 0, 0, -47, -47, -47,
         // State 49
-        26, 0, 27, 0, 28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 29, 30, 0, 0, 0, 31, 32, 6,
+        -48, 0, -48, 0, -48, 0, 0, -48, 0, 0, 0, 0, 0, 0, 0, 0, 0, -48, -48, 0, 0, 0, -48, -48, -48,
         // State 50
-        -12, 0, -12, 0, -12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -12, -12, 0, 0, 0, -12, -12, -12,
+        26, 0, 27, 0, 28, 0, 0, 29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 31, 0, 0, 0, 32, 33, 6,
         // State 51
-        -49, 0, -49, 0, -49, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, -49, 0, 0, 0, -49, -49, -49,
+        -12, 0, -12, 0, -12, 0, 0, -12, 0, 0, 0, 0, 0, 0, 0, 0, 0, -12, -12, 0, 0, 0, -12, -12, -12,
         // State 52
-        -50, 0, -50, 0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -50, -50, 0, 0, 0, -50, -50, -50,
+        -49, 0, -49, 0, -49, 0, 0, -49, 0, 0, 0, 0, 0, 0, 0, 0, 0, -49, -49, 0, 0, 0, -49, -49, -49,
         // State 53
-        0, -19, 0, -19, -19, -19, 0, -19, 0, -19, 0, 0, -19, -19, -19, -19, 0, 0, 0, 0, -19, -19, 0, 0, 0,
+        -50, 0, -50, 0, -50, 0, 0, -50, 0, 0, 0, 0, 0, 0, 0, 0, 0, -50, -50, 0, 0, 0, -50, -50, -50,
         // State 54
-        0, 0, 0, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, -19, 0, -19, -19, -19, 0, -19, 0, -19, 0, 0, -19, -19, -19, -19, 0, 0, 0, 0, -19, -19, 0, 0, 0,
         // State 55
-        0, -15, 0, -15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, -15, 0, 0, 0,
+        0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 56
-        0, 0, 0, -27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -27, -27, 0, 0, 0,
+        0, -15, 0, -15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -15, -15, 0, 0, 0,
         // State 57
-        0, -29, 0, -29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -29, -29, 0, 0, 0,
+        0, 0, 0, -27, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -27, -27, 0, 0, 0,
         // State 58
-        0, -31, 0, -31, 0, -31, 0, -31, 0, 0, 0, 0, -31, -31, -31, -31, 0, 0, 0, 0, -31, -31, 0, 0, 0,
+        0, -29, 0, -29, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -29, -29, 0, 0, 0,
         // State 59
-        0, -33, 0, -33, -33, -33, 0, -33, 0, -33, 0, 0, -33, -33, -33, -33, 0, 0, 0, 0, -33, -33, 0, 0, 0,
+        0, -31, 0, -31, 0, -31, 0, -31, 0, 0, 0, 0, -31, -31, -31, -31, 0, 0, 0, 0, -31, -31, 0, 0, 0,
         // State 60
+        0, -33, 0, -33, -33, -33, 0, -33, 0, -33, 0, 0, -33, -33, -33, -33, 0, 0, 0, 0, -33, -33, 0, 0, 0,
+        // State 61
         0, -23, 0, -23, -23, -23, 0, -23, 0, -23, 0, 0, -23, -23, -23, -23, 0, 0, 0, 0, -23, -23, 0, 0, 0,
     ];
     const __EOF_ACTION: &'static [i8] = &[
         // State 0
         0,
         // State 1
-        -62,
+        -63,
         // State 2
         0,
         // State 3
@@ -3472,6 +3515,8 @@ mod __parse__LocalAnnot {
         0,
         // State 60
         0,
+        // State 61
+        0,
     ];
     const __GOTO: &'static [i8] = &[
         // State 0
@@ -3499,7 +3544,7 @@ mod __parse__LocalAnnot {
         // State 11
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 12
-        0, 0, 0, 0, 0, 0, 0, 34, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 36, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 13
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 14
@@ -3509,25 +3554,25 @@ mod __parse__LocalAnnot {
         // State 16
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 17
-        0, 0, 0, 0, 0, 40, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 42, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 18
-        0, 0, 0, 0, 0, 0, 43, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 44, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 19
-        0, 0, 0, 0, 0, 0, 0, 0, 46, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 47, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 48, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 20
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 50, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 51, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 0, 0, 0, 0, 0, 0, 0,
         // State 21
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 22
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 23
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 54, 0, 0, 17, 0, 0, 0, 0, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55, 0, 0, 17, 0, 0, 0, 0, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 24
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 25
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 26
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 55, 11, 12, 13, 14, 15, 16, 0, 0, 17, 18, 19, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 11, 12, 13, 14, 15, 16, 0, 0, 17, 18, 19, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
         // State 27
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 28
@@ -3541,9 +3586,9 @@ mod __parse__LocalAnnot {
         // State 32
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 33
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 56, 14, 15, 16, 0, 0, 17, 0, 0, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
-        // State 34
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 34
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57, 14, 15, 16, 0, 0, 17, 0, 0, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
         // State 35
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 36
@@ -3553,29 +3598,29 @@ mod __parse__LocalAnnot {
         // State 38
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 39
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 57, 12, 13, 14, 15, 16, 0, 0, 17, 0, 19, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
-        // State 40
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 40
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58, 12, 13, 14, 15, 16, 0, 0, 17, 0, 19, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
         // State 41
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 42
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 58, 13, 14, 15, 16, 0, 0, 17, 0, 0, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
-        // State 43
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 43
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 13, 14, 15, 16, 0, 0, 17, 0, 0, 20, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
         // State 44
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 45
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 15, 16, 0, 0, 17, 0, 0, 0, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
-        // State 46
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 46
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 15, 16, 0, 0, 17, 0, 0, 0, 21, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
         // State 47
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 48
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 49
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 60, 16, 0, 0, 17, 0, 0, 0, 0, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
-        // State 50
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 50
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 61, 16, 0, 0, 17, 0, 0, 0, 0, 22, 0, 23, 0, 0, 0, 0, 0, 0, 0, 0, 24, 25, 0, 0,
         // State 51
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 52
@@ -3595,6 +3640,8 @@ mod __parse__LocalAnnot {
         // State 59
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 60
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        // State 61
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
     ];
     fn __expected_tokens(__state: usize) -> Vec<::std::string::String> {
@@ -4267,10 +4314,16 @@ mod __parse__LocalAnnot {
             60 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
+                    nonterminal_produced: 36,
+                }
+            }
+            61 => {
+                __state_machine::SimulatedReduce::Reduce {
+                    states_to_pop: 1,
                     nonterminal_produced: 37,
                 }
             }
-            61 => __state_machine::SimulatedReduce::Accept,
+            62 => __state_machine::SimulatedReduce::Accept,
             _ => panic!("invalid reduction index {}", __reduce_index)
         }
     }
@@ -4520,6 +4573,9 @@ mod __parse__LocalAnnot {
                 __reduce60(offset, ctxt, next_expr_id, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), F)>)
             }
             61 => {
+                __reduce61(offset, ctxt, next_expr_id, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), F)>)
+            }
+            62 => {
                 // __LocalAnnot = LocalAnnot => ActionFn(1);
                 let __sym0 = __pop_Variant1(__symbols);
                 let __start = __sym0.0.clone();
@@ -4719,12 +4775,12 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",") = Reft, "," => ActionFn(52);
+        // (<Reft> ",") = Reft, "," => ActionFn(53);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action52::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action53::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (2, 0)
     }
@@ -4746,10 +4802,10 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")* =  => ActionFn(50);
+        // (<Reft> ",")* =  => ActionFn(51);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action50::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action51::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (0, 1)
     }
@@ -4771,11 +4827,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")* = (<Reft> ",")+ => ActionFn(51);
+        // (<Reft> ",")* = (<Reft> ",")+ => ActionFn(52);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action51::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action52::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
@@ -4797,12 +4853,12 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")+ = Reft, "," => ActionFn(59);
+        // (<Reft> ",")+ = Reft, "," => ActionFn(60);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action59::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action60::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (2, 2)
     }
@@ -4824,13 +4880,13 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // (<Reft> ",")+ = (<Reft> ",")+, Reft, "," => ActionFn(60);
+        // (<Reft> ",")+ = (<Reft> ",")+, Reft, "," => ActionFn(61);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action60::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action61::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (3, 2)
     }
@@ -4852,10 +4908,10 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // @L =  => ActionFn(47);
+        // @L =  => ActionFn(48);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action47::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action48::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (0, 3)
     }
@@ -4877,10 +4933,10 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // @R =  => ActionFn(46);
+        // @R =  => ActionFn(47);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action46::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action47::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (0, 4)
     }
@@ -4902,11 +4958,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup1> = OpGroup1 => ActionFn(83);
+        // BinOp<OpGroup1> = OpGroup1 => ActionFn(84);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action83::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action84::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 5)
     }
@@ -4928,11 +4984,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup2> = OpGroup2 => ActionFn(84);
+        // BinOp<OpGroup2> = OpGroup2 => ActionFn(85);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action84::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action85::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 6)
     }
@@ -4954,11 +5010,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup3> = OpGroup3 => ActionFn(85);
+        // BinOp<OpGroup3> = OpGroup3 => ActionFn(86);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action85::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action86::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 7)
     }
@@ -4980,11 +5036,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup4> = OpGroup4 => ActionFn(86);
+        // BinOp<OpGroup4> = OpGroup4 => ActionFn(87);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action86::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action87::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 8)
     }
@@ -5006,11 +5062,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // BinOp<OpGroup5> = OpGroup5 => ActionFn(87);
+        // BinOp<OpGroup5> = OpGroup5 => ActionFn(88);
         let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action87::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action88::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 9)
     }
@@ -5084,13 +5140,13 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel3 = ExprLevel4, BinOp<OpGroup3>, ExprLevel4 => ActionFn(88);
+        // ExprLevel3 = ExprLevel4, BinOp<OpGroup3>, ExprLevel4 => ActionFn(89);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action88::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action89::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 12)
     }
@@ -5190,12 +5246,12 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel6 = UnOp, ExprLevel7 => ActionFn(89);
+        // ExprLevel6 = UnOp, ExprLevel7 => ActionFn(90);
         let __sym1 = __pop_Variant5(__symbols);
         let __sym0 = __pop_Variant13(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action89::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action90::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (2, 15)
     }
@@ -5243,11 +5299,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel7 = Name => ActionFn(90);
+        // ExprLevel7 = Name => ActionFn(91);
         let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action90::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action91::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 16)
     }
@@ -5269,11 +5325,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ExprLevel7 = Lit => ActionFn(91);
+        // ExprLevel7 = Lit => ActionFn(92);
         let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action91::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action92::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 16)
     }
@@ -5381,11 +5437,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Ident = r#"[a-zA-Z][a-zA-Z0-9_]*"# => ActionFn(92);
+        // Ident = r#"[a-zA-Z][a-zA-Z0-9_]*"# => ActionFn(93);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action92::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action93::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (1, 19)
     }
@@ -5407,13 +5463,13 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup1, ExprLevel2> = LeftAssoc<OpGroup1, ExprLevel2>, BinOp<OpGroup1>, ExprLevel2 => ActionFn(93);
+        // LeftAssoc<OpGroup1, ExprLevel2> = LeftAssoc<OpGroup1, ExprLevel2>, BinOp<OpGroup1>, ExprLevel2 => ActionFn(94);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action93::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action94::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 20)
     }
@@ -5435,11 +5491,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup1, ExprLevel2> = ExprLevel2 => ActionFn(45);
+        // LeftAssoc<OpGroup1, ExprLevel2> = ExprLevel2 => ActionFn(46);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action45::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action46::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 20)
     }
@@ -5461,13 +5517,13 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup2, ExprLevel3> = LeftAssoc<OpGroup2, ExprLevel3>, BinOp<OpGroup2>, ExprLevel3 => ActionFn(94);
+        // LeftAssoc<OpGroup2, ExprLevel3> = LeftAssoc<OpGroup2, ExprLevel3>, BinOp<OpGroup2>, ExprLevel3 => ActionFn(95);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action94::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action95::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 21)
     }
@@ -5489,11 +5545,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup2, ExprLevel3> = ExprLevel3 => ActionFn(43);
+        // LeftAssoc<OpGroup2, ExprLevel3> = ExprLevel3 => ActionFn(44);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action43::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action44::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 21)
     }
@@ -5515,13 +5571,13 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup4, ExprLevel5> = LeftAssoc<OpGroup4, ExprLevel5>, BinOp<OpGroup4>, ExprLevel5 => ActionFn(95);
+        // LeftAssoc<OpGroup4, ExprLevel5> = LeftAssoc<OpGroup4, ExprLevel5>, BinOp<OpGroup4>, ExprLevel5 => ActionFn(96);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action95::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action96::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 22)
     }
@@ -5543,11 +5599,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup4, ExprLevel5> = ExprLevel5 => ActionFn(40);
+        // LeftAssoc<OpGroup4, ExprLevel5> = ExprLevel5 => ActionFn(41);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action40::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action41::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 22)
     }
@@ -5569,13 +5625,13 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup5, ExprLevel6> = LeftAssoc<OpGroup5, ExprLevel6>, BinOp<OpGroup5>, ExprLevel6 => ActionFn(96);
+        // LeftAssoc<OpGroup5, ExprLevel6> = LeftAssoc<OpGroup5, ExprLevel6>, BinOp<OpGroup5>, ExprLevel6 => ActionFn(97);
         let __sym2 = __pop_Variant5(__symbols);
         let __sym1 = __pop_Variant4(__symbols);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action96::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
+        let __nt = super::__action97::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (3, 23)
     }
@@ -5597,11 +5653,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // LeftAssoc<OpGroup5, ExprLevel6> = ExprLevel6 => ActionFn(38);
+        // LeftAssoc<OpGroup5, ExprLevel6> = ExprLevel6 => ActionFn(39);
         let __sym0 = __pop_Variant5(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action38::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action39::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 23)
     }
@@ -5623,11 +5679,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = r#"[0-9]+"# => ActionFn(97);
+        // Lit = r#"[0-9]+"# => ActionFn(98);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action97::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action98::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -5649,11 +5705,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = r#"[0-9]*\\.[0-9]+"# => ActionFn(98);
+        // Lit = r#"[0-9]*\\.[0-9]+"# => ActionFn(99);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action98::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action99::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -5675,11 +5731,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = "true" => ActionFn(99);
+        // Lit = "true" => ActionFn(100);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action99::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action100::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -5701,11 +5757,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Lit = "false" => ActionFn(100);
+        // Lit = "false" => ActionFn(101);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action100::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action101::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 24)
     }
@@ -5755,11 +5811,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Name = Ident => ActionFn(34);
+        // Name = Ident => ActionFn(35);
         let __sym0 = __pop_Variant7(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action34::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action35::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant9(__nt), __end));
         (1, 26)
     }
@@ -6041,7 +6097,7 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Reft = Ident, ":", "{", ExprLevel1, "}" => ActionFn(101);
+        // Reft = Ident, ":", "{", ExprLevel1, "}" => ActionFn(102);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant5(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
@@ -6049,7 +6105,7 @@ mod __parse__LocalAnnot {
         let __sym0 = __pop_Variant7(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym4.2.clone();
-        let __nt = super::__action101::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2, __sym3, __sym4);
+        let __nt = super::__action102::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1, __sym2, __sym3, __sym4);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (5, 32)
     }
@@ -6071,11 +6127,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Reft? = Reft => ActionFn(48);
+        // Reft? = Reft => ActionFn(49);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action48::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action49::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant11(__nt), __end));
         (1, 33)
     }
@@ -6097,10 +6153,10 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // Reft? =  => ActionFn(49);
+        // Reft? =  => ActionFn(50);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action49::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action50::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant11(__nt), __end));
         (0, 33)
     }
@@ -6122,11 +6178,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList = Reft => ActionFn(103);
+        // ReftList = Reft => ActionFn(104);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action103::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action104::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 34)
     }
@@ -6148,10 +6204,10 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList =  => ActionFn(104);
+        // ReftList =  => ActionFn(105);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action104::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
+        let __nt = super::__action105::<F>(offset, ctxt, next_expr_id, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (0, 34)
     }
@@ -6173,12 +6229,12 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList = (<Reft> ",")+, Reft => ActionFn(105);
+        // ReftList = (<Reft> ",")+, Reft => ActionFn(106);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action105::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
+        let __nt = super::__action106::<F>(offset, ctxt, next_expr_id, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (2, 34)
     }
@@ -6200,11 +6256,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // ReftList = (<Reft> ",")+ => ActionFn(106);
+        // ReftList = (<Reft> ",")+ => ActionFn(107);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action106::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action107::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 34)
     }
@@ -6226,11 +6282,11 @@ mod __parse__LocalAnnot {
         F: Fn() -> ExprId,
         F: Copy,
     {
-        // UnOp = UnOpKind => ActionFn(102);
+        // UnOp = UnOpKind => ActionFn(103);
         let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action102::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        let __nt = super::__action103::<F>(offset, ctxt, next_expr_id, input, __sym0);
         __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (1, 35)
     }
@@ -6287,6 +6343,32 @@ mod __parse__LocalAnnot {
         (1, 36)
     }
     pub(crate) fn __reduce60<
+        'input,
+        F,
+    >(
+        offset: BytePos,
+        ctxt: SyntaxContext,
+        next_expr_id: F,
+        input: &'input str,
+        __action: i8,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i8>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), F)>,
+    ) -> (usize, usize)
+    where
+        F: Fn() -> ExprId,
+        F: Copy,
+    {
+        // UnOpKind = "-" => ActionFn(30);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action30::<F>(offset, ctxt, next_expr_id, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        (1, 36)
+    }
+    pub(crate) fn __reduce61<
         'input,
         F,
     >(
@@ -7067,6 +7149,24 @@ fn __action30<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
+    (_, __0, _): (usize, &'input str, usize),
+) -> UnOpKind
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    UnOpKind::Neg
+}
+
+#[allow(unused_variables)]
+fn __action31<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
     (_, lo, _): (usize, usize, usize),
     (_, tok, _): (usize, &'input str, usize),
     (_, hi, _): (usize, usize, usize),
@@ -7085,7 +7185,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action31<
+fn __action32<
     'input,
     F,
 >(
@@ -7108,7 +7208,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action32<
+fn __action33<
     'input,
     F,
 >(
@@ -7128,7 +7228,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action33<
+fn __action34<
     'input,
     F,
 >(
@@ -7148,7 +7248,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action34<
+fn __action35<
     'input,
     F,
 >(
@@ -7166,7 +7266,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action35<
+fn __action36<
     'input,
     F,
 >(
@@ -7189,7 +7289,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action36<
+fn __action37<
     'input,
     F,
 >(
@@ -7212,7 +7312,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action37<
+fn __action38<
     'input,
     F,
 >(
@@ -7235,24 +7335,6 @@ where
             kind: ExprKind::Binary(e1, op, e2),
             span: span_with_offset(lo, hi, offset, ctxt)
         }
-}
-
-#[allow(unused_variables)]
-fn __action38<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    (__0)
 }
 
 #[allow(unused_variables)]
@@ -7264,6 +7346,24 @@ fn __action39<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
+    (_, __0, _): (usize, Box<Pred>, usize),
+) -> Box<Pred>
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    (__0)
+}
+
+#[allow(unused_variables)]
+fn __action40<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
     (_, lo, _): (usize, usize, usize),
     (_, e1, _): (usize, Box<Pred>, usize),
     (_, op, _): (usize, BinOp, usize),
@@ -7282,7 +7382,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action40<
+fn __action41<
     'input,
     F,
 >(
@@ -7300,7 +7400,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action41<
+fn __action42<
     'input,
     F,
 >(
@@ -7323,7 +7423,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action42<
+fn __action43<
     'input,
     F,
 >(
@@ -7346,24 +7446,6 @@ where
             kind: ExprKind::Binary(e1, op, e2),
             span: span_with_offset(lo, hi, offset, ctxt)
         }
-}
-
-#[allow(unused_variables)]
-fn __action43<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    (__0)
 }
 
 #[allow(unused_variables)]
@@ -7375,6 +7457,24 @@ fn __action44<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
+    (_, __0, _): (usize, Box<Pred>, usize),
+) -> Box<Pred>
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    (__0)
+}
+
+#[allow(unused_variables)]
+fn __action45<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
     (_, lo, _): (usize, usize, usize),
     (_, e1, _): (usize, Box<Pred>, usize),
     (_, op, _): (usize, BinOp, usize),
@@ -7393,7 +7493,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action45<
+fn __action46<
     'input,
     F,
 >(
@@ -7408,25 +7508,6 @@ where
     F: Copy,
 {
     (__0)
-}
-
-#[allow(unused_variables)]
-fn __action46<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> usize
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    __lookbehind.clone()
 }
 
 #[allow(unused_variables)]
@@ -7445,11 +7526,30 @@ where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    __lookahead.clone()
+    __lookbehind.clone()
 }
 
 #[allow(unused_variables)]
 fn __action48<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
+    __lookbehind: &usize,
+    __lookahead: &usize,
+) -> usize
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    __lookahead.clone()
+}
+
+#[allow(unused_variables)]
+fn __action49<
     'input,
     F,
 >(
@@ -7467,7 +7567,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action49<
+fn __action50<
     'input,
     F,
 >(
@@ -7486,7 +7586,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action50<
+fn __action51<
     'input,
     F,
 >(
@@ -7505,7 +7605,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action51<
+fn __action52<
     'input,
     F,
 >(
@@ -7523,7 +7623,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action52<
+fn __action53<
     'input,
     F,
 >(
@@ -7542,7 +7642,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action53<
+fn __action54<
     'input,
     F,
 >(
@@ -7560,7 +7660,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action54<
+fn __action55<
     'input,
     F,
 >(
@@ -7576,29 +7676,6 @@ where
     F: Copy,
 {
     { let mut v = v; v.push(e); v }
-}
-
-#[allow(unused_variables)]
-fn __action55<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    (_, lo, _): (usize, usize, usize),
-    (_, kind, _): (usize, BinOpKind, usize),
-    (_, hi, _): (usize, usize, usize),
-) -> BinOp
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    BinOp {
-            kind: kind,
-            span: span_with_offset(lo, hi, offset, ctxt),
-        }
 }
 
 #[allow(unused_variables)]
@@ -7679,6 +7756,29 @@ fn __action59<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
+    (_, lo, _): (usize, usize, usize),
+    (_, kind, _): (usize, BinOpKind, usize),
+    (_, hi, _): (usize, usize, usize),
+) -> BinOp
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    BinOp {
+            kind: kind,
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
+}
+
+#[allow(unused_variables)]
+fn __action60<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
     __0: (usize, Reft, usize),
     __1: (usize, &'input str, usize),
 ) -> ::std::vec::Vec<Reft>
@@ -7688,7 +7788,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action52::<
+    let __temp0 = __action53::<
     F,
     >(
         offset,
@@ -7699,7 +7799,7 @@ where
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action53::<
+    __action54::<
     F,
     >(
         offset,
@@ -7711,7 +7811,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action60<
+fn __action61<
     'input,
     F,
 >(
@@ -7729,7 +7829,7 @@ where
 {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action52::<
+    let __temp0 = __action53::<
     F,
     >(
         offset,
@@ -7740,7 +7840,7 @@ where
         __2,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action54::<
+    __action55::<
     F,
     >(
         offset,
@@ -7753,7 +7853,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action61<
+fn __action62<
     'input,
     F,
 >(
@@ -7769,7 +7869,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action50::<
+    let __temp0 = __action51::<
     F,
     >(
         offset,
@@ -7793,7 +7893,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action62<
+fn __action63<
     'input,
     F,
 >(
@@ -7810,7 +7910,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action51::<
+    let __temp0 = __action52::<
     F,
     >(
         offset,
@@ -7828,48 +7928,6 @@ where
         next_expr_id,
         input,
         __temp0,
-        __1,
-    )
-}
-
-#[allow(unused_variables)]
-fn __action63<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    __0: (usize, BinOpKind, usize),
-    __1: (usize, usize, usize),
-) -> BinOp
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action55::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        __temp0,
-        __0,
         __1,
     )
 }
@@ -7892,7 +7950,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -7934,7 +7992,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -7945,7 +8003,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action41::<
+    __action57::<
     F,
     >(
         offset,
@@ -7976,7 +8034,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -7987,7 +8045,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action57::<
+    __action42::<
     F,
     >(
         offset,
@@ -8018,7 +8076,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8051,6 +8109,48 @@ fn __action68<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
+    __0: (usize, BinOpKind, usize),
+    __1: (usize, usize, usize),
+) -> BinOp
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    let __start0 = __0.0.clone();
+    let __end0 = __0.0.clone();
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
+    let __temp0 = (__start0, __temp0, __end0);
+    __action59::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
+}
+
+#[allow(unused_variables)]
+fn __action69<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
     __0: (usize, Box<Pred>, usize),
     __1: (usize, BinOp, usize),
     __2: (usize, Box<Pred>, usize),
@@ -8062,7 +8162,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8089,7 +8189,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action69<
+fn __action70<
     'input,
     F,
 >(
@@ -8107,7 +8207,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8133,7 +8233,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action70<
+fn __action71<
     'input,
     F,
 >(
@@ -8150,7 +8250,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8175,7 +8275,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action71<
+fn __action72<
     'input,
     F,
 >(
@@ -8192,7 +8292,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8217,7 +8317,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action72<
+fn __action73<
     'input,
     F,
 >(
@@ -8234,7 +8334,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8245,7 +8345,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action35::<
+    __action36::<
     F,
     >(
         offset,
@@ -8255,52 +8355,6 @@ where
         __temp0,
         __0,
         __1,
-    )
-}
-
-#[allow(unused_variables)]
-fn __action73<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    __0: (usize, Box<Pred>, usize),
-    __1: (usize, BinOp, usize),
-    __2: (usize, Box<Pred>, usize),
-    __3: (usize, usize, usize),
-) -> Box<Pred>
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    let __start0 = __0.0.clone();
-    let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action44::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        __temp0,
-        __0,
-        __1,
-        __2,
-        __3,
     )
 }
 
@@ -8324,7 +8378,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8335,7 +8389,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action42::<
+    __action45::<
     F,
     >(
         offset,
@@ -8370,7 +8424,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8381,7 +8435,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action39::<
+    __action43::<
     F,
     >(
         offset,
@@ -8416,7 +8470,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8427,7 +8481,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action37::<
+    __action40::<
     F,
     >(
         offset,
@@ -8451,16 +8505,18 @@ fn __action77<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, &'input str, usize),
-    __1: (usize, usize, usize),
-) -> Lit
+    __0: (usize, Box<Pred>, usize),
+    __1: (usize, BinOp, usize),
+    __2: (usize, Box<Pred>, usize),
+    __3: (usize, usize, usize),
+) -> Box<Pred>
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8471,7 +8527,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action30::<
+    __action38::<
     F,
     >(
         offset,
@@ -8481,6 +8537,8 @@ where
         __temp0,
         __0,
         __1,
+        __2,
+        __3,
     )
 }
 
@@ -8502,7 +8560,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8544,7 +8602,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8586,7 +8644,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8619,6 +8677,48 @@ fn __action81<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
+    __0: (usize, &'input str, usize),
+    __1: (usize, usize, usize),
+) -> Lit
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    let __start0 = __0.0.clone();
+    let __end0 = __0.0.clone();
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
+    let __temp0 = (__start0, __temp0, __end0);
+    __action34::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
+}
+
+#[allow(unused_variables)]
+fn __action82<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
     __0: (usize, Ident, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
@@ -8632,7 +8732,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8661,7 +8761,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action82<
+fn __action83<
     'input,
     F,
 >(
@@ -8678,7 +8778,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action47::<
+    let __temp0 = __action48::<
     F,
     >(
         offset,
@@ -8689,7 +8789,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action36::<
+    __action37::<
     F,
     >(
         offset,
@@ -8699,46 +8799,6 @@ where
         __temp0,
         __0,
         __1,
-    )
-}
-
-#[allow(unused_variables)]
-fn __action83<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    __0: (usize, BinOpKind, usize),
-) -> BinOp
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    let __start0 = __0.2.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action63::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        __0,
-        __temp0,
     )
 }
 
@@ -8759,7 +8819,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -8799,7 +8859,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -8839,7 +8899,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -8879,7 +8939,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -8911,17 +8971,15 @@ fn __action88<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, Box<Pred>, usize),
-    __1: (usize, BinOp, usize),
-    __2: (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    __0: (usize, BinOpKind, usize),
+) -> BinOp
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    let __start0 = __2.2.clone();
-    let __end0 = __2.2.clone();
-    let __temp0 = __action46::<
+    let __start0 = __0.2.clone();
+    let __end0 = __0.2.clone();
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -8940,8 +8998,6 @@ where
         next_expr_id,
         input,
         __0,
-        __1,
-        __2,
         __temp0,
     )
 }
@@ -8955,16 +9011,17 @@ fn __action89<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, UnOp, usize),
-    __1: (usize, Box<Pred>, usize),
+    __0: (usize, Box<Pred>, usize),
+    __1: (usize, BinOp, usize),
+    __2: (usize, Box<Pred>, usize),
 ) -> Box<Pred>
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    let __start0 = __1.2.clone();
-    let __end0 = __1.2.clone();
-    let __temp0 = __action46::<
+    let __start0 = __2.2.clone();
+    let __end0 = __2.2.clone();
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -8984,6 +9041,7 @@ where
         input,
         __0,
         __1,
+        __2,
         __temp0,
     )
 }
@@ -8997,15 +9055,16 @@ fn __action90<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, Name, usize),
+    __0: (usize, UnOp, usize),
+    __1: (usize, Box<Pred>, usize),
 ) -> Box<Pred>
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    let __start0 = __0.2.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __start0 = __1.2.clone();
+    let __end0 = __1.2.clone();
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9024,6 +9083,7 @@ where
         next_expr_id,
         input,
         __0,
+        __1,
         __temp0,
     )
 }
@@ -9037,7 +9097,7 @@ fn __action91<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, Lit, usize),
+    __0: (usize, Name, usize),
 ) -> Box<Pred>
 where
     F: Fn() -> ExprId,
@@ -9045,7 +9105,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9077,15 +9137,15 @@ fn __action92<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, &'input str, usize),
-) -> Ident
+    __0: (usize, Lit, usize),
+) -> Box<Pred>
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9117,17 +9177,15 @@ fn __action93<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, Box<Pred>, usize),
-    __1: (usize, BinOp, usize),
-    __2: (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    __0: (usize, &'input str, usize),
+) -> Ident
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    let __start0 = __2.2.clone();
-    let __end0 = __2.2.clone();
-    let __temp0 = __action46::<
+    let __start0 = __0.2.clone();
+    let __end0 = __0.2.clone();
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9146,8 +9204,6 @@ where
         next_expr_id,
         input,
         __0,
-        __1,
-        __2,
         __temp0,
     )
 }
@@ -9171,7 +9227,7 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9215,7 +9271,7 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9259,7 +9315,7 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9293,15 +9349,17 @@ fn __action97<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, &'input str, usize),
-) -> Lit
+    __0: (usize, Box<Pred>, usize),
+    __1: (usize, BinOp, usize),
+    __2: (usize, Box<Pred>, usize),
+) -> Box<Pred>
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    let __start0 = __0.2.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __start0 = __2.2.clone();
+    let __end0 = __2.2.clone();
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9320,6 +9378,8 @@ where
         next_expr_id,
         input,
         __0,
+        __1,
+        __2,
         __temp0,
     )
 }
@@ -9341,7 +9401,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9381,7 +9441,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9421,7 +9481,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9453,19 +9513,15 @@ fn __action101<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, Ident, usize),
-    __1: (usize, &'input str, usize),
-    __2: (usize, &'input str, usize),
-    __3: (usize, Box<Pred>, usize),
-    __4: (usize, &'input str, usize),
-) -> Reft
+    __0: (usize, &'input str, usize),
+) -> Lit
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    let __start0 = __4.2.clone();
-    let __end0 = __4.2.clone();
-    let __temp0 = __action46::<
+    let __start0 = __0.2.clone();
+    let __end0 = __0.2.clone();
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9484,10 +9540,6 @@ where
         next_expr_id,
         input,
         __0,
-        __1,
-        __2,
-        __3,
-        __4,
         __temp0,
     )
 }
@@ -9501,15 +9553,19 @@ fn __action102<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
-    __0: (usize, UnOpKind, usize),
-) -> UnOp
+    __0: (usize, Ident, usize),
+    __1: (usize, &'input str, usize),
+    __2: (usize, &'input str, usize),
+    __3: (usize, Box<Pred>, usize),
+    __4: (usize, &'input str, usize),
+) -> Reft
 where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    let __start0 = __0.2.clone();
-    let __end0 = __0.2.clone();
-    let __temp0 = __action46::<
+    let __start0 = __4.2.clone();
+    let __end0 = __4.2.clone();
+    let __temp0 = __action47::<
     F,
     >(
         offset,
@@ -9528,12 +9584,56 @@ where
         next_expr_id,
         input,
         __0,
+        __1,
+        __2,
+        __3,
+        __4,
         __temp0,
     )
 }
 
 #[allow(unused_variables)]
 fn __action103<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
+    __0: (usize, UnOpKind, usize),
+) -> UnOp
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    let __start0 = __0.2.clone();
+    let __end0 = __0.2.clone();
+    let __temp0 = __action47::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
+    let __temp0 = (__start0, __temp0, __end0);
+    __action83::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
+}
+
+#[allow(unused_variables)]
+fn __action104<
     'input,
     F,
 >(
@@ -9549,7 +9649,7 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<
+    let __temp0 = __action49::<
     F,
     >(
         offset,
@@ -9559,47 +9659,7 @@ where
         __0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action61::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        __temp0,
-    )
-}
-
-#[allow(unused_variables)]
-fn __action104<
-    'input,
-    F,
->(
-    offset: BytePos,
-    ctxt: SyntaxContext,
-    next_expr_id: F,
-    input: &'input str,
-    __lookbehind: &usize,
-    __lookahead: &usize,
-) -> Vec<Reft>
-where
-    F: Fn() -> ExprId,
-    F: Copy,
-{
-    let __start0 = __lookbehind.clone();
-    let __end0 = __lookahead.clone();
-    let __temp0 = __action49::<
-    F,
-    >(
-        offset,
-        ctxt,
-        next_expr_id,
-        input,
-        &__start0,
-        &__end0,
-    );
-    let __temp0 = (__start0, __temp0, __end0);
-    __action61::<
+    __action62::<
     F,
     >(
         offset,
@@ -9619,6 +9679,46 @@ fn __action105<
     ctxt: SyntaxContext,
     next_expr_id: F,
     input: &'input str,
+    __lookbehind: &usize,
+    __lookahead: &usize,
+) -> Vec<Reft>
+where
+    F: Fn() -> ExprId,
+    F: Copy,
+{
+    let __start0 = __lookbehind.clone();
+    let __end0 = __lookahead.clone();
+    let __temp0 = __action50::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
+    let __temp0 = (__start0, __temp0, __end0);
+    __action62::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+    )
+}
+
+#[allow(unused_variables)]
+fn __action106<
+    'input,
+    F,
+>(
+    offset: BytePos,
+    ctxt: SyntaxContext,
+    next_expr_id: F,
+    input: &'input str,
     __0: (usize, ::std::vec::Vec<Reft>, usize),
     __1: (usize, Reft, usize),
 ) -> Vec<Reft>
@@ -9628,7 +9728,7 @@ where
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action48::<
+    let __temp0 = __action49::<
     F,
     >(
         offset,
@@ -9638,7 +9738,7 @@ where
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action62::<
+    __action63::<
     F,
     >(
         offset,
@@ -9651,7 +9751,7 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action106<
+fn __action107<
     'input,
     F,
 >(
@@ -9667,7 +9767,7 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action49::<
+    let __temp0 = __action50::<
     F,
     >(
         offset,
@@ -9678,7 +9778,7 @@ where
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
-    __action62::<
+    __action63::<
     F,
     >(
         offset,

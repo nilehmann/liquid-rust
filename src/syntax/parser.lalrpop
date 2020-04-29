@@ -115,6 +115,7 @@ OpGroup5: BinOpKind = {
 UnOpKind: UnOpKind = {
     "!" => UnOpKind::Not,
     "*" => UnOpKind::Deref,
+    "-" => UnOpKind::Neg,
 }
 
 Lit: Lit = {

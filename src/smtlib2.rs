@@ -44,6 +44,11 @@ impl Expr2Smt<()> for Pred<'_, '_> {
                     stack.push(Token::Paren);
                     stack.push(Token::Expr(expr));
                 }
+                Token::Expr(Pred::Unary(UnOpKind::Neg, expr)) => {
+                    write!(w, "(- ")?;
+                    stack.push(Token::Paren);
+                    stack.push(Token::Expr(expr));
+                }
                 Token::Expr(Pred::Unary(UnOpKind::Deref, _)) => unimplemented!(),
                 Token::Space => write!(w, " ")?,
                 Token::Paren => write!(w, ")")?,
