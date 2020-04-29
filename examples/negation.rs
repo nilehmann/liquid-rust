@@ -17,7 +17,7 @@
 // }
 
 // This refinement is dumb and wrong but I can't think of anything else rn
-/**@ (n:{-n < -0}) -> v:{v >= n} @*/
+/**@ (n:{-n <= -0}) -> v:{v >= n} @*/
 fn sum(n: i32) -> i32 {
     if n == 0 {
         0

@@ -113,6 +113,7 @@ fn bin_op_to_smt2(op: BinOpKind) -> &'static str {
 
         BinOpKind::Eq => "=",
         BinOpKind::Lt => "<",
+        BinOpKind::Le => "<=",
         BinOpKind::Gt => ">",
         BinOpKind::Ge => ">=",
 

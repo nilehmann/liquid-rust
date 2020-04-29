@@ -157,7 +157,7 @@ impl<'a, 'lr, 'tcx> TypeChecker<'a, 'lr, 'tcx> {
         // We have to unify types here to reconcile differences in inferred
         // number types (e.g. what's the type of 0 + 1.0)
         match op.kind {
-            BinOpKind::Lt | BinOpKind::Gt | BinOpKind::Eq | BinOpKind::Ge => {
+            BinOpKind::Lt | BinOpKind::Le | BinOpKind::Gt | BinOpKind::Eq | BinOpKind::Ge => {
                 match self.infer_ctxt.unify(ty1, ty2) {
                     Some(ty) if ty.is_numeric() => self.mk_bool(),
                     _ => {
@@ -373,7 +373,7 @@ fn un_op_err_msg(op: UnOp, ty: Ty) -> String {
 fn bin_op_err_msg<'tcx>(ty1: Ty<'tcx>, op: BinOp, ty2: Ty<'tcx>) -> String {
     match op.kind {
         BinOpKind::And | BinOpKind::Or => "mismatched types".into(),
-        BinOpKind::Lt | BinOpKind::Gt | BinOpKind::Eq | BinOpKind::Ge => {
+        BinOpKind::Lt | BinOpKind::Le | BinOpKind::Gt | BinOpKind::Eq | BinOpKind::Ge => {
             format!("cannot compare `{}` with `{}`", ty1, ty2)
         }
         BinOpKind::Add => format!("cannot add `{}` to `{}`", ty1, ty2),
