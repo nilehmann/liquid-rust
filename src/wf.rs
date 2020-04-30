@@ -134,10 +134,12 @@ impl<'a, 'lr, 'tcx> TypeChecker<'a, 'lr, 'tcx> {
         match (op.kind, &ty.kind) {
             (UnOpKind::Deref, TyKind::Ref(_, ty, _)) => ty,
             (UnOpKind::Not, TyKind::Bool) => ty,
-            // We don't need to do any unification here because the negation
-            // of an integer type is that same integer type.
             (UnOpKind::Neg, TyKind::Int(_)) => ty,
             (UnOpKind::Neg, TyKind::Float(_)) => ty,
+            // Negation of an int is allowed based on signedness:
+            // We allow it for signed ints (TyKind::Int(_)), but we
+            // don't have a case for unsigned ints (TyKind::Uint(_)) to
+            // disallow that case.
             (UnOpKind::Neg, ty::Infer(ty::IntVar(_))) => ty,
             (UnOpKind::Neg, ty::Infer(ty::FloatVar(_))) => ty,
             _ => {
@@ -155,7 +157,7 @@ impl<'a, 'lr, 'tcx> TypeChecker<'a, 'lr, 'tcx> {
         }
 
         // We have to unify types here to reconcile differences in inferred
-        // number types (e.g. what's the type of 0 + 1.0)
+        // number types (e.g. (x: i64) + 1 is of type i64)
         match op.kind {
             BinOpKind::Lt | BinOpKind::Le | BinOpKind::Gt | BinOpKind::Eq | BinOpKind::Ge => {
                 match self.infer_ctxt.unify(ty1, ty2) {
@@ -254,13 +256,14 @@ impl<'tcx> InferCtxt<'tcx> {
     }
 
     // Unification returns the "least common denominator" of two types
-    // For example, if we have number literals of different inferred types,
-    // for example 0 + 1.0, we need to figure out what type to return from this
-    // operation (float); this is unification.
+    // If you have a variable of a known integer type and you're adding it to
+    // an int literal, we have to figure out what the result of that expr
+    // would be, based on the size of the types involved.
     //
     // We might not always succeed - for instance, if we're adding two numbers
-    // with explicitly different types (i.e. not literals with inferred types),
-    // we have to type error - so we return None.
+    // with explicitly different types (i.e. not literals with inferred types)
+    // or if we're adding int or float literalswe have to type error - so we
+    // return None.
     fn unify(&mut self, ty1: Ty<'tcx>, ty2: Ty<'tcx>) -> Option<Ty<'tcx>> {
         if ty1 == ty2 {
             return Some(ty1);
