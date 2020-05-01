@@ -18,6 +18,18 @@ jobs:
         with:
           path: /usr/share/rust/.rustup
           key: toolchain-${{ hashFiles('rust-toolchain') }}
+          
+      - name: cache cargo index
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/git
+          key: cargo-index-${{ hashFiles('**/Cargo.lock') }}
+
+      - name: cache cargo registry
+        uses: actions/cache@v1
+        with:
+          path: ~/.cargo/registry
+          key: cargo-registry-${{ hashFiles('**/Cargo.lock') }}
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
