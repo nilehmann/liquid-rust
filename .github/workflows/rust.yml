@@ -30,8 +30,7 @@ jobs:
         with:
           path: ~/.cargo/registry
           key: cargo-registry-${{ hashFiles('**/Cargo.lock') }}
-          
-      
+
       - name: Cache target
         uses: actions/cache@v1
         with:
