@@ -12,6 +12,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@v2
+      
+      - name: Cache toolchain
+        uses: actions/cache@v1
+        with:
+          path: /usr/share/rust/.rustup
+          key: toolchain-${{ hashFiles('rust-toolchain') }}
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1
