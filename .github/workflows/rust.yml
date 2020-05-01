@@ -19,6 +19,8 @@ jobs:
           profile: minimal
           components: rustc-dev
 
+      - run: sudo chown -R $(whoami):$(id -ng) ~/.cargo/
+
       - name: Cache cargo registry
         uses: actions/cache@v1
         with:
