@@ -129,7 +129,7 @@ fn sys_root(orig_args: &[String]) -> Vec<String> {
         })
         .map(|pb| pb.to_string_lossy().to_string())
         .expect(
-            "need to specify SYSROOT env var during clippy compilation, or use rustup or multirust",
+            "sysroot not found; please specify a SYSROOT env var, pass a --sysroot arg, or use rustup or multirust",
         );
 
     if !have_sys_root_arg {
