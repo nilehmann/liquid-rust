@@ -5,6 +5,7 @@ use super::{Binder, Operand, Place, Pred, ReftType, Scalar, Var};
 use crate::context::LiquidRustCtxt;
 use crate::smtlib2::{SmtRes, Solver};
 use crate::syntax::ast::{BinOpKind, UnOpKind};
+use rustc_data_structures::graph::{WithStartNode, vec_graph::VecGraph};
 use rustc_hir::BodyId;
 use rustc_index::vec::IndexVec;
 use rustc_index::{bit_set::BitSet, vec::Idx};
@@ -64,9 +65,45 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
         env
     }
 
+    /// Transforms the control flow graph into a dominator tree, which is used
+    /// so that we can later do a depth-first traversal in dominator-tree-order
+    /// when type-checking the body of this function.
+    pub fn build_dominator_tree(&mut self) -> VecGraph<mir::BasicBlock> {
+        let mut edges: Vec<(mir::BasicBlock, mir::BasicBlock)> = Vec::new();
+        let dominators = self.mir.dominators();
+
+        // The algorithm:
+        // For every basic block
+        // Get its immediate dominator
+        // Store the edge (dominator -> this bb)
+        // Build vecgraph out of edges
+
+        for (bb, _) in self.mir.basic_blocks().iter_enumerated() {
+            let dr = dominators.immediate_dominator(bb);
+            if dr != bb {
+                edges.push((dr, bb));
+            }
+        }
+
+        return VecGraph::new(self.mir.basic_blocks().len(), edges);
+    }
+
     pub fn check_body(&mut self) {
-        for (bb, bbd) in self.mir.basic_blocks().iter_enumerated() {
+        let dom_tree = self.build_dominator_tree();
+
+        // We don't use dom_tree.depth_first_search() so that we can support
+        // iterative context building later.
+        // Instead, we manually plumb a depth-first search
+
+        // Our queue is a Vec since we want a stack, not a deque
+        let mut queue: Vec<mir::BasicBlock> =
+            Vec::with_capacity(self.mir.basic_blocks().len());
+        queue.push(self.mir.start_node());
+
+        while let Some(bb) = queue.pop() {
             print!("\nbb{}:", bb.index());
+            let bbd = &self.mir[bb];
+
             for (i, statement) in bbd.statements.iter().enumerate() {
                 match &statement.kind {
                     StatementKind::Assign(box (place, rvalue)) => {
@@ -121,6 +158,11 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                     | TerminatorKind::Unreachable => {}
                     _ => todo!("{:?}", terminator.kind),
                 };
+            }
+
+            // We push the bbs that this bb immediately dominates to the queue.
+            for domd in dom_tree.successors(bb) {
+                queue.push(*domd);
             }
         }
         println!("---------------------------");
