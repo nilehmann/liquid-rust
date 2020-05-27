@@ -1,118 +1,167 @@
 extern crate rustc_mir;
 
-use super::dataflow;
 use super::{Binder, Operand, Place, Pred, ReftType, Scalar, Var};
 use crate::context::LiquidRustCtxt;
 use crate::smtlib2::{SmtRes, Solver};
 use crate::syntax::ast::{BinOpKind, UnOpKind};
-use rustc_data_structures::graph::{WithStartNode, vec_graph::VecGraph};
+use rustc_data_structures::graph::{vec_graph::VecGraph, WithStartNode};
 use rustc_hir::BodyId;
 use rustc_index::vec::IndexVec;
-use rustc_index::{bit_set::BitSet, vec::Idx};
+use rustc_index::vec::Idx;
 use rustc_middle::mir::{self, Constant, Rvalue, StatementKind, TerminatorKind};
 use rustc_middle::ty::{self, Ty};
-use rustc_mir::dataflow::{
-    Analysis, AnalysisDomain, BottomValue, GenKill, GenKillAnalysis, ResultsCursor,
-};
 use std::collections::{HashMap, HashSet};
 
 pub fn check_body(cx: &LiquidRustCtxt<'_, '_>, body_id: BodyId) {
     ReftChecker::new(cx, body_id).check_body();
 }
 
+struct DominatorTree<'lr, 'tcx> {
+    /// The dominator tree, generated from the control-flow graph of the
+    /// bbs in the function
+    dom_tree: VecGraph<mir::BasicBlock>,
+
+    /// The new predicates which we know for sure to be true before entering
+    /// a basic block
+    known_preds: HashMap<mir::BasicBlock, &'lr Pred<'lr, 'tcx>>,
+}
+
 struct ReftChecker<'a, 'lr, 'tcx> {
     cx: &'a LiquidRustCtxt<'lr, 'tcx>,
     mir: &'a mir::Body<'tcx>,
     reft_types: HashMap<mir::Local, Binder<&'lr ReftType<'lr, 'tcx>>>,
-    cursor: ResultsCursor<'a, 'tcx, DefinitelyInitializedLocal<'a, 'tcx>>,
-    conditionals: IndexVec<mir::BasicBlock, Vec<&'lr Pred<'lr, 'tcx>>>,
 }
 
 impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
     pub fn new(cx: &'a LiquidRustCtxt<'lr, 'tcx>, body_id: BodyId) -> Self {
         let reft_types = cx.local_decls(body_id).clone();
         let mir = cx.optimized_mir(body_id);
-        let def_id = cx.hir().body_owner_def_id(body_id);
-        let cursor = DefinitelyInitializedLocal::new(mir)
-            .into_engine(cx.tcx(), mir, def_id.to_def_id())
-            .iterate_to_fixpoint()
-            .into_results_cursor(mir);
-        let conditionals = dataflow::do_conditionals_analysis(cx, mir);
         ReftChecker {
             cx,
             mir,
             reft_types,
-            cursor,
-            conditionals,
         }
-    }
-
-    fn env_at(&mut self, block: mir::BasicBlock, index: usize) -> Vec<&'lr Pred<'lr, 'tcx>> {
-        let loc = mir::Location {
-            block,
-            statement_index: index,
-        };
-        self.cursor.seek_before(loc);
-        let mut env = Vec::new();
-        for local in self.cursor.get().iter() {
-            if let Some(pred) = self.reft_types.get(&local).and_then(|rt| rt.pred()) {
-                env.push(self.cx.open_pred(pred, Operand::from_local(local)));
-            }
-        }
-        for conditional in &self.conditionals[block] {
-            env.push(conditional);
-        }
-        env
     }
 
     /// Transforms the control flow graph into a dominator tree, which is used
     /// so that we can later do a depth-first traversal in dominator-tree-order
     /// when type-checking the body of this function.
-    pub fn build_dominator_tree(&mut self) -> VecGraph<mir::BasicBlock> {
-        let mut edges: Vec<(mir::BasicBlock, mir::BasicBlock)> = Vec::new();
+    ///
+    /// The dominator tree also contains edge information - predicates which
+    /// we know to be true after we've travelled along an edge.
+    pub fn build_dominator_tree(&mut self) -> DominatorTree<'lr, 'tcx> {
+        let mut edges = Vec::new();
+        let mut known_preds = HashMap::new();
         let dominators = self.mir.dominators();
 
-        // The algorithm:
-        // For every basic block
-        // Get its immediate dominator
-        // Store the edge (dominator -> this bb)
-        // Build vecgraph out of edges
-
-        for (bb, _) in self.mir.basic_blocks().iter_enumerated() {
+        for (bb, bbd) in self.mir.basic_blocks().iter_enumerated() {
             let dr = dominators.immediate_dominator(bb);
             if dr != bb {
                 edges.push((dr, bb));
             }
+
+            if let Some(terminator) = &bbd.terminator {
+                match &terminator.kind {
+                    mir::TerminatorKind::SwitchInt {
+                        discr,
+                        values,
+                        switch_ty,
+                        targets,
+                    } => {
+                        let discr = self.cx.mk_operand(Operand::from_mir(discr));
+                        for (value, target) in values.iter().zip(targets.iter()) {
+                            let value = self.cx.mk_operand(Operand::from_bits(
+                                self.cx.tcx(),
+                                *value,
+                                switch_ty,
+                            ));
+                            let cond = self.cx.mk_binary(discr, BinOpKind::Eq, value);
+                            known_preds.insert(*target, cond);
+                        }
+                    }
+                    mir::TerminatorKind::Assert {
+                        cond,
+                        expected,
+                        target,
+                        ..
+                    } => {
+                        let mut cond = self.cx.mk_operand(Operand::from_mir(cond));
+                        if !expected {
+                            cond = self.cx.mk_unary(UnOpKind::Not, cond);
+                        }
+                        known_preds.insert(*target, cond);
+                    }
+                    _ => {}
+                }
+            }
         }
 
-        return VecGraph::new(self.mir.basic_blocks().len(), edges);
+        return DominatorTree {
+            known_preds,
+            dom_tree: VecGraph::new(self.mir.basic_blocks().len(), edges),
+        };
     }
 
     pub fn check_body(&mut self) {
         let dom_tree = self.build_dominator_tree();
 
-        // We don't use dom_tree.depth_first_search() so that we can support
-        // iterative context building later.
-        // Instead, we manually plumb a depth-first search
+        // Typing context:
+        // We iteratively build our typing context as we go.
+        // env is the actual typing environment, while depths is the depth
+        // at which each corresponding item in env was added.
+        let mut env: Vec<&'lr Pred<'lr, 'tcx>> = Vec::new();
+        let mut depths = Vec::new();
+
+        // Before we do anything, we have to push the refinement predicates
+        // for our return type and argument types
+        // These locals are defined before any statements are executed, so
+        // we have to manually plumb them into our typing context (they
+        // are never assigned with check_assign)
+        for (local, rt) in self.reft_types.iter() {
+            if let Some(pred) = rt.pred() {
+                env.push(self.cx.open_pred(pred, Operand::from_local(*local)));
+            }
+        }
 
         // Our queue is a Vec since we want a stack, not a deque
-        let mut queue: Vec<mir::BasicBlock> =
+        // The first element of the tuple is the depth of the current node,
+        // while the second is the actual basic block index itself
+        let mut queue: Vec<(usize, mir::BasicBlock)> =
             Vec::with_capacity(self.mir.basic_blocks().len());
-        queue.push(self.mir.start_node());
+        queue.push((1, self.mir.start_node()));
 
-        while let Some(bb) = queue.pop() {
+        while let Some((depth, bb)) = queue.pop() {
+            dbg!(&env);
+            dbg!(&depths);
+            
             print!("\nbb{}:", bb.index());
             let bbd = &self.mir[bb];
 
-            for (i, statement) in bbd.statements.iter().enumerate() {
+            // If our current depth is not greater than the depth of the top
+            // item in the context, we pop until this is true.
+            while let Some(d) = depths.pop() {
+                if depth > d {
+                    depths.push(d);
+                    break;
+                } else {
+                    let _ = env.pop();
+                }
+            }
+
+            // We then push our known pred, if it exists
+            if let Some(p) = dom_tree.known_preds.get(&bb) {
+                env.push(p);
+                depths.push(depth);
+            }
+
+            for statement in bbd.statements.iter() {
                 match &statement.kind {
                     StatementKind::Assign(box (place, rvalue)) => {
                         println!("\n  {:?}", statement);
                         let ty = place.ty(self, self.cx.tcx()).ty;
                         let lhs = self.rvalue_reft_type(ty, rvalue);
-                        let env = self.env_at(bb, i);
                         println!("    {:?}", env);
-                        self.check_assign(*place, &env, lhs);
+                        self.check_assign(*place, &mut env, &mut depths, depth, lhs);
                     }
                     StatementKind::StorageLive(_)
                     | StatementKind::StorageDead(_)
@@ -120,7 +169,7 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                     _ => todo!("{:?}", statement),
                 }
             }
-            let env = self.env_at(bb, bbd.statements.len());
+
             if let Some(terminator) = &bbd.terminator {
                 println!("\n  {:?}", terminator.kind);
                 match &terminator.kind {
@@ -144,7 +193,7 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                                 self.check_subtyping(&env, actual, formal);
                             }
                             println!("");
-                            self.check_assign(*place, &env, ret);
+                            self.check_assign(*place, &mut env, &mut depths, depth, ret);
                         } else {
                             todo!("implement checks for non converging calls")
                         }
@@ -161,8 +210,8 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
             }
 
             // We push the bbs that this bb immediately dominates to the queue.
-            for domd in dom_tree.successors(bb) {
-                queue.push(*domd);
+            for domd in dom_tree.dom_tree.successors(bb) {
+                queue.push((depth + 1, *domd));
             }
         }
         println!("---------------------------");
@@ -171,7 +220,9 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
     fn check_assign(
         &mut self,
         place: mir::Place,
-        env: &[&'lr Pred<'lr, 'tcx>],
+        env: &mut Vec<&'lr Pred<'lr, 'tcx>>,
+        depths: &mut Vec<usize>,
+        depth: usize,
         lhs: Binder<&'lr ReftType<'lr, 'tcx>>,
     ) {
         if place.projection.len() > 0 {
@@ -183,6 +234,10 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
         } else if !self.mir.local_decls[local].is_user_variable() {
             println!("    infer {:?}:{:?}", local, lhs);
             self.reft_types.insert(local, lhs);
+            if let Some(pred) = lhs.pred() {
+                env.push(self.cx.open_pred(pred, Operand::from_local(local)));
+                depths.push(depth);
+            }
         }
     }
 
@@ -346,85 +401,3 @@ pub fn mir_binop_to_refine_op(op: mir::BinOp) -> BinOpKind {
     }
 }
 
-struct DefinitelyInitializedLocal<'a, 'tcx> {
-    body: &'a mir::Body<'tcx>,
-}
-
-impl<'a, 'tcx> DefinitelyInitializedLocal<'a, 'tcx> {
-    pub fn new(body: &'a mir::Body<'tcx>) -> Self {
-        DefinitelyInitializedLocal { body }
-    }
-}
-
-impl<'tcx> AnalysisDomain<'tcx> for DefinitelyInitializedLocal<'_, 'tcx> {
-    type Idx = mir::Local;
-
-    const NAME: &'static str = "definitely_init_local";
-
-    fn bits_per_block(&self, _: &mir::Body<'tcx>) -> usize {
-        self.body.local_decls.len()
-    }
-
-    fn initialize_start_block(&self, _: &mir::Body<'tcx>, on_entry: &mut BitSet<Self::Idx>) {
-        on_entry.clear();
-        for arg in self.body.args_iter() {
-            on_entry.insert(arg);
-        }
-    }
-
-    fn pretty_print_idx(&self, w: &mut impl std::io::Write, mpi: Self::Idx) -> std::io::Result<()> {
-        write!(w, "{:?}", self.body.local_decls[mpi])
-    }
-}
-
-impl<'tcx> GenKillAnalysis<'tcx> for DefinitelyInitializedLocal<'_, 'tcx> {
-    fn statement_effect(
-        &self,
-        trans: &mut impl GenKill<mir::Local>,
-        stmt: &mir::Statement<'tcx>,
-        _loc: mir::Location,
-    ) {
-        if let StatementKind::Assign(box (place, _)) = stmt.kind {
-            if place.projection.len() == 0 {
-                trans.gen(place.local);
-            } else {
-                todo!("{:?}", stmt)
-            }
-        }
-    }
-
-    fn terminator_effect(
-        &self,
-        trans: &mut impl GenKill<mir::Local>,
-        terminator: &mir::Terminator<'tcx>,
-        _loc: mir::Location,
-    ) {
-        // TODO: at least function calls should have effect here
-        if_chain! {
-            if let TerminatorKind::Call {destination, ..} = &terminator.kind;
-            if let Some((place, _)) = destination;
-            then {
-                if place.projection.len() == 0 {
-                    trans.gen(place.local);
-                } else {
-                    todo!("{:?}", terminator)
-                }
-            }
-        }
-    }
-
-    fn call_return_effect(
-        &self,
-        _trans: &mut impl GenKill<Self::Idx>,
-        _block: mir::BasicBlock,
-        _func: &mir::Operand<'tcx>,
-        _args: &[mir::Operand<'tcx>],
-        _dest_place: mir::Place<'tcx>,
-    ) {
-        // TODO We should initialize the dest_place here
-    }
-}
-
-impl BottomValue for DefinitelyInitializedLocal<'_, '_> {
-    const BOTTOM_VALUE: bool = true;
-}
