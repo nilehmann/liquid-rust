@@ -1,4 +1,5 @@
 pub mod typeck;
+pub mod dom_tree;
 
 extern crate arena;
 extern crate rustc_index;
