@@ -1,6 +1,6 @@
+use super::{Operand, Pred};
 use crate::context::LiquidRustCtxt;
 use crate::syntax::ast::{BinOpKind, UnOpKind};
-use super::{Operand, Pred};
 use rustc_data_structures::graph::vec_graph::VecGraph;
 use rustc_middle::mir;
 use std::collections::HashMap;
@@ -37,46 +37,9 @@ impl<'lr, 'tcx> DominatorTree<'lr, 'tcx> {
             }
 
             if let Some(terminator) = &bbd.terminator {
-                match &terminator.kind {
-                    mir::TerminatorKind::SwitchInt {
-                        discr,
-                        values,
-                        switch_ty,
-                        targets,
-                    } => {
-                        let discr = cx.mk_operand(Operand::from_mir(discr));
-                        let mut disj = cx.pred_false;
-                        for (value, target) in values.iter().zip(targets.iter()) {
-                            let value = cx.mk_operand(Operand::from_bits(
-                                cx.tcx(),
-                                *value,
-                                switch_ty,
-                            ));
-                            let cond = cx.mk_binary(discr, BinOpKind::Eq, value);
-                            disj = cx.mk_binary(disj, BinOpKind::Or, cond);
-                            known_preds.insert(*target, cond);
-                        }
-
-                        // There will always be one more target than there are
-                        // values: this represents the "otherwise" case.
-                        let otherwise_bb = targets.last().unwrap();
-                        let neg = cx.mk_unary(UnOpKind::Not, disj);
-                        known_preds.insert(*otherwise_bb, neg);
-                    }
-                    mir::TerminatorKind::Assert {
-                        cond,
-                        expected,
-                        target,
-                        ..
-                    } => {
-                        let mut cond = cx.mk_operand(Operand::from_mir(cond));
-                        if !expected {
-                            cond = cx.mk_unary(UnOpKind::Not, cond);
-                        }
-                        known_preds.insert(*target, cond);
-                    }
-                    _ => {}
-                }
+                Self::find_terminator_preds(cx, &terminator.kind, |t, k| {
+                    known_preds.insert(t, k);
+                });
             }
         }
 
@@ -86,8 +49,55 @@ impl<'lr, 'tcx> DominatorTree<'lr, 'tcx> {
         };
     }
 
+    /// Finds all of the predicates we know to be true after going through a
+    /// terminator for a particular basic block and calls a callback on each
+    /// new predicate. 
+    pub fn find_terminator_preds(
+        cx: &LiquidRustCtxt<'lr, 'tcx>,
+        tk: &mir::TerminatorKind<'tcx>,
+        mut on_pred: impl FnMut(mir::BasicBlock, &'lr Pred<'lr, 'tcx>),
+    ) {
+        match &tk {
+            mir::TerminatorKind::SwitchInt {
+                discr,
+                values,
+                switch_ty,
+                targets,
+            } => {
+                let discr = cx.mk_operand(Operand::from_mir(discr));
+                let mut disj = cx.pred_false;
+                for (value, target) in values.iter().zip(targets.iter()) {
+                    let value = cx.mk_operand(Operand::from_bits(cx.tcx(), *value, switch_ty));
+                    let cond = cx.mk_binary(discr, BinOpKind::Eq, value);
+                    disj = cx.mk_binary(disj, BinOpKind::Or, cond);
+                    on_pred(*target, cond);
+                }
+
+                // There will always be one more target than there are
+                // values: this represents the "otherwise" case.
+                let otherwise_bb = targets.last().unwrap();
+                let neg = cx.mk_unary(UnOpKind::Not, disj);
+                on_pred(*otherwise_bb, neg);
+            }
+            mir::TerminatorKind::Assert {
+                cond,
+                expected,
+                target,
+                ..
+            } => {
+                let mut cond = cx.mk_operand(Operand::from_mir(cond));
+                if !expected {
+                    cond = cx.mk_unary(UnOpKind::Not, cond);
+                }
+                on_pred(*target, cond);
+            }
+            _ => {}
+        }
+    }
+
     pub fn traverse<'dt>(
-        &'dt self, start_node: mir::BasicBlock
+        &'dt self,
+        start_node: mir::BasicBlock,
     ) -> DepthFirstTraversal<'dt, 'lr, 'tcx> {
         DepthFirstTraversal::with_start_node(&self, start_node)
     }
@@ -100,7 +110,8 @@ pub struct DepthFirstTraversal<'dt, 'lr, 'tcx> {
 
 impl<'dt, 'lr, 'tcx> DepthFirstTraversal<'dt, 'lr, 'tcx> {
     pub fn with_start_node(
-        dom_tree: &'dt DominatorTree<'lr, 'tcx>, start_node: mir::BasicBlock
+        dom_tree: &'dt DominatorTree<'lr, 'tcx>,
+        start_node: mir::BasicBlock,
     ) -> Self {
         let queue = vec![(1, start_node)];
 

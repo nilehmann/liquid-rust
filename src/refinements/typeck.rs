@@ -1,6 +1,6 @@
 extern crate rustc_mir;
 
-use super::{Binder, Operand, Place, Pred, ReftType, Scalar, Var, dom_tree::DominatorTree};
+use super::{dom_tree::DominatorTree, Binder, Operand, Place, Pred, ReftType, Scalar, Var};
 use crate::context::LiquidRustCtxt;
 use crate::smtlib2::{SmtRes, Solver};
 use crate::syntax::ast::{BinOpKind, UnOpKind};
@@ -10,12 +10,12 @@ use rustc_index::vec::IndexVec;
 use rustc_index::{bit_set::BitSet, vec::Idx};
 use rustc_middle::mir::{self, Constant, Rvalue, StatementKind, TerminatorKind};
 use rustc_middle::ty::{self, Ty};
-use std::collections::{HashMap, HashSet};
 use rustc_mir::dataflow::{
     Analysis, AnalysisDomain, BottomValue, GenKill, GenKillAnalysis, ResultsCursor,
 };
+use std::collections::{HashMap, HashSet};
 
-const LOCAL_DEPTH: usize = 99999;
+const LOCAL_DEPTH: usize = usize::MAX;
 
 pub fn check_body(cx: &LiquidRustCtxt<'_, '_>, body_id: BodyId) {
     ReftChecker::new(cx, body_id).check_body();
