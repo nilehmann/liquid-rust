@@ -15,8 +15,6 @@ use rustc_mir::dataflow::{
 };
 use std::collections::{HashMap, HashSet};
 
-const LOCAL_DEPTH: usize = usize::MAX;
-
 pub fn check_body(cx: &LiquidRustCtxt<'_, '_>, body_id: BodyId) {
     ReftChecker::new(cx, body_id).check_body();
 }
@@ -81,7 +79,9 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
             }
 
             // We also push our locals
-            self.reinsert_locals(bb, &mut env, &mut depths, LOCAL_DEPTH);
+            // We count the number of locals we push so that we
+            // can pop this number later
+            let (start_ix, nlocals) = self.reinsert_locals(bb, &mut env);
 
             for statement in bbd.statements.iter() {
                 match &statement.kind {
@@ -90,7 +90,7 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                         let ty = place.ty(self, self.cx.tcx()).ty;
                         let lhs = self.rvalue_reft_type(ty, &rvalue);
                         println!("    {:?}", env);
-                        self.check_assign(*place, &mut env, &mut depths, LOCAL_DEPTH, lhs);
+                        self.check_assign(*place, &mut env, &mut depths, depth, lhs);
                     }
                     StatementKind::StorageLive(_)
                     | StatementKind::StorageDead(_)
@@ -122,7 +122,7 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                                 self.check_subtyping(&env, actual, formal);
                             }
                             println!("");
-                            self.check_assign(*place, &mut env, &mut depths, LOCAL_DEPTH, ret);
+                            self.check_assign(*place, &mut env, &mut depths, depth, ret);
                         } else {
                             todo!("implement checks for non converging calls")
                         }
@@ -137,6 +137,8 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                     _ => todo!("{:?}", terminator.kind),
                 };
             }
+
+            self.remove_locals(&mut env, start_ix, nlocals);
         }
         println!("---------------------------");
     }
@@ -157,9 +159,10 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
         &mut self,
         block: mir::BasicBlock,
         env: &mut Vec<&'lr Pred<'lr, 'tcx>>,
-        depths: &mut Vec<usize>,
-        depth: usize,
-    ) {
+    ) -> (usize, usize) {
+        let mut inserted = 0;
+        let ix = env.len();
+        
         let loc = mir::Location {
             block,
             statement_index: 0,
@@ -168,8 +171,21 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
         for local in self.cursor.get().iter() {
             if let Some(pred) = self.reft_types.get(&local).and_then(|rt| rt.pred()) {
                 env.push(self.cx.open_pred(pred, Operand::from_local(local)));
-                depths.push(depth);
+                inserted += 1;
             }
+        }
+
+        (ix, inserted)
+    }
+
+    fn remove_locals(
+        &mut self,
+        env: &mut Vec<&'lr Pred<'lr, 'tcx>>,
+        start_ix: usize,
+        amt: usize,
+    ) {
+        for _ in 0..amt {
+            env.remove(start_ix);
         }
     }
 
