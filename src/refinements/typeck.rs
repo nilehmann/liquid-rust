@@ -81,7 +81,7 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
             // We also push our locals
             // We count the number of locals we push so that we
             // can pop this number later
-            let (start_ix, nlocals) = self.reinsert_locals(bb, &mut env);
+            let mut nls = self.reinsert_locals(bb, &mut env);
 
             for statement in bbd.statements.iter() {
                 match &statement.kind {
@@ -90,7 +90,10 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                         let ty = place.ty(self, self.cx.tcx()).ty;
                         let lhs = self.rvalue_reft_type(ty, &rvalue);
                         println!("    {:?}", env);
-                        self.check_assign(*place, &mut env, &mut depths, depth, lhs);
+                        if let Some(pred) = self.check_assign(*place, &env, lhs) {
+                            env.push(self.cx.open_pred(pred, Operand::from_local(place.local)));
+                            nls += 1;
+                        }
                     }
                     StatementKind::StorageLive(_)
                     | StatementKind::StorageDead(_)
@@ -122,7 +125,7 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                                 self.check_subtyping(&env, actual, formal);
                             }
                             println!("");
-                            self.check_assign(*place, &mut env, &mut depths, depth, ret);
+                            let _ = self.check_assign(*place, &env, ret);
                         } else {
                             todo!("implement checks for non converging calls")
                         }
@@ -138,7 +141,7 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
                 };
             }
 
-            self.remove_locals(&mut env, start_ix, nlocals);
+            self.remove_locals(&mut env, nls);
         }
         println!("---------------------------");
     }
@@ -159,9 +162,8 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
         &mut self,
         block: mir::BasicBlock,
         env: &mut Vec<&'lr Pred<'lr, 'tcx>>,
-    ) -> (usize, usize) {
+    ) -> usize {
         let mut inserted = 0;
-        let ix = env.len();
         
         let loc = mir::Location {
             block,
@@ -175,41 +177,36 @@ impl<'a, 'lr, 'tcx> ReftChecker<'a, 'lr, 'tcx> {
             }
         }
 
-        (ix, inserted)
+        inserted
     }
 
     fn remove_locals(
         &mut self,
         env: &mut Vec<&'lr Pred<'lr, 'tcx>>,
-        start_ix: usize,
         amt: usize,
     ) {
-        for _ in 0..amt {
-            env.remove(start_ix);
-        }
+        env.truncate(env.len().saturating_sub(amt));
     }
 
     fn check_assign(
         &mut self,
         place: mir::Place,
-        env: &mut Vec<&'lr Pred<'lr, 'tcx>>,
-        depths: &mut Vec<usize>,
-        depth: usize,
+        env: &[&'lr Pred<'lr, 'tcx>],
         lhs: Binder<&'lr ReftType<'lr, 'tcx>>,
-    ) {
+    ) -> Option<Binder<&'lr Pred<'lr, 'tcx>>> {
         if place.projection.len() > 0 {
             todo!();
         }
         let local = place.local;
         if let Some(rhs) = self.reft_types.get(&local) {
             self.check_subtyping(&env, lhs, *rhs);
+            None
         } else if !self.mir.local_decls[local].is_user_variable() {
             println!("    infer {:?}:{:?}", local, lhs);
             self.reft_types.insert(local, lhs);
-            if let Some(pred) = lhs.pred() {
-                env.push(self.cx.open_pred(pred, Operand::from_local(local)));
-                depths.push(depth);
-            }
+            lhs.pred()
+        } else {
+            None
         }
     }
 
