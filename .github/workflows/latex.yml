@@ -7,8 +7,6 @@ name: Latex Notes
 on:
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
 
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
@@ -16,15 +14,23 @@ jobs:
   build:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
-
+      
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-    # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+      
+    - name: Check latex changes
+      uses: tony84727/changed-file-filter@0.0.2
+      id: filter
+      with:
+        filters: |
+          notes:
+            - 'notes/**'
     
     # Runs a set of commands using the runners shell
     - name: Compile Latex
       uses: xu-cheng/latex-action@v2
+      if: steps.filter.outputs.notes == 'true'
       with:
         root_file: main.tex
         working_directory: notes
@@ -32,6 +38,7 @@ jobs:
         
     - name: Upload PDF to Google Cloud Storage
       uses: actions-hub/gcloud@300.0.0
+      if: steps.filter.outputs.notes == 'true'
       env:
         PROJECT_ID: liquid-rust 
         APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
