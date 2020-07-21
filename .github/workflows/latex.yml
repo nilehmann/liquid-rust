@@ -35,5 +35,5 @@ jobs:
         PROJECT_ID: liquid-rust 
         APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
       with:
-        args: -m rsync -R main.pdf gs://liquid-rust
+        args: cp notes/main.pdf gs://liquid-rust
         cli: gsutil
