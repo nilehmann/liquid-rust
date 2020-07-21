@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Latex Notes
 
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
@@ -26,4 +26,5 @@ jobs:
     - name: Latex
       uses: xu-cheng/latex-action@v2
       with:
+        root-file: main.tex
         working-directory: notes
