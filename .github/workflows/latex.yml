@@ -26,5 +26,5 @@ jobs:
     - name: Latex
       uses: xu-cheng/latex-action@v2
       with:
-        root-file: main.tex
-        working-directory: notes
+        root_file: main.tex
+        working_directory: notes
