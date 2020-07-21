@@ -21,3 +21,19 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+    
+    # Runs a set of commands using the runners shell
+    - name: Compile Latex
+      uses: xu-cheng/latex-action@v2
+      with:
+        root_file: main.tex
+        working_directory: notes
+        
+    - name: Upload PDF to Google Cloud Storage
+      uses: actions-hub/gcloud@300.0.0
+      env:
+        PROJECT_ID: liquid-rust 
+        APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
+      with:
+        args: cp notes/main.pdf gs://liquid-rust
+        cli: gsutil
