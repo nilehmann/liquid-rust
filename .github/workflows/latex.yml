@@ -5,8 +5,6 @@ name: Latex Notes
 # Controls when the action will run. Triggers the workflow on push or pull request
 # events but only for the master branch
 on:
-  pull_request:
-    branches: [ master ]
   push:
     branches: [ master ]
 
@@ -21,27 +19,16 @@ jobs:
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     - uses: actions/checkout@v2
-      
-    - name: Check latex changes
-      uses: tony84727/changed-file-filter@0.0.2
-      id: filter
-      with:
-        filters: |
-          notes:
-            - 'notes/**'
     
     # Runs a set of commands using the runners shell
     - name: Compile Latex
       uses: xu-cheng/latex-action@v2
-      if: steps.filter.outputs.notes == 'true'
       with:
         root_file: main.tex
-        working_directory: notes
-        
+        working_directory: notes   
         
     - name: Upload PDF to Google Cloud Storage
       uses: actions-hub/gcloud@300.0.0
-      if: steps.filter.outputs.notes == 'true'
       env:
         PROJECT_ID: liquid-rust 
         APPLICATION_CREDENTIALS: ${{ secrets.GOOGLE_APPLICATION_CREDENTIALS }}
