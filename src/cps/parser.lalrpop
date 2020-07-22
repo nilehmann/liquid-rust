@@ -89,9 +89,9 @@ IntTy: IntTy = {
 
 Type: Type = {
     "fn" "(" <args: Args> ")" "->" <ret: Tydent> => Type::Fn { args, ret: Box::new(ret) },
-    "{" <ty: BasicType> "|" <pred: Pred> "}" => Type::Type { ty, pred },
+    "{" <ty: BasicType> "|" <pred: Pred> "}" => Type::Reft { ty, pred },
     "(" <Comma<Tydent>> ")" => Type::Prod(<>),
-    <ty: BasicType> => Type::Type { ty, pred: Pred::Op(Operand::Lit(Literal::Bool(true))) },
+    <ty: BasicType> => Type::Reft { ty, pred: Pred::Op(Operand::Lit(Literal::Bool(true))) },
 };
 
 Pred: Pred = {

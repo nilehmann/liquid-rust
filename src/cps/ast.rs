@@ -108,7 +108,7 @@ pub enum IntTy {
 #[derive(Debug)]
 pub enum Type {
     Fn { args: Vec<Tydent>, ret: Box<Tydent> },
-    Type { ty: BasicType, pred: Pred },
+    Reft { ty: BasicType, pred: Pred },
     Prod(Vec<Tydent>),
 }
 

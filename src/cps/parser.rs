@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.17.2"
-// sha256: 111f2f2b045caaa59956b5ba8b8ccf3753eb678e8a88093239c1f2b9b978036
+// sha256: fcc8ad58b7216f76f0a4df95dbc3f5521ada674162c314df1fe309ae178c324
 #![allow(clippy::all)]
 #![allow(unused_parens)]
 use std::str::FromStr;
@@ -8639,7 +8639,7 @@ fn __action43<
     (_, _, _): (usize, &'input str, usize),
 ) -> Type
 {
-    Type::Type { ty, pred }
+    Type::Reft { ty, pred }
 }
 
 #[allow(unused_variables)]
@@ -8663,7 +8663,7 @@ fn __action45<
     (_, ty, _): (usize, BasicType, usize),
 ) -> Type
 {
-    Type::Type { ty, pred: Pred::Op(Operand::Lit(Literal::Bool(true))) }
+    Type::Reft { ty, pred: Pred::Op(Operand::Lit(Literal::Bool(true))) }
 }
 
 #[allow(unused_variables)]
