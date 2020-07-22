@@ -7,12 +7,12 @@ use rustc_span::Symbol;
 
 /// Each function in MIR is translated to a CpsFn
 #[derive(Debug)]
-pub struct CpsFn {
-    pub name: Symbol,
+pub struct FnDef {
+    pub name: ContIdent,
     pub args: Vec<Tydent>,
-    pub cont: Symbol,
+    pub cont: ContIdent,
     pub ret: Tydent,
-    pub body: Box<Body>,
+    pub body: Box<FuncBody>,
 }
 
 /// A Local is an identifier for some local variable (a fn arg, a let-bound
@@ -20,12 +20,13 @@ pub struct CpsFn {
 /// For now, these are symbols, but we could theoretically just use u32s
 /// (since the name of the variables doesn't really matter)
 pub type Local = Symbol;
+pub type ContIdent = Symbol;
 
-/// A Tydent is a Reft with an associated identifier.
+/// A Tydent is a Type with an associated identifier.
 #[derive(Debug)]
 pub struct Tydent {
     pub ident: Local,
-    pub reft: Reft,
+    pub reft: Type,
 }
 
 /// A Literal is a boolean or integer literal.
@@ -72,12 +73,12 @@ pub enum RBinOp {
 
 /// A Body is (a part of) a function body.
 #[derive(Debug)]
-pub enum Body {
-    Let(Local, RValue, Box<Body>),
-    Cont(Local, Vec<Tydent>, Box<Body>, Box<Body>),
-    Ite(Path, Box<Body>, Box<Body>),
-    Call(Local, Vec<Path>, Local),
-    Jump(Local, Vec<Path>),
+pub enum FuncBody {
+    Let(Local, RValue, Box<FuncBody>),
+    LetCont(ContIdent, Vec<Tydent>, Box<FuncBody>, Box<FuncBody>),
+    Ite(Path, Box<FuncBody>, Box<FuncBody>),
+    Call(ContIdent, Vec<Path>, ContIdent),
+    Jump(ContIdent, Vec<Path>),
     Abort,
 }
     
@@ -105,10 +106,10 @@ pub enum IntTy {
 }
 
 #[derive(Debug)]
-pub enum Reft {
-    Fn { args: Vec<Tydent>, ret: Box<Reft> },
-    Reft { ty: BasicType, pred: Pred },
-    Proj(Vec<Reft>),
+pub enum Type {
+    Fn { args: Vec<Tydent>, ret: Box<Tydent> },
+    Type { ty: BasicType, pred: Pred },
+    Prod(Vec<Tydent>),
 }
 
 #[derive(Debug)]

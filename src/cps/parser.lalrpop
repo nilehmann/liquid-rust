@@ -20,14 +20,15 @@ Comma<T>: Vec<T> = {
     }
 };
 
-pub Fn: CpsFn =
-    "fn" <name: Ident> "(" <args: Args> ")" "ret" <cont: Ident> "(" <ret: Tydent> ")" "=" <body: Body> =>
-        CpsFn { name, args, cont, ret, body };
+pub Fn: FnDef =
+    "fn" <name: ContIdent> "(" <args: Args> ")" "ret" <cont: ContIdent> "(" <ret: Tydent> ")" "=" <body: FuncBody> =>
+        FnDef { name, args, cont, ret, body };
 
 Ident: Symbol = r"([a-zA-Z][a-zA-Z0-9_]*|_[a-zA-Z0-9_]+)" => Symbol::intern(<>);
 Local: Local = Ident;
+ContIdent: Symbol = Ident;
 
-Tydent: Tydent = <ident: Local> ":" <reft: Reft> => Tydent { ident, reft };
+Tydent: Tydent = <ident: Local> ":" <reft: Type> => Tydent { ident, reft };
 Args = Comma<Tydent>;
 
 Literal: Literal = {
@@ -59,13 +60,13 @@ RBinOp: RBinOp = {
     ">" => RBinOp::Gt,
 };
 
-Body: Box<Body> = {
-    "let" <Local> "=" <RValue> "in" <Body> => Box::new(Body::Let(<>)),
-    "letcont" <Local> "(" <Args> ")" "=" <Body> "in" <Body> => Box::new(Body::Cont(<>)),
-    "if" <Path> "then" <Body> "else" <Body> => Box::new(Body::Ite(<>)),
-    "call" <Local> "(" <Comma<Path>> ")" "ret" <Local> => Box::new(Body::Call(<>)),
-    "jump" <Local> "(" <Comma<Path>> ")" => Box::new(Body::Jump(<>)),
-    "abort" => Box::new(Body::Abort),
+FuncBody: Box<FuncBody> = {
+    "let" <Local> "=" <RValue> "in" <FuncBody> => Box::new(FuncBody::Let(<>)),
+    "letcont" <ContIdent> "(" <Args> ")" "=" <FuncBody> "in" <FuncBody> => Box::new(FuncBody::LetCont(<>)),
+    "if" <Path> "then" <FuncBody> "else" <FuncBody> => Box::new(FuncBody::Ite(<>)),
+    "call" <ContIdent> "(" <Comma<Path>> ")" "ret" <ContIdent> => Box::new(FuncBody::Call(<>)),
+    "jump" <ContIdent> "(" <Comma<Path>> ")" => Box::new(FuncBody::Jump(<>)),
+    "abort" => Box::new(FuncBody::Abort),
 };
 
 BasicType: BasicType = {
@@ -86,11 +87,11 @@ IntTy: IntTy = {
     "u128" => IntTy::U128,
 };
 
-Reft: Reft = {
-    "fn" "(" <args: Args> ")" "->" <ret: Reft> => Reft::Fn { args, ret: Box::new(ret) },
-    "{" <ty: BasicType> "|" <pred: Pred> "}" => Reft::Reft { ty, pred },
-    "(" <Comma<Reft>> ")" => Reft::Proj(<>),
-    <ty: BasicType> => Reft::Reft { ty, pred: Pred::Op(Operand::Lit(Literal::Bool(true))) },
+Type: Type = {
+    "fn" "(" <args: Args> ")" "->" <ret: Tydent> => Type::Fn { args, ret: Box::new(ret) },
+    "{" <ty: BasicType> "|" <pred: Pred> "}" => Type::Type { ty, pred },
+    "(" <Comma<Tydent>> ")" => Type::Prod(<>),
+    <ty: BasicType> => Type::Type { ty, pred: Pred::Op(Operand::Lit(Literal::Bool(true))) },
 };
 
 Pred: Pred = {
