@@ -3,6 +3,8 @@
 
 pub use rustc_span::Symbol;
 
+use std::fmt;
+
 /// Each function in MIR is translated to a CpsFn
 #[derive(Debug)]
 pub struct FnDef {
@@ -32,6 +34,15 @@ pub struct Tydent {
 pub enum Literal {
     Bool(bool),
     Int(i128),
+}
+
+impl fmt::Display for Literal {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Literal::Bool(b) => write!(f, "{}", b),
+            Literal::Int(i)  => write!(f, "{}", i),
+        }
+    }
 }
 
 /// A Projection is just a number.
@@ -66,6 +77,17 @@ impl Path {
     }
 }
 
+impl fmt::Display for Path {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.ident)?;
+        for p in &self.projs {
+            write!(f, ".{}", p)?;
+        }
+
+        Ok(())
+    }
+}
+
 impl From<Local> for Path {
     fn from(ident: Local) -> Path {
         Path {
@@ -82,12 +104,22 @@ pub enum Operand {
     Lit(Literal),
 }
 
+impl fmt::Display for Operand {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Operand::Path(p) => p.fmt(f),
+            Operand::Lit(l)  => l.fmt(f),
+        }
+    }
+}
+
 impl Operand {
     /// Substitute all occurrences of symbols in `from` with their respective symbol in `to` in this operand
     pub fn subst(&self, from: &[Local], to: &[Local]) -> Operand {
         match self {
             Operand::Path(og) => {
-                let ps = if let Some((f, t)) = from.iter().zip(to.iter()).find(|x| *x.0 == og.ident) {
+                let ps = if let Some((f, t)) = from.iter().zip(to.iter()).find(|x| *x.0 == og.ident)
+                {
                     og.subst(*f, *t)
                 } else {
                     og.clone()
@@ -101,7 +133,8 @@ impl Operand {
     pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Operand {
         match self {
             Operand::Path(og) => {
-                let ps = if let Some((f, t)) = from.iter().zip(to.iter()).find(|x| *x.0 == og.ident) {
+                let ps = if let Some((f, t)) = from.iter().zip(to.iter()).find(|x| *x.0 == og.ident)
+                {
                     og.subst_path(*f, t.clone())
                 } else {
                     og.clone()
@@ -153,6 +186,17 @@ pub enum FuncBody {
 pub enum BasicType {
     Bool,
     Int(IntTy),
+}
+
+impl fmt::Display for BasicType {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", match self {
+            BasicType::Bool => "Bool",
+            BasicType::Int(_) => "Int",
+        })?;
+
+        Ok(())
+    }
 }
 
 // An IntTy is a width and signedness for an int.
@@ -223,7 +267,7 @@ impl Type {
 pub enum Pred {
     Op(Operand),
     Unary(PredUnOp, Box<Pred>),
-    Binary(PredBinOp, Operand, Box<Pred>),
+    Binary(PredBinOp, Box<Pred>, Box<Pred>),
 }
 
 impl Pred {
@@ -232,7 +276,11 @@ impl Pred {
         match self {
             Pred::Op(op) => Pred::Op(op.subst(from, to)),
             Pred::Unary(un, op) => Pred::Unary(*un, Box::new(op.subst(from, to))),
-            Pred::Binary(bin, o1, o2) => Pred::Binary(*bin, o1.subst(from, to), Box::new(o2.subst(from, to))),
+            Pred::Binary(bin, o1, o2) => Pred::Binary(
+                *bin,
+                Box::new(o1.subst(from, to)),
+                Box::new(o2.subst(from, to)),
+            ),
         }
     }
 
@@ -240,7 +288,11 @@ impl Pred {
         match self {
             Pred::Op(op) => Pred::Op(op.subst_path(from, to)),
             Pred::Unary(un, op) => Pred::Unary(*un, Box::new(op.subst_path(from, to))),
-            Pred::Binary(bin, o1, o2) => Pred::Binary(*bin, o1.subst_path(from, to), Box::new(o2.subst_path(from, to))),
+            Pred::Binary(bin, o1, o2) => Pred::Binary(
+                *bin,
+                Box::new(o1.subst_path(from, to)),
+                Box::new(o2.subst_path(from, to)),
+            ),
         }
     }
 }
@@ -251,19 +303,48 @@ impl From<Operand> for Box<Pred> {
     }
 }
 
+impl From<Local> for Pred {
+    fn from(ident: Local) -> Pred {
+        Pred::Op(ident.into())
+    }
+}
+
+impl From<Local> for Box<Pred> {
+    fn from(ident: Local) -> Box<Pred> {
+        Box::new(Pred::Op(ident.into()))
+    }
+}
+
 #[derive(Debug, Copy, Clone)]
 pub enum PredUnOp {
     Not,
 }
 
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, PartialEq, Eq)]
 pub enum PredBinOp {
     Add,
+    And,
     Lt,
     Le,
     Eq,
     Ge,
     Gt,
+}
+
+impl fmt::Display for PredBinOp {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", match self {
+            PredBinOp::Add => "+",
+            PredBinOp::And => "&&",
+            PredBinOp::Lt => "<",
+            PredBinOp::Le => "<=",
+            PredBinOp::Eq => "<=",
+            PredBinOp::Ge => ">=",
+            PredBinOp::Gt => ">",
+        })?;
+
+        Ok(())
+    }
 }
 
 impl From<RBinOp> for PredBinOp {

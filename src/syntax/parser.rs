@@ -1,11 +1,11 @@
 // auto-generated: "lalrpop 0.17.2"
-// sha256: 5e8096c3884542abebf61d7aab616b496d1a35e80f4341c9cd833944bbab
+// sha256: 3316f5e913b822d22e681012c33bf3c4a0dfad6d5492a8623ed2871045ce5e
 #![allow(clippy::all)]
 #![allow(unused_parens)]
+use std::str::FromStr;
 use super::span_with_offset;
 use crate::syntax::ast::*;
-use rustc_span::{hygiene::SyntaxContext, symbol::Symbol, BytePos};
-use std::str::FromStr;
+use rustc_span::{symbol::Symbol, hygiene::SyntaxContext, BytePos};
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -6639,7 +6639,10 @@ mod __intern_token {
 pub use self::__intern_token::Token;
 
 #[allow(unused_variables)]
-fn __action0<'input, F>(
+fn __action0<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6654,7 +6657,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action1<'input, F>(
+fn __action1<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6669,7 +6675,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action2<'input, F>(
+fn __action2<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6686,7 +6695,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action3<'input, F>(
+fn __action3<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6702,13 +6714,16 @@ where
     F: Copy,
 {
     FnType {
-        inputs: inputs,
-        output,
-    }
+            inputs: inputs,
+            output
+        }
 }
 
 #[allow(unused_variables)]
-fn __action4<'input, F>(
+fn __action4<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6725,7 +6740,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action5<'input, F>(
+fn __action5<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6747,7 +6765,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action6<'input, F>(
+fn __action6<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6765,15 +6786,18 @@ where
     F: Copy,
 {
     Reft {
-        binding: ident,
-        pred: *e,
-        span: span_with_offset(lo, hi, offset, ctxt),
-        hir_res: HirRes::Unresolved,
-    }
+            binding: ident,
+            pred: *e,
+            span: span_with_offset(lo, hi, offset, ctxt),
+            hir_res: HirRes::Unresolved
+        }
 }
 
 #[allow(unused_variables)]
-fn __action7<'input, F>(
+fn __action7<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6788,7 +6812,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action8<'input, F>(
+fn __action8<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6803,7 +6830,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action9<'input, F>(
+fn __action9<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6819,14 +6849,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Binary(e1, op, e2),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Binary(e1, op, e2),
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
 }
 
 #[allow(unused_variables)]
-fn __action10<'input, F>(
+fn __action10<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6841,7 +6874,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action11<'input, F>(
+fn __action11<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6856,7 +6892,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action12<'input, F>(
+fn __action12<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6871,7 +6910,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action13<'input, F>(
+fn __action13<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6886,14 +6928,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Unary(op, e),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Unary(op, e),
+            span: span_with_offset(lo, hi, offset, ctxt)
+        }
 }
 
 #[allow(unused_variables)]
-fn __action14<'input, F>(
+fn __action14<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6908,7 +6953,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action15<'input, F>(
+fn __action15<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6922,14 +6970,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Name(name),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Name(name),
+            span: span_with_offset(lo, hi, offset, ctxt)
+        }
 }
 
 #[allow(unused_variables)]
-fn __action16<'input, F>(
+fn __action16<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6943,14 +6994,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Lit(lit),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Lit(lit),
+            span: span_with_offset(lo, hi, offset, ctxt)
+        }
 }
 
 #[allow(unused_variables)]
-fn __action17<'input, F>(
+fn __action17<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6967,7 +7021,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action18<'input, F>(
+fn __action18<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6982,7 +7039,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action19<'input, F>(
+fn __action19<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -6997,7 +7057,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action20<'input, F>(
+fn __action20<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7012,7 +7075,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action21<'input, F>(
+fn __action21<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7027,7 +7093,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action22<'input, F>(
+fn __action22<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7042,7 +7111,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action23<'input, F>(
+fn __action23<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7057,7 +7129,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action24<'input, F>(
+fn __action24<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7072,7 +7147,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action25<'input, F>(
+fn __action25<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7087,7 +7165,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action26<'input, F>(
+fn __action26<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7102,7 +7183,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action27<'input, F>(
+fn __action27<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7117,7 +7201,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action28<'input, F>(
+fn __action28<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7132,7 +7219,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action29<'input, F>(
+fn __action29<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7147,7 +7237,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action30<'input, F>(
+fn __action30<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7162,7 +7255,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action31<'input, F>(
+fn __action31<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7177,7 +7273,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action32<'input, F>(
+fn __action32<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7191,19 +7290,19 @@ where
     F: Copy,
 {
     {
-        let kind = match u128::from_str(tok) {
-            Ok(i) => LitKind::Int(i, LitIntType::Unsuffixed),
-            Err(_) => LitKind::Err,
-        };
-        Lit {
-            kind: kind,
-            span: span_with_offset(lo, hi, offset, ctxt),
-        }
-    }
+      let kind = match u128::from_str(tok) {
+          Ok(i) => LitKind::Int(i, LitIntType::Unsuffixed),
+          Err(_) => LitKind::Err
+      };
+      Lit { kind: kind, span: span_with_offset(lo, hi, offset, ctxt) }
+  }
 }
 
 #[allow(unused_variables)]
-fn __action33<'input, F>(
+fn __action33<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7217,13 +7316,16 @@ where
     F: Copy,
 {
     Lit {
-        kind: LitKind::Float(Symbol::intern(tok), LitFloatType::Unsuffixed),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+          kind: LitKind::Float(Symbol::intern(tok), LitFloatType::Unsuffixed),
+          span: span_with_offset(lo, hi, offset, ctxt)
+      }
 }
 
 #[allow(unused_variables)]
-fn __action34<'input, F>(
+fn __action34<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7236,14 +7338,14 @@ where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    Lit {
-        kind: LitKind::Bool(true),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+    Lit { kind: LitKind::Bool(true), span: span_with_offset(lo, hi, offset, ctxt) }
 }
 
 #[allow(unused_variables)]
-fn __action35<'input, F>(
+fn __action35<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7256,14 +7358,14 @@ where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    Lit {
-        kind: LitKind::Bool(false),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+    Lit { kind: LitKind::Bool(false), span: span_with_offset(lo, hi, offset, ctxt) }
 }
 
 #[allow(unused_variables)]
-fn __action36<'input, F>(
+fn __action36<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7274,14 +7376,14 @@ where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    Name {
-        ident: __0,
-        hir_res: HirRes::Unresolved,
-    }
+    Name {ident: __0, hir_res: HirRes::Unresolved }
 }
 
 #[allow(unused_variables)]
-fn __action37<'input, F>(
+fn __action37<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7301,7 +7403,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action38<'input, F>(
+fn __action38<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7315,13 +7420,16 @@ where
     F: Copy,
 {
     UnOp {
-        kind: kind,
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            kind: kind,
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
 }
 
 #[allow(unused_variables)]
-fn __action39<'input, F>(
+fn __action39<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7337,14 +7445,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Binary(e1, op, e2),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Binary(e1, op, e2),
+            span: span_with_offset(lo, hi, offset, ctxt)
+        }
 }
 
 #[allow(unused_variables)]
-fn __action40<'input, F>(
+fn __action40<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7359,7 +7470,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action41<'input, F>(
+fn __action41<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7375,14 +7489,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Binary(e1, op, e2),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Binary(e1, op, e2),
+            span: span_with_offset(lo, hi, offset, ctxt)
+        }
 }
 
 #[allow(unused_variables)]
-fn __action42<'input, F>(
+fn __action42<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7397,7 +7514,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action43<'input, F>(
+fn __action43<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7411,13 +7531,16 @@ where
     F: Copy,
 {
     BinOp {
-        kind: kind,
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            kind: kind,
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
 }
 
 #[allow(unused_variables)]
-fn __action44<'input, F>(
+fn __action44<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7433,14 +7556,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Binary(e1, op, e2),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Binary(e1, op, e2),
+            span: span_with_offset(lo, hi, offset, ctxt)
+        }
 }
 
 #[allow(unused_variables)]
-fn __action45<'input, F>(
+fn __action45<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7455,7 +7581,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action46<'input, F>(
+fn __action46<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7471,14 +7600,17 @@ where
     F: Copy,
 {
     box Pred {
-        expr_id: next_expr_id(),
-        kind: ExprKind::Binary(e1, op, e2),
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            expr_id: next_expr_id(),
+            kind: ExprKind::Binary(e1, op, e2),
+            span: span_with_offset(lo, hi, offset, ctxt)
+        }
 }
 
 #[allow(unused_variables)]
-fn __action47<'input, F>(
+fn __action47<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7493,7 +7625,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action48<'input, F>(
+fn __action48<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7509,7 +7644,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action49<'input, F>(
+fn __action49<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7525,7 +7663,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action50<'input, F>(
+fn __action50<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7540,7 +7681,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action51<'input, F>(
+fn __action51<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7556,7 +7700,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action52<'input, F>(
+fn __action52<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7572,7 +7719,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action53<'input, F>(
+fn __action53<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7587,7 +7737,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action54<'input, F>(
+fn __action54<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7603,7 +7756,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action55<'input, F>(
+fn __action55<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7618,7 +7774,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action56<'input, F>(
+fn __action56<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7630,15 +7789,14 @@ where
     F: Fn() -> ExprId,
     F: Copy,
 {
-    {
-        let mut v = v;
-        v.push(e);
-        v
-    }
+    { let mut v = v; v.push(e); v }
 }
 
 #[allow(unused_variables)]
-fn __action57<'input, F>(
+fn __action57<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7652,13 +7810,16 @@ where
     F: Copy,
 {
     BinOp {
-        kind: kind,
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            kind: kind,
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
 }
 
 #[allow(unused_variables)]
-fn __action58<'input, F>(
+fn __action58<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7672,13 +7833,16 @@ where
     F: Copy,
 {
     BinOp {
-        kind: kind,
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            kind: kind,
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
 }
 
 #[allow(unused_variables)]
-fn __action59<'input, F>(
+fn __action59<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7692,13 +7856,16 @@ where
     F: Copy,
 {
     BinOp {
-        kind: kind,
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            kind: kind,
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
 }
 
 #[allow(unused_variables)]
-fn __action60<'input, F>(
+fn __action60<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7712,13 +7879,16 @@ where
     F: Copy,
 {
     BinOp {
-        kind: kind,
-        span: span_with_offset(lo, hi, offset, ctxt),
-    }
+            kind: kind,
+            span: span_with_offset(lo, hi, offset, ctxt),
+        }
 }
 
 #[allow(unused_variables)]
-fn __action61<'input, F>(
+fn __action61<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7732,13 +7902,33 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action54::<F>(offset, ctxt, next_expr_id, input, __0, __1);
+    let __temp0 = __action54::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __1,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action55::<F>(offset, ctxt, next_expr_id, input, __temp0)
+    __action55::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action62<'input, F>(
+fn __action62<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7753,13 +7943,34 @@ where
 {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action54::<F>(offset, ctxt, next_expr_id, input, __1, __2);
+    let __temp0 = __action54::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __1,
+        __2,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action56::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action56::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action63<'input, F>(
+fn __action63<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7772,13 +7983,34 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action52::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action52::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action5::<F>(offset, ctxt, next_expr_id, input, __temp0, __0)
+    __action5::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action64<'input, F>(
+fn __action64<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7792,13 +8024,33 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action53::<F>(offset, ctxt, next_expr_id, input, __0);
+    let __temp0 = __action53::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action5::<F>(offset, ctxt, next_expr_id, input, __temp0, __1)
+    __action5::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action65<'input, F>(
+fn __action65<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7812,13 +8064,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action57::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action57::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action66<'input, F>(
+fn __action66<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7832,13 +8106,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action58::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action58::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action67<'input, F>(
+fn __action67<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7852,13 +8148,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action43::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action43::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action68<'input, F>(
+fn __action68<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7872,13 +8190,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action59::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action59::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action69<'input, F>(
+fn __action69<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7892,13 +8232,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action60::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action60::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action70<'input, F>(
+fn __action70<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7914,9 +8276,20 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action9::<F>(
+    __action9::<
+    F,
+    >(
         offset,
         ctxt,
         next_expr_id,
@@ -7930,7 +8303,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action71<'input, F>(
+fn __action71<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7945,13 +8321,36 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action13::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1, __2)
+    __action13::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+        __2,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action72<'input, F>(
+fn __action72<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7965,13 +8364,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action15::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action15::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action73<'input, F>(
+fn __action73<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -7985,13 +8406,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action16::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action16::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action74<'input, F>(
+fn __action74<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8005,13 +8448,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action37::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action37::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action75<'input, F>(
+fn __action75<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8027,9 +8492,20 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action46::<F>(
+    __action46::<
+    F,
+    >(
         offset,
         ctxt,
         next_expr_id,
@@ -8043,7 +8519,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action76<'input, F>(
+fn __action76<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8059,9 +8538,20 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action44::<F>(
+    __action44::<
+    F,
+    >(
         offset,
         ctxt,
         next_expr_id,
@@ -8075,7 +8565,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action77<'input, F>(
+fn __action77<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8091,9 +8584,20 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action41::<F>(
+    __action41::<
+    F,
+    >(
         offset,
         ctxt,
         next_expr_id,
@@ -8107,7 +8611,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action78<'input, F>(
+fn __action78<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8123,9 +8630,20 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action39::<F>(
+    __action39::<
+    F,
+    >(
         offset,
         ctxt,
         next_expr_id,
@@ -8139,7 +8657,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action79<'input, F>(
+fn __action79<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8153,13 +8674,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action32::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action32::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action80<'input, F>(
+fn __action80<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8173,13 +8716,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action33::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action33::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action81<'input, F>(
+fn __action81<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8193,13 +8758,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action34::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action34::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action82<'input, F>(
+fn __action82<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8213,13 +8800,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action35::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action35::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action83<'input, F>(
+fn __action83<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8237,9 +8846,20 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action6::<F>(
+    __action6::<
+    F,
+    >(
         offset,
         ctxt,
         next_expr_id,
@@ -8255,7 +8875,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action84<'input, F>(
+fn __action84<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8269,13 +8892,35 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action49::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action49::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action38::<F>(offset, ctxt, next_expr_id, input, __temp0, __0, __1)
+    __action38::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+        __0,
+        __1,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action85<'input, F>(
+fn __action85<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8288,13 +8933,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action65::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action65::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action86<'input, F>(
+fn __action86<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8307,13 +8973,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action66::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action66::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action87<'input, F>(
+fn __action87<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8326,13 +9013,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action67::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action67::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action88<'input, F>(
+fn __action88<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8345,13 +9053,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action68::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action68::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action89<'input, F>(
+fn __action89<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8364,13 +9093,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action69::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action69::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action90<'input, F>(
+fn __action90<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8385,13 +9135,36 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action70::<F>(offset, ctxt, next_expr_id, input, __0, __1, __2, __temp0)
+    __action70::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __1,
+        __2,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action91<'input, F>(
+fn __action91<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8405,13 +9178,35 @@ where
 {
     let __start0 = __1.2.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action71::<F>(offset, ctxt, next_expr_id, input, __0, __1, __temp0)
+    __action71::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __1,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action92<'input, F>(
+fn __action92<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8424,13 +9219,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action72::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action72::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action93<'input, F>(
+fn __action93<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8443,13 +9259,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action73::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action73::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action94<'input, F>(
+fn __action94<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8462,13 +9299,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action74::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action74::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action95<'input, F>(
+fn __action95<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8483,13 +9341,36 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action75::<F>(offset, ctxt, next_expr_id, input, __0, __1, __2, __temp0)
+    __action75::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __1,
+        __2,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action96<'input, F>(
+fn __action96<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8504,13 +9385,36 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action76::<F>(offset, ctxt, next_expr_id, input, __0, __1, __2, __temp0)
+    __action76::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __1,
+        __2,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action97<'input, F>(
+fn __action97<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8525,13 +9429,36 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action77::<F>(offset, ctxt, next_expr_id, input, __0, __1, __2, __temp0)
+    __action77::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __1,
+        __2,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action98<'input, F>(
+fn __action98<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8546,13 +9473,36 @@ where
 {
     let __start0 = __2.2.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action78::<F>(offset, ctxt, next_expr_id, input, __0, __1, __2, __temp0)
+    __action78::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __1,
+        __2,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action99<'input, F>(
+fn __action99<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8565,13 +9515,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action79::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action79::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action100<'input, F>(
+fn __action100<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8584,13 +9555,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action80::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action80::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action101<'input, F>(
+fn __action101<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8603,13 +9595,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action81::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action81::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action102<'input, F>(
+fn __action102<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8622,13 +9635,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action82::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action82::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action103<'input, F>(
+fn __action103<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8645,9 +9679,20 @@ where
 {
     let __start0 = __4.2.clone();
     let __end0 = __4.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action83::<F>(
+    __action83::<
+    F,
+    >(
         offset,
         ctxt,
         next_expr_id,
@@ -8662,7 +9707,10 @@ where
 }
 
 #[allow(unused_variables)]
-fn __action104<'input, F>(
+fn __action104<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8675,13 +9723,34 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action48::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action48::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action84::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action84::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action105<'input, F>(
+fn __action105<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8694,13 +9763,32 @@ where
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action50::<F>(offset, ctxt, next_expr_id, input, __0);
+    let __temp0 = __action50::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action63::<F>(offset, ctxt, next_expr_id, input, __temp0)
+    __action63::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action106<'input, F>(
+fn __action106<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8714,13 +9802,33 @@ where
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action51::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action51::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action63::<F>(offset, ctxt, next_expr_id, input, __temp0)
+    __action63::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action107<'input, F>(
+fn __action107<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8734,13 +9842,33 @@ where
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action50::<F>(offset, ctxt, next_expr_id, input, __1);
+    let __temp0 = __action50::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __1,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action64::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action64::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
 #[allow(unused_variables)]
-fn __action108<'input, F>(
+fn __action108<
+    'input,
+    F,
+>(
     offset: BytePos,
     ctxt: SyntaxContext,
     next_expr_id: F,
@@ -8753,37 +9881,40 @@ where
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action51::<F>(offset, ctxt, next_expr_id, input, &__start0, &__end0);
+    let __temp0 = __action51::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        &__start0,
+        &__end0,
+    );
     let __temp0 = (__start0, __temp0, __end0);
-    __action64::<F>(offset, ctxt, next_expr_id, input, __0, __temp0)
+    __action64::<
+    F,
+    >(
+        offset,
+        ctxt,
+        next_expr_id,
+        input,
+        __0,
+        __temp0,
+    )
 }
 
-pub trait __ToTriple<'input, F> {
-    fn to_triple(
-        value: Self,
-    ) -> Result<
-        (usize, Token<'input>, usize),
-        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
-    >;
+pub trait __ToTriple<'input, F, > {
+    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>;
 }
 
-impl<'input, F> __ToTriple<'input, F> for (usize, Token<'input>, usize) {
-    fn to_triple(
-        value: Self,
-    ) -> Result<
-        (usize, Token<'input>, usize),
-        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
-    > {
+impl<'input, F, > __ToTriple<'input, F, > for (usize, Token<'input>, usize) {
+    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
         Ok(value)
     }
 }
-impl<'input, F> __ToTriple<'input, F> for Result<(usize, Token<'input>, usize), &'static str> {
-    fn to_triple(
-        value: Self,
-    ) -> Result<
-        (usize, Token<'input>, usize),
-        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
-    > {
+impl<'input, F, > __ToTriple<'input, F, > for Result<(usize, Token<'input>, usize), &'static str> {
+    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
         match value {
             Ok(v) => Ok(v),
             Err(error) => Err(__lalrpop_util::ParseError::User { error }),

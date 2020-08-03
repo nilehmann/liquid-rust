@@ -158,7 +158,7 @@ pub fn synth(tenv: &TEnv, rval: RValue) -> Option<Type> {
                 reft: Type::Reft {
                     ident: loc,
                     ty: BasicType::Int(IntTy::I128),
-                    pred: Pred::Binary(PredBinOp::Eq, o1, o2.into()),
+                    pred: Pred::Binary(PredBinOp::Eq, o1.into(), o2.into()),
                 },
             };
             let tyd2 = Tydent {
@@ -176,8 +176,8 @@ pub fn synth(tenv: &TEnv, rval: RValue) -> Option<Type> {
                     ty: BasicType::Int(IntTy::I128),
                     pred: Pred::Binary(
                         PredBinOp::Eq,
-                        loc.into(),
-                        Box::new(Pred::Binary(cmp.into(), o1, o2.into())),
+                        Box::new(loc.into()),
+                        Box::new(Pred::Binary(cmp.into(), o1.into(), o2.into())),
                     ),
                 },
             };
@@ -213,7 +213,7 @@ impl ConstraintGen {
                     self.tenv.insert(l, p);
                 }
                 Some(bind1(l, &self.tenv[&l], r))
-            },
+            }
             FuncBody::LetCont(k, tyds, def, bod) => {
                 let mut prevs = vec![];
                 for tyd in &tyds {
@@ -230,7 +230,7 @@ impl ConstraintGen {
                 }
 
                 let c2 = self.cgen(*bod)?;
-                
+
                 let res = bind(&self.kenv[&k], Constraint::Conj(Box::new(c1), Box::new(c2)));
 
                 if let Some(pk) = prevk {
@@ -238,7 +238,7 @@ impl ConstraintGen {
                 }
 
                 Some(res)
-            },
+            }
             FuncBody::Call(f, args, k) => {
                 let fty = self.tenv.get(&f)?;
 
@@ -266,7 +266,7 @@ impl ConstraintGen {
                 } else {
                     None
                 }
-            },
+            }
             FuncBody::Jump(k, args) => {
                 let tyds = self.kenv.get(&k)?;
 
@@ -276,12 +276,12 @@ impl ConstraintGen {
                 for (arg, tyd) in args.iter().zip(tyds.iter()) {
                     let t = synth(&self.tenv, RValue::Op(Operand::Path(arg.clone())))?;
                     let r = subtype(t, tyd.reft.subst_path(&idents, &args))?;
-                    
+
                     res = Constraint::Conj(Box::new(r), Box::new(res));
                 }
 
                 Some(res)
-            },
+            }
             FuncBody::Ite(p, t, e) => {
                 let bp = Box::new(Pred::Op(Operand::Path(p)));
                 let c1 = Constraint::Implies(bp.clone(), Box::new(self.cgen(*t)?));
@@ -290,7 +290,7 @@ impl ConstraintGen {
                     Box::new(self.cgen(*e)?),
                 );
                 Some(Constraint::Conj(Box::new(c1), Box::new(c2)))
-            },
+            }
             FuncBody::Abort => Some(Constraint::always()),
         }
     }

@@ -151,7 +151,7 @@ Ident: Ident = {
 
 LeftAssoc<OpGroup, NextExprLevel>: Box<Pred> = {
     <lo:@L>
-    <e1: LeftAssoc<OpGroup,NextExprLevel>>
+    <e1: LeftAssoc<OpGroup, NextExprLevel>>
     <op: BinOp<OpGroup>>
     <e2: NextExprLevel>
     <hi:@R> =>

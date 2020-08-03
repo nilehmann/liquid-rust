@@ -101,16 +101,53 @@ Type: Type = {
     },
 };
 
-Pred: Pred = {
-    Operand => Pred::Op(<>),
-    <arg1: Operand> <op: PredBinOp> <arg2: Pred> => Pred::Binary(op, arg1, Box::new(arg2)),
+LeftAssoc<OpGroup, NextExprLevel>: Box<Pred> = {
+    <e1: LeftAssoc<OpGroup, NextExprLevel>>
+    <op: OpGroup>
+    <e2: NextExprLevel> =>
+        box Pred::Binary(op, e1, e2),
+    NextExprLevel,
 };
 
-PredBinOp: PredBinOp = {
-    "+" => PredBinOp::Add,
+Pred: Pred = {
+    <e1: LeftAssoc<OpGroup1, ExprLevel2>>
+    <op: OpGroup1>
+    <e2: ExprLevel2> =>
+        Pred::Binary(op, e1, e2),
+    ExprLevel2 => *<>,
+};
+
+ExprLevel2: Box<Pred> = {
+    <e1: ExprLevel3> <op: OpGroup2> <e2: ExprLevel3> =>
+        box Pred::Binary(op, e1, e2),
+    ExprLevel3,
+}
+
+ExprLevel3: Box<Pred> = LeftAssoc<OpGroup3, ExprLevel4>;
+
+ExprLevel4: Box<Pred> = {
+    <op: PredUnOp> <e: ExprLevel5> => box Pred::Unary(op, e),
+    ExprLevel5,
+}
+
+ExprLevel5: Box<Pred> = Operand => Box::new(Pred::Op(<>));
+
+OpGroup1: PredBinOp = {
+    "&&" => PredBinOp::And,
+}
+
+OpGroup2: PredBinOp = {
     "<" => PredBinOp::Lt,
     "<=" => PredBinOp::Le,
-    "==" => PredBinOp::Eq,
-    ">=" => PredBinOp::Ge,
     ">" => PredBinOp::Gt,
+    ">=" => PredBinOp::Ge,
+    "==" => PredBinOp::Eq,
+}
+
+OpGroup3: PredBinOp = {
+    "+" => PredBinOp::Add,
+}
+
+PredUnOp: PredUnOp = {
+    "!" => PredUnOp::Not,
 };

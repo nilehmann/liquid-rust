@@ -1,6 +1,7 @@
 pub mod ast;
 pub mod constraint;
 pub mod parser;
+pub mod smt;
 
 #[cfg(test)]
 mod tests {
