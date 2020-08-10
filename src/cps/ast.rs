@@ -70,7 +70,9 @@ impl Path {
 
     pub fn subst_path(&self, from: Local, to: Path) -> Path {
         if self.ident == from {
-            to
+            let mut new = to;
+            new.projs.extend(self.projs.iter());
+            new
         } else {
             self.clone()
         }
@@ -188,6 +190,17 @@ pub enum BasicType {
     Int(IntTy),
 }
 
+impl BasicType {
+    pub fn assignable_to(&self, other: BasicType) -> bool {
+        match (self, other) {
+            (BasicType::Bool, BasicType::Bool) => true,
+            // TODO: we assume all int types are compatible
+            (BasicType::Int(_), BasicType::Int(_)) => true,
+            _ => false,
+        }
+    }
+}
+
 impl fmt::Display for BasicType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", match self {
@@ -200,7 +213,7 @@ impl fmt::Display for BasicType {
 }
 
 // An IntTy is a width and signedness for an int.
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
 pub enum IntTy {
     I8,
     I16,

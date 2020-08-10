@@ -78,9 +78,9 @@ fn subtype(a: Type, b: Type) -> Option<Constraint> {
                 pred: pb,
             },
         ) => {
-            // If we're checking two scalar types, we check if their base types
-            // are the same. If they are, produce a Forall constraint.
-            if ba == bb {
+            // If we're checking two scalar types, we check if a value of former's base
+            // type would be assignable to the latter's base type.
+            if ba.assignable_to(bb) {
                 Some(Constraint::Forall {
                     ident: ia,
                     ty: ba,
@@ -127,7 +127,7 @@ pub fn synth(tenv: &TEnv, rval: RValue) -> Option<Type> {
                 ident: v,
                 ty: match l {
                     Literal::Bool(_) => BasicType::Bool,
-                    Literal::Int(_) => BasicType::Int(IntTy::I128),
+                    Literal::Int(_) => BasicType::Int(IntTy::I32),
                 },
                 pred: Pred::Binary(PredBinOp::Eq, v.into(), Operand::Lit(l).into()),
             };
@@ -139,11 +139,7 @@ pub fn synth(tenv: &TEnv, rval: RValue) -> Option<Type> {
 
             for proj in p.projs {
                 if let Type::Prod(ts) = ty {
-                    if proj < ts.len() {
-                        ty = &ts[proj].reft;
-                    } else {
-                        return None;
-                    }
+                    ty = &ts.get(proj)?.reft;
                 } else {
                     return None;
                 }
@@ -157,8 +153,13 @@ pub fn synth(tenv: &TEnv, rval: RValue) -> Option<Type> {
                 ident: loc,
                 reft: Type::Reft {
                     ident: loc,
+                    // TODO: proper int type recognition
                     ty: BasicType::Int(IntTy::I128),
-                    pred: Pred::Binary(PredBinOp::Eq, o1.into(), o2.into()),
+                    pred: Pred::Binary(
+                        PredBinOp::Eq,
+                        Box::new(loc.into()),
+                        Box::new(Pred::Binary(PredBinOp::Add, o1.into(), o2.into())),
+                    ),
                 },
             };
             let tyd2 = Tydent {
@@ -173,7 +174,7 @@ pub fn synth(tenv: &TEnv, rval: RValue) -> Option<Type> {
                 ident: loc,
                 reft: Type::Reft {
                     ident: loc,
-                    ty: BasicType::Int(IntTy::I128),
+                    ty: BasicType::Bool,
                     pred: Pred::Binary(
                         PredBinOp::Eq,
                         Box::new(loc.into()),
@@ -203,16 +204,67 @@ impl ConstraintGen {
         }
     }
 
+    pub fn check_fns(&mut self, fs: Vec<FnDef>) -> Option<Vec<Constraint>> {
+        // For each function we have, we check it, then add its type
+        // to our environment
+        let mut cons = vec![];
+
+        for f in fs {
+            let args = f.args.clone();
+            let ret = Box::new(f.ret.clone());
+            let name = f.name;
+            cons.push(self.check_fn(f)?);
+            self.tenv.insert(name, Type::Fn { args, ret });
+        }
+
+        Some(cons)
+    }
+
+    pub fn check_fn(&mut self, f: FnDef) -> Option<Constraint> {
+        // We first add all the arguments of the function to the TEnv.
+        let mut prevs = vec![];
+        for arg in f.args {
+            prevs.push((arg.ident, self.tenv.insert(arg.ident, arg.reft)));
+        }
+
+        // We then add the result cont to the environment
+        let prevk = self.kenv.insert(f.cont, vec![f.ret]);
+
+        // Actually do codegen for this fn
+        let res = self.cgen(*f.body);
+
+        // Finally, remove what we added to the env, replacing them with
+        // their prev values if needed.
+        if let Some(pk) = prevk {
+            self.kenv.insert(f.cont, pk);
+        } else {
+            self.kenv.remove(&f.cont);
+        }
+
+        for (idn, reft) in prevs {
+            if let Some(r) = reft {
+                self.tenv.insert(idn, r);
+            } else {
+                self.tenv.remove(&idn);
+            }
+        }
+
+        res        
+    }
+
     pub fn cgen(&mut self, body: FuncBody) -> Option<Constraint> {
         match body {
             FuncBody::Let(l, rv, fb) => {
                 let ty = synth(&self.tenv, rv)?;
                 let prev = self.tenv.insert(l, ty);
                 let r = self.cgen(*fb)?;
+                let res = bind1(l, &self.tenv[&l], r);
                 if let Some(p) = prev {
                     self.tenv.insert(l, p);
+                } else {
+                    self.tenv.remove(&l);
                 }
-                Some(bind1(l, &self.tenv[&l], r))
+                Some(res)
             }
             FuncBody::LetCont(k, tyds, def, bod) => {
                 let mut prevs = vec![];
@@ -220,21 +272,23 @@ impl ConstraintGen {
                     prevs.push((tyd.ident, self.tenv.insert(tyd.ident, tyd.reft.clone())));
                 }
                 let prevk = self.kenv.insert(k, tyds);
-
                 let c1 = self.cgen(*def)?;
 
                 for (idn, reft) in prevs {
                     if let Some(r) = reft {
                         self.tenv.insert(idn, r);
+                    } else {
+                        self.tenv.remove(&idn);
                     }
                 }
 
                 let c2 = self.cgen(*bod)?;
-
                 let res = bind(&self.kenv[&k], Constraint::Conj(Box::new(c1), Box::new(c2)));
 
                 if let Some(pk) = prevk {
                     self.kenv.insert(k, pk);
+                } else {
+                    self.kenv.remove(&k);
                 }
 
                 Some(res)
@@ -275,10 +329,13 @@ impl ConstraintGen {
 
                 for (arg, tyd) in args.iter().zip(tyds.iter()) {
                     let t = synth(&self.tenv, RValue::Op(Operand::Path(arg.clone())))?;
+                    // TODO: substitution is a little broke; problem:
+                    // {x: i32 | x >= 0}[y.0/x] => {x: i32 | y.0 >= 0}
                     let r = subtype(t, tyd.reft.subst_path(&idents, &args))?;
 
                     res = Constraint::Conj(Box::new(r), Box::new(res));
                 }
+
 
                 Some(res)
             }

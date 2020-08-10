@@ -5,9 +5,11 @@ pub mod smt;
 
 #[cfg(test)]
 mod tests {
+    use super::*;
     use rustc_ast::attr::with_default_session_globals;
 
-    const CPS_SUM_TEXT: &str = r"fn sum(n: {i32 | n >= 0}) ret k(v: {i32 | v >= n}) =
+    const CPS_SUM_TEXT: &str = r"
+fn sum(n: {i32 | n >= 0}) ret k(v: {i32 | v >= n}) =
   letcont loop(i1: {i32 | i1 >= 0}, r1: {i32 | r1 >= i1}) =
     let t0 = i1 <= n in
     if t0 then
@@ -18,21 +20,24 @@ mod tests {
       else
         abort
     else
-      jump k(r2)
+      jump k(r1)
   in
   let i0 = 0 in
   let r0 = 0 in
   jump loop(i0, r0)
 ";
 
-    const CPS_COUNT_ZEROS_TEXT: &str = r"fn count_zeros(limit: {i32 | n >= 0}) ret k(v: {i32 | v >= 0}) =
+    const CPS_COUNT_ZEROS_TEXT: &str = r"
+fn f(n: {i32 | n >= 0}) ret k(v: i32) = jump k(n)
+
+fn count_zeros(limit: {i32 | n >= 0}) ret k(v: {i32 | v >= 0}) =
   letcont b0(i1: {i32 | i1 >= 0}, c1: {i32 | r1 >= 0}) =
     let t0 = i1 < limit in
     if t0 then
       letcont b1(x: i32) =
         letcont b2(c3: {i32 | c3 >= 0}) =
           let t3 = i1 + 1 in
-          if t3.1 then jump b0(i2, t3.0) else abort
+          if t3.1 then jump b0(t3.0, c3) else abort
         in
         let t1 = x == 0 in
         if t1 then
@@ -50,22 +55,20 @@ mod tests {
   jump b0(i0, c0)
 ";
     #[test]
-    fn cps_sum() {
+    fn cps_smt_sum() {
         with_default_session_globals(|| {
-            let expr = super::parser::FnsParser::new().parse(CPS_SUM_TEXT).unwrap();
-
-            dbg!(expr);
+            let fns = parser::FnsParser::new().parse(CPS_SUM_TEXT).unwrap();
+            let mut cgen = constraint::ConstraintGen::new();
+            dbg!(cgen.check_fns(fns).expect("cgen failed"));
         });
     }
 
     #[test]
-    fn cps_count_zeros() {
+    fn cps_smt_count_zeros() {
         with_default_session_globals(|| {
-            let expr = super::parser::FnsParser::new()
-                .parse(CPS_COUNT_ZEROS_TEXT)
-                .unwrap();
-
-            dbg!(expr);
+            let fns = parser::FnsParser::new().parse(CPS_COUNT_ZEROS_TEXT).unwrap();
+            let mut cgen = constraint::ConstraintGen::new();
+            cgen.check_fns(fns).expect("cgen failed");
         });
     }
 }
