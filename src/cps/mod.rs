@@ -30,7 +30,7 @@ fn sum(n: {i32 | n >= 0}) ret k(v: {i32 | v >= n}) =
     const CPS_COUNT_ZEROS_TEXT: &str = r"
 fn f(n: {i32 | n >= 0}) ret k(v: i32) = jump k(n)
 
-fn count_zeros(limit: {i32 | n >= 0}) ret k(v: {i32 | v >= 0}) =
+fn count_zeros(limit: {i32 | limit >= 0}) ret k(v: {i32 | v >= 0}) =
   letcont b0(i1: {i32 | i1 >= 0}, c1: {i32 | r1 >= 0}) =
     let t0 = i1 < limit in
     if t0 then

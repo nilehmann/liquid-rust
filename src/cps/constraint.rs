@@ -1,5 +1,6 @@
 use super::ast::*;
 
+use rsmt2::{print::Expr2Smt, Solver};
 use std::collections::HashMap;
 
 #[derive(Debug)]
@@ -204,7 +205,25 @@ impl ConstraintGen {
         }
     }
 
-    pub fn check_fns(&mut self, fs: Vec<FnDef>) -> Option<Vec<Constraint>> {
+    pub fn check_fns(&mut self, fs: Vec<FnDef>) -> Option<()> {
+        let mut solver = Solver::default(()).expect("couldn't create solver");
+
+        let cs = self.cgen_fns(fs)?;
+
+        for c in cs {
+            c.expr_to_smt2(&mut std::io::stdout(), ());
+            solver.assert(&c).expect("failed to assert");
+            if solver.check_sat().expect("during check sat") {
+                ()
+            } else {
+                panic!("expected sat, got unsat")
+            }
+        }
+
+        Some(())
+    }
+
+    pub fn cgen_fns(&mut self, fs: Vec<FnDef>) -> Option<Vec<Constraint>> {
         // For each function we have, we check it, then add its type
         // to our environment
         let mut cons = vec![];
@@ -213,14 +232,14 @@ impl ConstraintGen {
             let args = f.args.clone();
             let ret = Box::new(f.ret.clone());
             let name = f.name;
-            cons.push(self.check_fn(f)?);
+            cons.push(self.cgen_fn(f)?);
             self.tenv.insert(name, Type::Fn { args, ret });
         }
 
         Some(cons)
     }
 
-    pub fn check_fn(&mut self, f: FnDef) -> Option<Constraint> {
+    pub fn cgen_fn(&mut self, f: FnDef) -> Option<Constraint> {
         // We first add all the arguments of the function to the TEnv.
         let mut prevs = vec![];
         for arg in f.args {
@@ -249,7 +268,7 @@ impl ConstraintGen {
             }
         }
 
-        res        
+        res
     }
 
     pub fn cgen(&mut self, body: FuncBody) -> Option<Constraint> {
@@ -335,7 +354,6 @@ impl ConstraintGen {
 
                     res = Constraint::Conj(Box::new(r), Box::new(res));
                 }
-
 
                 Some(res)
             }
