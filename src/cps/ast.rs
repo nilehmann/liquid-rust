@@ -57,25 +57,29 @@ pub struct Path {
 
 impl Path {
     /// Substitute all occurrences of symbol `from` with symbol `to` in this path
-    pub fn subst(&self, from: Local, to: Local) -> Path {
-        if self.ident == from {
-            Path {
-                ident: to,
-                projs: self.projs.clone(),
+    pub fn subst(&self, from: &[Local], to: &[Local]) -> Path {
+        for (f, t) in from.iter().zip(to.iter()) {
+            if self.ident == *f {
+                return Path {
+                    ident: *t,
+                    projs: self.projs.clone(),
+                };
             }
-        } else {
-            self.clone()
         }
+
+        return self.clone();
     }
 
-    pub fn subst_path(&self, from: Local, to: Path) -> Path {
-        if self.ident == from {
-            let mut new = to;
-            new.projs.extend(self.projs.iter());
-            new
-        } else {
-            self.clone()
+    pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Path {
+        for (f, t) in from.iter().zip(to.iter()) {
+            if self.ident == *f {
+                let mut new = t.clone();
+                new.projs.extend(self.projs.iter());
+                return new;
+            }
         }
+
+        return self.clone()
     }
 }
 
@@ -120,13 +124,7 @@ impl Operand {
     pub fn subst(&self, from: &[Local], to: &[Local]) -> Operand {
         match self {
             Operand::Path(og) => {
-                let ps = if let Some((f, t)) = from.iter().zip(to.iter()).find(|x| *x.0 == og.ident)
-                {
-                    og.subst(*f, *t)
-                } else {
-                    og.clone()
-                };
-                Operand::Path(ps)
+                Operand::Path(og.subst(from, to))
             }
             Operand::Lit(l) => Operand::Lit(*l),
         }
@@ -135,13 +133,7 @@ impl Operand {
     pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Operand {
         match self {
             Operand::Path(og) => {
-                let ps = if let Some((f, t)) = from.iter().zip(to.iter()).find(|x| *x.0 == og.ident)
-                {
-                    og.subst_path(*f, t.clone())
-                } else {
-                    og.clone()
-                };
-                Operand::Path(ps)
+                Operand::Path(og.subst_path(from, to))
             }
             Operand::Lit(l) => Operand::Lit(*l),
         }
@@ -244,7 +236,7 @@ pub enum Type {
 impl From<BasicType> for Type {
     fn from(b: BasicType) -> Type {
         Type::Reft {
-            ident: Local::intern("_v"),
+            ident: Local::intern("_v").into(),
             ty: b,
             pred: Pred::Op(Operand::Lit(Literal::Bool(true))),
         }
@@ -255,10 +247,18 @@ impl Type {
     /// Substitute symbols with others in all of this type
     pub fn subst(&self, from: &[Local], to: &[Local]) -> Type {
         match self {
-            Type::Reft { ident, ty, pred } => Type::Reft {
-                ident: *ident,
-                ty: *ty,
-                pred: pred.subst(from, to),
+            Type::Reft { ident, ty, pred } => {
+                let mut nid = *ident;
+                for (f, t) in from.iter().zip(to.iter()) {
+                    if ident == f {
+                        nid = *t;
+                    }
+                }
+                Type::Reft {
+                    ident: nid,
+                    ty: *ty,
+                    pred: pred.subst(from, to),
+                }
             },
             _ => todo!(),
         }
@@ -266,11 +266,14 @@ impl Type {
 
     pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Type {
         match self {
-            Type::Reft { ident, ty, pred } => Type::Reft {
-                ident: *ident,
-                ty: *ty,
-                pred: pred.subst_path(from, to),
-            },
+            Type::Reft { ident, ty, pred } => {
+                // TODO: this is a bug
+                Type::Reft {
+                    ident: *ident,
+                    ty: *ty,
+                    pred: pred.subst_path(from, to),
+                }
+            }
             _ => todo!(),
         }
     }
@@ -351,7 +354,7 @@ impl fmt::Display for PredBinOp {
             PredBinOp::And => "&&",
             PredBinOp::Lt => "<",
             PredBinOp::Le => "<=",
-            PredBinOp::Eq => "<=",
+            PredBinOp::Eq => "=",
             PredBinOp::Ge => ">=",
             PredBinOp::Gt => ">",
         })?;

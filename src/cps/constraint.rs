@@ -171,23 +171,16 @@ pub fn synth(tenv: &TEnv, rval: RValue) -> Option<Type> {
         }
         RValue::Binary(cmp, o1, o2) => {
             let loc = Local::intern("_v");
-            let tyd1 = Tydent {
+            let reft = Type::Reft {
                 ident: loc,
-                reft: Type::Reft {
-                    ident: loc,
-                    ty: BasicType::Bool,
-                    pred: Pred::Binary(
-                        PredBinOp::Eq,
-                        Box::new(loc.into()),
-                        Box::new(Pred::Binary(cmp.into(), o1.into(), o2.into())),
-                    ),
-                },
+                ty: BasicType::Bool,
+                pred: Pred::Binary(
+                    PredBinOp::Eq,
+                    Box::new(loc.into()),
+                    Box::new(Pred::Binary(cmp.into(), o1.into(), o2.into())),
+                ),
             };
-            let tyd2 = Tydent {
-                ident: Local::intern("_w"),
-                reft: BasicType::Bool.into(),
-            };
-            Some(Type::Prod(vec![tyd1, tyd2]))
+            Some(reft)
         }
     }
 }
@@ -250,7 +243,7 @@ impl ConstraintGen {
         let prevk = self.kenv.insert(f.cont, vec![f.ret]);
 
         // Actually do codegen for this fn
-        let res = self.cgen(*f.body);
+        let mut res = self.cgen(*f.body)?;
 
         // Finally, remove what we added to the env, replacing them with
         // their prev values if needed.
@@ -260,15 +253,19 @@ impl ConstraintGen {
             self.kenv.remove(&f.cont);
         }
 
-        for (idn, reft) in prevs {
+        for (idn, reft) in prevs.into_iter().rev() {
+            // get our reft and bind it in the constraint
+            res = bind1(idn, &self.tenv[&idn], res);
+            
             if let Some(r) = reft {
                 self.tenv.insert(idn, r);
             } else {
                 self.tenv.remove(&idn);
             }
+
         }
 
-        res
+        Some(res)
     }
 
     pub fn cgen(&mut self, body: FuncBody) -> Option<Constraint> {

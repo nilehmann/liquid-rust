@@ -15,7 +15,7 @@ enum Token<'a, T, U> {
 }
 
 impl Expr2Smt<()> for Pred {
-    fn expr_to_smt2<Writer: Write>(&self, w: &mut Writer, info: ()) -> SmtRes<()> {
+    fn expr_to_smt2<Writer: Write>(&self, w: &mut Writer, _info: ()) -> SmtRes<()> {
         let mut stack = vec![Token::Expr(self)];
         while let Some(token) = stack.pop() {
             match token {
