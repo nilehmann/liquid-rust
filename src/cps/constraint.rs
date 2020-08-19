@@ -3,7 +3,6 @@ use super::ast::*;
 use crate::context::ArenaInterner;
 
 use rsmt2::{print::Expr2Smt, Solver};
-use rustc_arena::TypedArena;
 use std::collections::HashMap;
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
@@ -30,14 +29,13 @@ pub struct ConstraintGen<'cx> {
     kenv: KEnv<'cx>,
 
     cps_arena: &'cx CpsArena<'cx>,
-    cgen_arena: ArenaInterner<'cx, Constraint<'cx>>,
+    cgen_arena: &'cx ArenaInterner<'cx, Constraint<'cx>>,
 
     always: &'cx Constraint<'cx>,
 }
 
 impl<'cx> ConstraintGen<'cx> {
-    pub fn new(cps_arena: &'cx CpsArena<'cx>) -> Self {
-        let cgen_arena = ArenaInterner::new(TypedArena::default());
+    pub fn new(cps_arena: &'cx CpsArena<'cx>, cgen_arena: &'cx ArenaInterner<'cx, Constraint<'cx>>) -> Self {
         let p = cps_arena
             .preds
             .intern(Pred::Op(Operand::Lit(Literal::Bool(true))));
@@ -129,7 +127,8 @@ impl<'cx> ConstraintGen<'cx> {
 
                 for (a1, a2) in a1s.into_iter().zip(a2s.into_iter()).rev() {
                     let sub = self.subtype(a2.reft, a1.reft.run_subst(self.cps_arena, &s))?;
-                    res = self.bind(&[*a2], self.cgen_arena.intern(Constraint::Conj(res, sub)));
+                    // TODO: self.cps_arena.tyd_args.alloc(vec![*a2]) sucks
+                    res = self.bind(self.cps_arena.tyd_args.alloc(vec![*a2]), self.cgen_arena.intern(Constraint::Conj(res, sub)));
                 }
 
                 Some(res)
