@@ -1,36 +1,100 @@
 //! This module defines and includes utilities for dealing with the intermediate CPS
 //! representation of Rust used by Liquid Rust.
 
+use crate::context::ArenaInterner;
+
+use rustc_arena::TypedArena;
 pub use rustc_span::Symbol;
 
 use std::fmt;
 
+// This is for LALRPOP :/
+pub type Slice<T> = [T];
+
+pub struct CpsArena<'cx> {
+    pub preds: ArenaInterner<'cx, Pred<'cx>>,
+    pub refts: ArenaInterner<'cx, Type<'cx>>,
+    pub bodies: ArenaInterner<'cx, FuncBody<'cx>>,
+
+    // TODO: use ArenaInterner.alloc_slice/alloc_from_iter?
+    pub tyd_args: TypedArena<Vec<Tydent<'cx>>>,
+    pub loc_args: TypedArena<Vec<Local>>,
+    pub projs: TypedArena<Vec<Projection>>,
+}
+
+impl CpsArena<'_> {
+    fn new() -> Self {
+        let preds = ArenaInterner::new(TypedArena::default());
+        let refts = ArenaInterner::new(TypedArena::default());
+        let bodies = ArenaInterner::new(TypedArena::default());
+
+        let tyd_args = TypedArena::default();
+        let loc_args = TypedArena::default();
+        let projs = TypedArena::default();
+
+        CpsArena {
+            preds,
+            refts,
+            bodies,
+            tyd_args,
+            loc_args,
+            projs,
+        }
+    }
+}
+
+// We don't just use a hashmap so that we don't have to constantly
+// allocate hashmaps for substs
+//
+// TODO: We might change this back to a hashmap once we implement
+// deferred substitutions
+pub struct Subst<'a> {
+    from: &'a [Local],
+    to: &'a [Local],
+}
+
+impl<'a> Subst<'a> {
+    pub fn new(from: &'a [Local], to: &'a [Local]) -> Self {
+        Subst { from, to }
+    }
+    
+    pub fn get(&self, l: &Local) -> Option<&Local> {
+        for (f, t) in self.from.iter().zip(self.to.iter()) {
+            if *l == *f {
+                return Some(t)
+            }
+        }
+
+        None
+    }
+}
+
 /// Each function in MIR is translated to a CpsFn
-#[derive(Debug)]
-pub struct FnDef {
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct FnDef<'cx> {
     pub name: ContIdent,
-    pub args: Vec<Tydent>,
+    pub args: &'cx [Tydent<'cx>],
     pub cont: ContIdent,
-    pub ret: Tydent,
-    pub body: Box<FuncBody>,
+    pub ret: Tydent<'cx>,
+    pub body: &'cx FuncBody<'cx>,
 }
 
 /// A Local is an identifier for some local variable (a fn arg or a let-bound
 /// variable)
 /// For now, these are symbols, but we could theoretically just use u32s
-/// (since the name of the variables doesn't really matter)
+/// (since the name of the variables doesn'cx really matter)
 pub type Local = Symbol;
 pub type ContIdent = Symbol;
 
 /// A Tydent is a Type with an associated identifier.
-#[derive(Debug, Clone)]
-pub struct Tydent {
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Tydent<'cx> {
     pub ident: Local,
-    pub reft: Type,
+    pub reft: &'cx Type<'cx>,
 }
 
 /// A Literal is a boolean or integer literal.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum Literal {
     Bool(bool),
     Int(i128),
@@ -40,7 +104,7 @@ impl fmt::Display for Literal {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Literal::Bool(b) => write!(f, "{}", b),
-            Literal::Int(i)  => write!(f, "{}", i),
+            Literal::Int(i) => write!(f, "{}", i),
         }
     }
 }
@@ -49,44 +113,34 @@ impl fmt::Display for Literal {
 pub type Projection = usize;
 
 /// Paths are local variables with some projections into them.
-#[derive(Debug, Clone)]
-pub struct Path {
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct Path<'cx> {
     pub ident: Local,
-    pub projs: Vec<Projection>,
+    pub projs: &'cx [Projection],
 }
 
-impl Path {
+impl<'cx> Path<'cx> {
     /// Substitute all occurrences of symbol `from` with symbol `to` in this path
-    pub fn subst(&self, from: &[Local], to: &[Local]) -> Path {
-        for (f, t) in from.iter().zip(to.iter()) {
-            if self.ident == *f {
-                return Path {
-                    ident: *t,
-                    projs: self.projs.clone(),
-                };
-            }
+    pub fn run_subst(&self, subst: &Subst) -> Path {
+        Path {
+            ident: *subst.get(&self.ident).unwrap_or(&self.ident),
+            projs: &self.projs[..],
         }
-
-        return self.clone();
     }
 
-    pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Path {
-        for (f, t) in from.iter().zip(to.iter()) {
-            if self.ident == *f {
-                let mut new = t.clone();
-                new.projs.extend(self.projs.iter());
-                return new;
-            }
+    pub fn from_local(arena: &'cx CpsArena, ident: Local) -> Path<'cx> {
+        Path {
+            ident,
+            // TODO: intern this somehow
+            projs: arena.projs.alloc(vec![]),
         }
-
-        return self.clone()
     }
 }
 
-impl fmt::Display for Path {
+impl fmt::Display for Path<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.ident)?;
-        for p in &self.projs {
+        for p in self.projs {
             write!(f, ".{}", p)?;
         }
 
@@ -94,67 +148,47 @@ impl fmt::Display for Path {
     }
 }
 
-impl From<Local> for Path {
-    fn from(ident: Local) -> Path {
-        Path {
-            ident,
-            projs: vec![],
-        }
-    }
-}
-
 /// An Operand is either a path or a literal.
-#[derive(Debug, Clone)]
-pub enum Operand {
-    Path(Path),
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Operand<'cx> {
+    Path(Path<'cx>),
     Lit(Literal),
 }
 
-impl fmt::Display for Operand {
+impl fmt::Display for Operand<'_> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             Operand::Path(p) => p.fmt(f),
-            Operand::Lit(l)  => l.fmt(f),
+            Operand::Lit(l) => l.fmt(f),
         }
     }
 }
 
-impl Operand {
+impl<'cx> Operand<'cx> {
     /// Substitute all occurrences of symbols in `from` with their respective symbol in `to` in this operand
-    pub fn subst(&self, from: &[Local], to: &[Local]) -> Operand {
+    pub fn subst(&self, subst: &Subst) -> Operand {
         match self {
             Operand::Path(og) => {
-                Operand::Path(og.subst(from, to))
+                Operand::Path(og.run_subst(subst))
             }
             Operand::Lit(l) => Operand::Lit(*l),
         }
     }
 
-    pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Operand {
-        match self {
-            Operand::Path(og) => {
-                Operand::Path(og.subst_path(from, to))
-            }
-            Operand::Lit(l) => Operand::Lit(*l),
-        }
-    }
-}
-
-impl From<Local> for Operand {
-    fn from(ident: Local) -> Operand {
-        Operand::Path(ident.into())
+    pub fn from_local(arena: &'cx CpsArena, ident: Local) -> Operand<'cx> {
+        Operand::Path(Path::from_local(arena, ident))
     }
 }
 
 /// An RValue is an operand or some operations on them.
-#[derive(Debug)]
-pub enum RValue {
-    Op(Operand),
-    Binary(RBinOp, Operand, Operand),
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum RValue<'cx> {
+    Op(Operand<'cx>),
+    Binary(RBinOp, Operand<'cx>, Operand<'cx>),
 }
 
 /// BinOpKind is a binary operation on Operands.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum RBinOp {
     CheckedAdd,
     Lt,
@@ -165,18 +199,23 @@ pub enum RBinOp {
 }
 
 /// A Body is (a part of) a function body.
-#[derive(Debug)]
-pub enum FuncBody {
-    Let(Local, RValue, Box<FuncBody>),
-    LetCont(ContIdent, Vec<Tydent>, Box<FuncBody>, Box<FuncBody>),
-    Ite(Path, Box<FuncBody>, Box<FuncBody>),
-    Call(Local, Vec<Path>, ContIdent),
-    Jump(ContIdent, Vec<Path>),
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum FuncBody<'cx> {
+    Let(Local, RValue<'cx>, &'cx FuncBody<'cx>),
+    LetCont(
+        ContIdent,
+        &'cx [Tydent<'cx>],
+        &'cx FuncBody<'cx>,
+        &'cx FuncBody<'cx>,
+    ),
+    Ite(Path<'cx>, &'cx FuncBody<'cx>, &'cx FuncBody<'cx>),
+    Call(Local, &'cx [Local], ContIdent),
+    Jump(ContIdent, &'cx [Local]),
     Abort,
 }
 
 /// A BasicType is a primitive type in the CPS IR; there are bools and ints.
-#[derive(Debug, PartialEq, Eq, Copy, Clone)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum BasicType {
     Bool,
     Int(IntTy),
@@ -195,17 +234,21 @@ impl BasicType {
 
 impl fmt::Display for BasicType {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", match self {
-            BasicType::Bool => "Bool",
-            BasicType::Int(_) => "Int",
-        })?;
+        write!(
+            f,
+            "{}",
+            match self {
+                BasicType::Bool => "Bool",
+                BasicType::Int(_) => "Int",
+            }
+        )?;
 
         Ok(())
     }
 }
 
 // An IntTy is a width and signedness for an int.
-#[derive(Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone, Ord, PartialOrd, Hash)]
 pub enum IntTy {
     I8,
     I16,
@@ -219,124 +262,87 @@ pub enum IntTy {
     U128,
 }
 
-#[derive(Debug, Clone)]
-pub enum Type {
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Type<'cx> {
     Reft {
         ident: Local,
         ty: BasicType,
-        pred: Pred,
+        pred: &'cx Pred<'cx>,
     },
     Fn {
-        args: Vec<Tydent>,
-        ret: Box<Tydent>,
+        args: &'cx [Tydent<'cx>],
+        ret: Tydent<'cx>,
     },
-    Prod(Vec<Tydent>),
+    Prod(&'cx [Tydent<'cx>]),
 }
 
-impl From<BasicType> for Type {
-    fn from(b: BasicType) -> Type {
-        Type::Reft {
-            ident: Local::intern("_v").into(),
-            ty: b,
-            pred: Pred::Op(Operand::Lit(Literal::Bool(true))),
-        }
-    }
-}
-
-impl Type {
+impl<'cx> Type<'cx> {
     /// Substitute symbols with others in all of this type
-    pub fn subst(&self, from: &[Local], to: &[Local]) -> Type {
+    pub fn run_subst(&'cx self, arena: &'cx CpsArena<'cx>, subst: &Subst) -> &'cx Type<'cx> {
         match self {
             Type::Reft { ident, ty, pred } => {
-                let mut nid = *ident;
-                for (f, t) in from.iter().zip(to.iter()) {
-                    if ident == f {
-                        nid = *t;
-                    }
-                }
-                Type::Reft {
+                let nid = *subst.get(ident).unwrap_or(ident);
+                let pred = pred.run_subst(arena, subst);
+                arena.refts.intern(Type::Reft {
                     ident: nid,
                     ty: *ty,
-                    pred: pred.subst(from, to),
-                }
-            },
-            _ => todo!(),
-        }
-    }
-
-    pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Type {
-        match self {
-            Type::Reft { ident, ty, pred } => {
-                // TODO: this is a bug
-                Type::Reft {
-                    ident: *ident,
-                    ty: *ty,
-                    pred: pred.subst_path(from, to),
-                }
+                    pred,
+                })
             }
-            _ => todo!(),
+            x => x,
         }
+    }
+
+    pub fn from_basic(arena: &'cx CpsArena<'cx>, b: BasicType) -> &'cx Type<'cx> {
+        arena.refts.intern(Type::Reft {
+            ident: Local::intern("_v").into(),
+            ty: b,
+            pred: arena.preds.intern(Pred::Op(Operand::Lit(Literal::Bool(true)))),
+        })
     }
 }
 
-#[derive(Debug, Clone)]
-pub enum Pred {
-    Op(Operand),
-    Unary(PredUnOp, Box<Pred>),
-    Binary(PredBinOp, Box<Pred>, Box<Pred>),
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum Pred<'cx> {
+    Op(Operand<'cx>),
+    Unary(PredUnOp, &'cx Pred<'cx>),
+    Binary(PredBinOp, &'cx Pred<'cx>, &'cx Pred<'cx>),
 }
 
-impl Pred {
+impl<'cx> Pred<'cx> {
     /// Substitute all occurrences of symbols in `from` with their respective symbol in `to` in this predicate
-    pub fn subst(&self, from: &[Local], to: &[Local]) -> Pred {
+    pub fn run_subst(&'cx self, arena: &'cx CpsArena<'cx>, subst: &Subst) -> &'cx Pred<'cx> {
         match self {
-            Pred::Op(op) => Pred::Op(op.subst(from, to)),
-            Pred::Unary(un, op) => Pred::Unary(*un, Box::new(op.subst(from, to))),
-            Pred::Binary(bin, o1, o2) => Pred::Binary(
-                *bin,
-                Box::new(o1.subst(from, to)),
-                Box::new(o2.subst(from, to)),
-            ),
+            Pred::Op(op) => {
+                arena.preds.intern(Pred::Op(op.subst(subst)))
+            }
+            Pred::Unary(un, op) => {
+                let new_op = op.run_subst(arena, subst);
+                arena.preds.intern(Pred::Unary(*un, new_op))
+            }
+            Pred::Binary(bin, o1, o2) => {
+                let new_op1 = o1.run_subst(arena, subst);
+                let new_op2 = o2.run_subst(arena, subst);
+                arena.preds.intern(Pred::Binary(*bin, new_op1, new_op2))
+            }
         }
     }
 
-    pub fn subst_path(&self, from: &[Local], to: &[Path]) -> Pred {
-        match self {
-            Pred::Op(op) => Pred::Op(op.subst_path(from, to)),
-            Pred::Unary(un, op) => Pred::Unary(*un, Box::new(op.subst_path(from, to))),
-            Pred::Binary(bin, o1, o2) => Pred::Binary(
-                *bin,
-                Box::new(o1.subst_path(from, to)),
-                Box::new(o2.subst_path(from, to)),
-            ),
-        }
+    pub fn from_local(arena: &'cx CpsArena<'cx>, l: Local) -> &'cx Pred<'cx> {
+        arena.preds.intern(Pred::Op(Operand::from_local(arena, l)))
+    }
+
+    pub fn from_op(arena: &'cx CpsArena<'cx>, op: Operand<'cx>) -> &'cx Pred<'cx> {
+        arena.preds.intern(Pred::Op(op))
     }
 }
 
-impl From<Operand> for Box<Pred> {
-    fn from(op: Operand) -> Box<Pred> {
-        Box::new(Pred::Op(op))
-    }
-}
-
-impl From<Local> for Pred {
-    fn from(ident: Local) -> Pred {
-        Pred::Op(ident.into())
-    }
-}
-
-impl From<Local> for Box<Pred> {
-    fn from(ident: Local) -> Box<Pred> {
-        Box::new(Pred::Op(ident.into()))
-    }
-}
-
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PredUnOp {
     Not,
 }
 
-#[derive(Debug, Copy, Clone, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PredBinOp {
     Add,
     And,
@@ -349,15 +355,19 @@ pub enum PredBinOp {
 
 impl fmt::Display for PredBinOp {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", match self {
-            PredBinOp::Add => "+",
-            PredBinOp::And => "&&",
-            PredBinOp::Lt => "<",
-            PredBinOp::Le => "<=",
-            PredBinOp::Eq => "=",
-            PredBinOp::Ge => ">=",
-            PredBinOp::Gt => ">",
-        })?;
+        write!(
+            f,
+            "{}",
+            match self {
+                PredBinOp::Add => "+",
+                PredBinOp::And => "&&",
+                PredBinOp::Lt => "<",
+                PredBinOp::Le => "<=",
+                PredBinOp::Eq => "=",
+                PredBinOp::Ge => ">=",
+                PredBinOp::Gt => ">",
+            }
+        )?;
 
         Ok(())
     }

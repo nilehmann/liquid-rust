@@ -1,5 +1,5 @@
 // auto-generated: "lalrpop 0.17.2"
-// sha256: aa8f4d8db8f98c6c82030a47be95b8a33184ed6a2983f143b013fe14b53b63
+// sha256: ebcb3569a42ef7a94d92a5fbf5a6d1d1f2150a8172e61a3baf2a74649ca37b
 #![allow(clippy::all)]
 #![allow(unused_parens)]
 use std::str::FromStr;
@@ -23,35 +23,35 @@ mod __parse__Fn {
     use self::__lalrpop_util::state_machine as __state_machine;
     use super::__intern_token::Token;
     #[allow(dead_code)]
-    pub enum __Symbol<'input>
+    pub enum __Symbol<'input, 'cx>
      {
         Variant0(&'input str),
-        Variant1(Path),
-        Variant2(::std::vec::Vec<Path>),
-        Variant3(Tydent),
-        Variant4(::std::vec::Vec<Tydent>),
-        Variant5(Vec<Tydent>),
+        Variant1(Local),
+        Variant2(::std::vec::Vec<Local>),
+        Variant3(Tydent<'cx>),
+        Variant4(::std::vec::Vec<Tydent<'cx>>),
+        Variant5(&'cx Slice<Tydent<'cx>>),
         Variant6(BasicType),
-        Variant7(Vec<Path>),
-        Variant8(Symbol),
-        Variant9(Box<Pred>),
-        Variant10(FnDef),
-        Variant11(::std::vec::Vec<FnDef>),
-        Variant12(Box<FuncBody>),
-        Variant13(IntTy),
-        Variant14(Literal),
-        Variant15(Local),
-        Variant16(PredBinOp),
-        Variant17(Operand),
-        Variant18(::std::option::Option<Path>),
-        Variant19(Pred),
+        Variant7(Vec<Local>),
+        Variant8(Vec<Tydent<'cx>>),
+        Variant9(Symbol),
+        Variant10(&'cx Pred<'cx>),
+        Variant11(FnDef<'cx>),
+        Variant12(::std::vec::Vec<FnDef<'cx>>),
+        Variant13(&'cx FuncBody<'cx>),
+        Variant14(IntTy),
+        Variant15(Literal),
+        Variant16(::std::option::Option<Local>),
+        Variant17(PredBinOp),
+        Variant18(Operand<'cx>),
+        Variant19(Path<'cx>),
         Variant20(PredUnOp),
         Variant21(Projection),
         Variant22(::std::vec::Vec<Projection>),
         Variant23(RBinOp),
-        Variant24(RValue),
-        Variant25(::std::option::Option<Tydent>),
-        Variant26(Type),
+        Variant24(RValue<'cx>),
+        Variant25(::std::option::Option<Tydent<'cx>>),
+        Variant26(&'cx Type<'cx>),
     }
     const __ACTION: &'static [i16] = &[
         // State 0
@@ -163,13 +163,13 @@ mod __parse__Fn {
         // State 53
         0, -25, 0, 0, 77, 0, 0, 0, 0, -25, -25, 0, -25, -25, -25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -25, 0, 0,
         // State 54
-        0, -69, 0, 0, -69, 0, 0, 0, 0, -69, -69, 0, -69, -69, -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0,
+        0, -71, 0, 0, -71, 0, 0, 0, 0, -71, -71, 0, -71, -71, -71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0,
         // State 55
-        0, -70, 0, -70, -70, -70, 0, 80, 0, -70, -70, 0, -70, -70, -70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0,
+        0, -72, 0, 0, -72, 0, 0, 80, 0, -72, -72, 0, -72, -72, -72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -72, 0, 0, 0, 0, -72, 0, 0, 0, 0, 0, 0, 0, 0, -72, 0, 0,
         // State 56
         0, -28, 0, 0, -28, 0, 0, 0, 0, -28, -28, 0, -28, -28, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28, 0, 0,
         // State 57
-        0, -68, 0, 0, -68, 0, 0, 0, 0, -68, -68, 0, -68, -68, -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0,
+        0, -70, 0, 0, -70, 0, 0, 0, 0, -70, -70, 0, -70, -70, -70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0,
         // State 58
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 81, 0, 0,
         // State 59
@@ -191,27 +191,27 @@ mod __parse__Fn {
         // State 67
         61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 6, 64,
         // State 68
-        -62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -62, 0, 0, 0, 0, 0, 0, 0, 0, -62, -62,
-        // State 69
-        -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, -63, -63,
-        // State 70
-        -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, -66, -66,
-        // State 71
         -64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -64, 0, 0, 0, 0, 0, 0, 0, 0, -64, -64,
-        // State 72
+        // State 69
         -65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -65, 0, 0, 0, 0, 0, 0, 0, 0, -65, -65,
+        // State 70
+        -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0, 0, 0, 0, 0, 0, 0, -68, -68,
+        // State 71
+        -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, -66, -66,
+        // State 72
+        -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, -67, -67,
         // State 73
         61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 6, 64,
         // State 74
-        -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, -61, -61,
+        -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, -63, -63,
         // State 75
         61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 6, 64,
         // State 76
-        -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, -67, -67,
+        -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0, 0, 0, 0, 0, 0, 0, -69, -69,
         // State 77
-        0, -80, 0, -80, -80, -80, 0, -80, 0, -80, -80, 0, -80, -80, -80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0,
+        0, -80, 0, 0, -80, 0, 0, -80, 0, -80, -80, 0, -80, -80, -80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0,
         // State 78
-        0, -71, 0, -71, -71, -71, 0, 80, 0, -71, -71, 0, -71, -71, -71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0, 0, 0, -71, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0,
+        0, -73, 0, 0, -73, 0, 0, 80, 0, -73, -73, 0, -73, -73, -73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -73, 0, 0, 0, 0, -73, 0, 0, 0, 0, 0, 0, 0, 0, -73, 0, 0,
         // State 79
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 90,
         // State 80
@@ -231,9 +231,9 @@ mod __parse__Fn {
         // State 87
         0, -55, 0, 0, -55, 0, 0, 0, 0, -55, -55, 0, -55, -55, -55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -55, 0, 0,
         // State 88
-        0, -81, 0, -81, -81, -81, 0, -81, 0, -81, -81, 0, -81, -81, -81, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0, 0, 0, -81, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0,
+        0, -81, 0, 0, -81, 0, 0, -81, 0, -81, -81, 0, -81, -81, -81, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0, 0, 0, -81, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0,
         // State 89
-        0, -77, 0, -77, -77, -77, 0, -77, 0, -77, -77, 0, -77, -77, -77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0, 0, 0, -77, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0,
+        0, -77, 0, 0, -77, 0, 0, -77, 0, -77, -77, 0, -77, -77, -77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0, 0, 0, -77, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0,
         // State 90
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 99, 0, 0,
         // State 91
@@ -667,7 +667,7 @@ mod __parse__Fn {
         // State 21
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 22
-        0, 0, 0, 0, 0, 8, 0, 0, 0, 38, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 8, 38, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0,
         // State 23
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 24
@@ -711,7 +711,7 @@ mod __parse__Fn {
         // State 43
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 44
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49, 50, 51, 52, 0, 0, 0, 0, 0, 11, 0, 53, 54, 55, 56, 0, 0, 0, 57, 58, 0, 59, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49, 50, 51, 52, 0, 0, 0, 0, 0, 11, 0, 53, 54, 55, 56, 0, 0, 0, 0, 57, 58, 59, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 45
         0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 21, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 46
@@ -721,15 +721,15 @@ mod __parse__Fn {
         // State 48
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 49
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 50
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 51
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 52
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 74, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 53
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 76, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 54
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 55
@@ -741,7 +741,7 @@ mod __parse__Fn {
         // State 58
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 59
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 82, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 57, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 82, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 0, 57, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 60
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 61
@@ -757,7 +757,7 @@ mod __parse__Fn {
         // State 66
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85, 0, 0, 0, 0,
         // State 67
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 86, 51, 52, 0, 0, 0, 0, 0, 11, 0, 0, 54, 55, 56, 0, 0, 0, 57, 58, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 86, 51, 52, 0, 0, 0, 0, 0, 11, 0, 0, 54, 55, 56, 0, 0, 0, 0, 57, 58, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 68
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 69
@@ -769,11 +769,11 @@ mod __parse__Fn {
         // State 72
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 73
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 87, 50, 51, 52, 0, 0, 0, 0, 0, 11, 0, 0, 54, 55, 56, 0, 0, 0, 57, 58, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 87, 50, 51, 52, 0, 0, 0, 0, 0, 11, 0, 0, 54, 55, 56, 0, 0, 0, 0, 57, 58, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 74
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 75
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88, 52, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 57, 58, 0, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88, 52, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 0, 57, 58, 0, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 76
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 77
@@ -787,7 +787,7 @@ mod __parse__Fn {
         // State 81
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 82
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49, 50, 51, 52, 0, 0, 0, 0, 0, 11, 0, 53, 54, 55, 56, 0, 0, 0, 57, 58, 0, 91, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 49, 50, 51, 52, 0, 0, 0, 0, 0, 11, 0, 53, 54, 55, 56, 0, 0, 0, 0, 57, 58, 91, 60, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 83
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 92, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 84
@@ -811,7 +811,7 @@ mod __parse__Fn {
         // State 93
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 100, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 94
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 56, 0, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 56, 0, 0, 0, 0, 0, 101, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 95
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 102, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 96
@@ -831,17 +831,17 @@ mod __parse__Fn {
         // State 103
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 104
-        0, 0, 110, 0, 0, 0, 0, 0, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 56, 0, 0, 0, 0, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 110, 0, 0, 0, 0, 0, 111, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 105
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 113, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 106
-        0, 0, 110, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 56, 0, 0, 0, 0, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 110, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 112, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 107
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 115, 58, 0, 0, 0, 0, 0, 0, 0, 116, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 0, 115, 58, 0, 0, 0, 0, 0, 0, 116, 0, 0, 0, 0, 0,
         // State 108
         0, 0, 0, 0, 0, 8, 117, 0, 0, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 12, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 13, 0, 0, 0, 0,
         // State 109
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 56, 0, 0, 0, 0, 118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 0, 118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 110
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 111
@@ -867,7 +867,7 @@ mod __parse__Fn {
         // State 121
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 122
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 135, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 11, 0, 0, 0, 55, 56, 0, 0, 0, 0, 135, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 123
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 124
@@ -960,21 +960,22 @@ mod __parse__Fn {
             }
         }).collect()
     }
-    pub struct __StateMachine<'input>
-    where 
+    pub struct __StateMachine<'input, 'cx>
+    where 'cx: 'cx
     {
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
-        __phantom: ::std::marker::PhantomData<(&'input ())>,
+        __phantom: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     }
-    impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    impl<'input, 'cx> __state_machine::ParserDefinition for __StateMachine<'input, 'cx>
+    where 'cx: 'cx
     {
         type Location = usize;
         type Error = &'static str;
         type Token = Token<'input>;
         type TokenIndex = usize;
-        type Symbol = __Symbol<'input>;
-        type Success = FnDef;
+        type Symbol = __Symbol<'input, 'cx>;
+        type Success = FnDef<'cx>;
         type StateIndex = i16;
         type Action = i16;
         type ReduceIndex = i16;
@@ -992,7 +993,7 @@ mod __parse__Fn {
 
         #[inline]
         fn token_to_index(&self, token: &Self::Token) -> Option<usize> {
-            __token_to_integer(token, ::std::marker::PhantomData::<(&())>)
+            __token_to_integer(token, ::std::marker::PhantomData::<(&(), &())>)
         }
 
         #[inline]
@@ -1016,7 +1017,7 @@ mod __parse__Fn {
         }
 
         fn token_to_symbol(&self, token_index: usize, token: Self::Token) -> Self::Symbol {
-            __token_to_symbol(token_index, token, ::std::marker::PhantomData::<(&())>)
+            __token_to_symbol(token_index, token, ::std::marker::PhantomData::<(&(), &())>)
         }
 
         fn expected_tokens(&self, state: i16) -> Vec<String> {
@@ -1044,24 +1045,26 @@ mod __parse__Fn {
             symbols: &mut Vec<__state_machine::SymbolTriple<Self>>,
         ) -> Option<__state_machine::ParseResult<Self>> {
             __reduce(
+                self.arena,
                 self.input,
                 action,
                 start_location,
                 states,
                 symbols,
-                ::std::marker::PhantomData::<(&())>,
+                ::std::marker::PhantomData::<(&(), &())>,
             )
         }
 
         fn simulate_reduce(&self, action: i16) -> __state_machine::SimulatedReduce<Self> {
-            __simulate_reduce(action, ::std::marker::PhantomData::<(&())>)
+            __simulate_reduce(action, ::std::marker::PhantomData::<(&(), &())>)
         }
     }
     fn __token_to_integer<
         'input,
+        'cx,
     >(
         __token: &Token<'input>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> Option<usize>
     {
         match *__token {
@@ -1114,11 +1117,12 @@ mod __parse__Fn {
     }
     fn __token_to_symbol<
         'input,
+        'cx,
     >(
         __token_index: usize,
         __token: Token<'input>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> __Symbol<'input>
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> __Symbol<'input, 'cx>
     {
         match __token_index {
             0 => match __token {
@@ -1302,10 +1306,13 @@ mod __parse__Fn {
     }
     fn __simulate_reduce<
         'input,
+        'cx,
     >(
         __reduce_index: i16,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> __state_machine::SimulatedReduce<__StateMachine<'input>>
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> __state_machine::SimulatedReduce<__StateMachine<'input, 'cx>>
+    where
+        'cx: 'cx,
     {
         match __reduce_index {
             0 => {
@@ -1676,8 +1683,8 @@ mod __parse__Fn {
             }
             61 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    states_to_pop: 0,
+                    nonterminal_produced: 26,
                 }
             }
             62 => {
@@ -1689,19 +1696,19 @@ mod __parse__Fn {
             63 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    nonterminal_produced: 28,
                 }
             }
             64 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    nonterminal_produced: 28,
                 }
             }
             65 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    nonterminal_produced: 28,
                 }
             }
             66 => {
@@ -1713,7 +1720,7 @@ mod __parse__Fn {
             67 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 29,
+                    nonterminal_produced: 28,
                 }
             }
             68 => {
@@ -1730,7 +1737,7 @@ mod __parse__Fn {
             }
             70 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
+                    states_to_pop: 1,
                     nonterminal_produced: 30,
                 }
             }
@@ -1742,7 +1749,7 @@ mod __parse__Fn {
             }
             72 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 0,
+                    states_to_pop: 2,
                     nonterminal_produced: 31,
                 }
             }
@@ -1917,16 +1924,19 @@ mod __parse__Fn {
         #[allow(dead_code)]
         pub fn parse<
             'input,
+            'cx,
         >(
             &self,
+            arena: &'cx CpsArena<'cx>,
             input: &'input str,
-        ) -> Result<FnDef, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<FnDef<'cx>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             let __r = __state_machine::Parser::drive(
                 __StateMachine {
+                    arena,
                     input,
-                    __phantom: ::std::marker::PhantomData::<(&())>,
+                    __phantom: ::std::marker::PhantomData::<(&(), &())>,
                 },
                 __tokens,
             );
@@ -1935,317 +1945,319 @@ mod __parse__Fn {
     }
     pub(crate) fn __reduce<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> Option<Result<FnDef,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> Option<Result<FnDef<'cx>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
-                __reduce0(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce0(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             1 => {
-                __reduce1(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce1(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             2 => {
-                __reduce2(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce2(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             3 => {
-                __reduce3(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce3(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             4 => {
-                __reduce4(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce4(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             5 => {
-                __reduce5(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce5(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             6 => {
-                __reduce6(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce6(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             7 => {
-                __reduce7(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce7(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             8 => {
-                __reduce8(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce8(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             9 => {
-                __reduce9(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce9(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             10 => {
-                __reduce10(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce10(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             11 => {
-                __reduce11(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce11(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             12 => {
-                __reduce12(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce12(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             13 => {
-                __reduce13(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce13(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             14 => {
-                __reduce14(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce14(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             15 => {
-                __reduce15(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce15(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             16 => {
-                __reduce16(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce16(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             17 => {
-                __reduce17(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce17(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             18 => {
-                __reduce18(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce18(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             19 => {
-                __reduce19(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce19(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             20 => {
-                __reduce20(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce20(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             21 => {
-                __reduce21(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce21(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             22 => {
-                __reduce22(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce22(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             23 => {
-                __reduce23(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce23(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             24 => {
-                __reduce24(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce24(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             25 => {
-                __reduce25(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce25(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             26 => {
-                __reduce26(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce26(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             27 => {
-                __reduce27(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce27(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             28 => {
-                __reduce28(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce28(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             29 => {
-                __reduce29(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce29(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             30 => {
-                __reduce30(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce30(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             31 => {
-                __reduce31(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce31(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             32 => {
-                __reduce32(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce32(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             33 => {
-                __reduce33(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce33(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             34 => {
-                __reduce34(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce34(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             35 => {
-                __reduce35(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce35(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             36 => {
-                __reduce36(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce36(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             37 => {
-                __reduce37(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce37(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             38 => {
-                __reduce38(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce38(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             39 => {
-                __reduce39(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce39(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             40 => {
-                __reduce40(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce40(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             41 => {
-                __reduce41(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce41(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             42 => {
-                __reduce42(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce42(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             43 => {
-                __reduce43(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce43(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             44 => {
-                __reduce44(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce44(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             45 => {
-                __reduce45(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce45(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             46 => {
-                __reduce46(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce46(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             47 => {
-                __reduce47(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce47(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             48 => {
-                __reduce48(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce48(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             49 => {
-                __reduce49(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce49(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             50 => {
-                __reduce50(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce50(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             51 => {
-                __reduce51(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce51(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             52 => {
-                __reduce52(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce52(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             53 => {
-                __reduce53(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce53(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             54 => {
-                __reduce54(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce54(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             55 => {
-                __reduce55(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce55(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             56 => {
-                __reduce56(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce56(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             57 => {
-                __reduce57(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce57(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             58 => {
-                __reduce58(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce58(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             59 => {
-                __reduce59(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce59(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             60 => {
-                __reduce60(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce60(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             61 => {
-                __reduce61(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce61(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             62 => {
-                __reduce62(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce62(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             63 => {
-                __reduce63(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce63(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             64 => {
-                __reduce64(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce64(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             65 => {
-                __reduce65(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce65(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             66 => {
-                __reduce66(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce66(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             67 => {
-                __reduce67(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce67(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             68 => {
-                __reduce68(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce68(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             69 => {
-                __reduce69(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce69(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             70 => {
-                __reduce70(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce70(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             71 => {
-                __reduce71(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce71(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             72 => {
-                __reduce72(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce72(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             73 => {
-                __reduce73(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce73(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             74 => {
-                __reduce74(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce74(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             75 => {
-                __reduce75(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce75(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             76 => {
-                __reduce76(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce76(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             77 => {
-                __reduce77(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce77(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             78 => {
-                __reduce78(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce78(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             79 => {
-                __reduce79(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce79(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             80 => {
-                __reduce80(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce80(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             81 => {
-                __reduce81(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce81(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             82 => {
-                __reduce82(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce82(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             83 => {
-                __reduce83(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce83(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             84 => {
-                __reduce84(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce84(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             85 => {
-                __reduce85(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce85(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             86 => {
-                __reduce86(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce86(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             87 => {
-                __reduce87(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce87(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             88 => {
-                __reduce88(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce88(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             89 => {
-                __reduce89(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce89(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             90 => {
-                __reduce90(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce90(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             91 => {
-                __reduce91(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce91(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             92 => {
-                __reduce92(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce92(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             93 => {
-                __reduce93(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce93(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             94 => {
-                __reduce94(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce94(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             95 => {
-                __reduce95(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce95(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             96 => {
-                __reduce96(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce96(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             97 => {
                 // __Fn = Fn => ActionFn(1);
-                let __sym0 = __pop_Variant10(__symbols);
+                let __sym0 = __pop_Variant11(__symbols);
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action1::<>(input, __sym0);
+                let __nt = super::__action1::<>(arena, input, __sym0);
                 return Some(Ok(__nt));
             }
             98 => {
-                __reduce98(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce98(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             _ => panic!("invalid action code {}", __action)
         };
@@ -2258,8 +2270,9 @@ mod __parse__Fn {
     }
     fn __pop_Variant6<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, BasicType, usize)
      {
         match __symbols.pop().unwrap() {
@@ -2267,55 +2280,24 @@ mod __parse__Fn {
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant11<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Box<FuncBody>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, FnDef<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant12(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
-    fn __pop_Variant9<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Box<Pred>, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant9(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
-    fn __pop_Variant10<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, FnDef, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant10(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
-    fn __pop_Variant13<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, IntTy, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant13(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant11(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant14<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Literal, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, IntTy, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant14(__v), __r) => (__l, __v, __r),
@@ -2324,63 +2306,69 @@ mod __parse__Fn {
     }
     fn __pop_Variant15<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Local, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Literal, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant15(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Operand, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant17(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
     fn __pop_Variant1<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Path, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Local, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant1(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
+    fn __pop_Variant18<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Operand<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant18(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
     fn __pop_Variant19<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Pred, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Path<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant19(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant17<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, PredBinOp, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant16(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant17(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant20<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, PredUnOp, usize)
      {
         match __symbols.pop().unwrap() {
@@ -2390,8 +2378,9 @@ mod __parse__Fn {
     }
     fn __pop_Variant21<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, Projection, usize)
      {
         match __symbols.pop().unwrap() {
@@ -2401,8 +2390,9 @@ mod __parse__Fn {
     }
     fn __pop_Variant23<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, RBinOp, usize)
      {
         match __symbols.pop().unwrap() {
@@ -2412,108 +2402,106 @@ mod __parse__Fn {
     }
     fn __pop_Variant24<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, RValue, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, RValue<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant24(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant8<
+    fn __pop_Variant9<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, Symbol, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant8(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant9(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant3<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Tydent, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Tydent<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant3(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant26<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Type, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant26(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
     fn __pop_Variant7<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Path>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Vec<Local>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant7(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant5<
+    fn __pop_Variant8<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Tydent>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Vec<Tydent<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant5(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant8(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::option::Option<Path>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::option::Option<Local>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant18(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant16(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant25<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::option::Option<Tydent>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::option::Option<Tydent<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant25(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant12<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::vec::Vec<FnDef>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::vec::Vec<FnDef<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant11(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant12(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant2<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::vec::Vec<Path>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::vec::Vec<Local>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant2(__v), __r) => (__l, __v, __r),
@@ -2522,8 +2510,9 @@ mod __parse__Fn {
     }
     fn __pop_Variant22<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, ::std::vec::Vec<Projection>, usize)
      {
         match __symbols.pop().unwrap() {
@@ -2533,19 +2522,69 @@ mod __parse__Fn {
     }
     fn __pop_Variant4<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::vec::Vec<Tydent>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::vec::Vec<Tydent<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant4(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
+    fn __pop_Variant13<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx FuncBody<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant13(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx Pred<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant10(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
+    fn __pop_Variant5<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx Slice<Tydent<'cx>>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant5(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
+    fn __pop_Variant26<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx Type<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant26(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
     fn __pop_Variant0<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, &'input str, usize)
      {
         match __symbols.pop().unwrap() {
@@ -2555,111 +2594,123 @@ mod __parse__Fn {
     }
     pub(crate) fn __reduce0<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",") = Path, "," => ActionFn(86);
+        // (<Local> ",") = Local, "," => ActionFn(86);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action86::<>(input, __sym0, __sym1);
+        let __nt = super::__action86::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (2, 0)
     }
     pub(crate) fn __reduce1<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")* =  => ActionFn(84);
+        // (<Local> ",")* =  => ActionFn(84);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action84::<>(input, &__start, &__end);
+        let __nt = super::__action84::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (0, 1)
     }
     pub(crate) fn __reduce2<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")* = (<Path> ",")+ => ActionFn(85);
+        // (<Local> ",")* = (<Local> ",")+ => ActionFn(85);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action85::<>(input, __sym0);
+        let __nt = super::__action85::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
     pub(crate) fn __reduce3<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")+ = Path, "," => ActionFn(91);
+        // (<Local> ",")+ = Local, "," => ActionFn(91);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action91::<>(input, __sym0, __sym1);
+        let __nt = super::__action91::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (2, 2)
     }
     pub(crate) fn __reduce4<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")+ = (<Path> ",")+, Path, "," => ActionFn(92);
+        // (<Local> ",")+ = (<Local> ",")+, Local, "," => ActionFn(92);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action92::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action92::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (3, 2)
     }
     pub(crate) fn __reduce5<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",") = Tydent, "," => ActionFn(79);
@@ -2667,56 +2718,62 @@ mod __parse__Fn {
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action79::<>(input, __sym0, __sym1);
+        let __nt = super::__action79::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 3)
     }
     pub(crate) fn __reduce6<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")* =  => ActionFn(77);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action77::<>(input, &__start, &__end);
+        let __nt = super::__action77::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (0, 4)
     }
     pub(crate) fn __reduce7<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")* = (<Tydent> ",")+ => ActionFn(78);
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action78::<>(input, __sym0);
+        let __nt = super::__action78::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 4)
     }
     pub(crate) fn __reduce8<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")+ = Tydent, "," => ActionFn(95);
@@ -2724,19 +2781,21 @@ mod __parse__Fn {
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action95::<>(input, __sym0, __sym1);
+        let __nt = super::__action95::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (2, 5)
     }
     pub(crate) fn __reduce9<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")+ = (<Tydent> ",")+, Tydent, "," => ActionFn(96);
@@ -2745,189 +2804,209 @@ mod __parse__Fn {
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action96::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action96::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (3, 5)
     }
     pub(crate) fn __reduce10<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Args = Comma<Tydent> => ActionFn(9);
-        let __sym0 = __pop_Variant5(__symbols);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action9::<>(input, __sym0);
+        let __nt = super::__action9::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 6)
     }
     pub(crate) fn __reduce11<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // BasicType = "bool" => ActionFn(31);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action31::<>(input, __sym0);
+        let __nt = super::__action31::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 7)
     }
     pub(crate) fn __reduce12<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // BasicType = IntTy => ActionFn(32);
-        let __sym0 = __pop_Variant13(__symbols);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action32::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 7)
     }
     pub(crate) fn __reduce13<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> = Path => ActionFn(101);
+        // Comma<Local> = Local => ActionFn(101);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action101::<>(input, __sym0);
+        let __nt = super::__action101::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (1, 8)
     }
     pub(crate) fn __reduce14<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> =  => ActionFn(102);
+        // Comma<Local> =  => ActionFn(102);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action102::<>(input, &__start, &__end);
+        let __nt = super::__action102::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (0, 8)
     }
     pub(crate) fn __reduce15<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> = (<Path> ",")+, Path => ActionFn(103);
+        // Comma<Local> = (<Local> ",")+, Local => ActionFn(103);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action103::<>(input, __sym0, __sym1);
+        let __nt = super::__action103::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (2, 8)
     }
     pub(crate) fn __reduce16<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> = (<Path> ",")+ => ActionFn(104);
+        // Comma<Local> = (<Local> ",")+ => ActionFn(104);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action104::<>(input, __sym0);
+        let __nt = super::__action104::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (1, 8)
     }
     pub(crate) fn __reduce17<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> = Tydent => ActionFn(107);
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action107::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action107::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 9)
     }
     pub(crate) fn __reduce18<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> =  => ActionFn(108);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action108::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action108::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (0, 9)
     }
     pub(crate) fn __reduce19<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> = (<Tydent> ",")+, Tydent => ActionFn(109);
@@ -2935,1130 +3014,1244 @@ mod __parse__Fn {
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action109::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action109::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (2, 9)
     }
     pub(crate) fn __reduce20<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> = (<Tydent> ",")+ => ActionFn(110);
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action110::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action110::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 9)
     }
     pub(crate) fn __reduce21<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ContIdent = Ident => ActionFn(6);
-        let __sym0 = __pop_Variant8(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action6::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        let __nt = super::__action6::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
         (1, 10)
     }
     pub(crate) fn __reduce22<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel2 = ExprLevel3, OpGroup2, ExprLevel3 => ActionFn(49);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action49::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action49::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 11)
     }
     pub(crate) fn __reduce23<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel2 = ExprLevel3 => ActionFn(50);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action50::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action50::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 11)
     }
     pub(crate) fn __reduce24<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel3 = LeftAssoc<OpGroup3, ExprLevel4> => ActionFn(51);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action51::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action51::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 12)
     }
     pub(crate) fn __reduce25<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel4 = PredUnOp, ExprLevel5 => ActionFn(52);
-        let __sym1 = __pop_Variant9(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
         let __sym0 = __pop_Variant20(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action52::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action52::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (2, 13)
     }
     pub(crate) fn __reduce26<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel4 = ExprLevel5 => ActionFn(53);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action53::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 13)
     }
     pub(crate) fn __reduce27<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel5 = Operand => ActionFn(54);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action54::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 14)
     }
     pub(crate) fn __reduce28<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn = "fn", ContIdent, "(", Args, ")", "ret", ContIdent, "(", Tydent, ")", "=", FuncBody => ActionFn(3);
-        let __sym11 = __pop_Variant12(__symbols);
+        let __sym11 = __pop_Variant13(__symbols);
         let __sym10 = __pop_Variant0(__symbols);
         let __sym9 = __pop_Variant0(__symbols);
         let __sym8 = __pop_Variant3(__symbols);
         let __sym7 = __pop_Variant0(__symbols);
-        let __sym6 = __pop_Variant8(__symbols);
+        let __sym6 = __pop_Variant9(__symbols);
         let __sym5 = __pop_Variant0(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant5(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym11.2.clone();
-        let __nt = super::__action3::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8, __sym9, __sym10, __sym11);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        let __nt = super::__action3::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8, __sym9, __sym10, __sym11);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
         (12, 15)
     }
     pub(crate) fn __reduce29<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn* =  => ActionFn(71);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action71::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action71::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (0, 16)
     }
     pub(crate) fn __reduce30<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn* = Fn+ => ActionFn(72);
-        let __sym0 = __pop_Variant11(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action72::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action72::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 16)
     }
     pub(crate) fn __reduce31<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn+ = Fn => ActionFn(73);
-        let __sym0 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action73::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action73::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 17)
     }
     pub(crate) fn __reduce32<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn+ = Fn+, Fn => ActionFn(74);
-        let __sym1 = __pop_Variant10(__symbols);
-        let __sym0 = __pop_Variant11(__symbols);
+        let __sym1 = __pop_Variant11(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action74::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action74::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (2, 17)
     }
     pub(crate) fn __reduce33<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fns =  => ActionFn(99);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action99::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action99::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (0, 18)
     }
     pub(crate) fn __reduce34<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fns = Fn+ => ActionFn(100);
-        let __sym0 = __pop_Variant11(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action100::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action100::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 18)
     }
     pub(crate) fn __reduce35<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // FuncBody = "let", Local, "=", RValue, "in", FuncBody => ActionFn(25);
-        let __sym5 = __pop_Variant12(__symbols);
+        let __sym5 = __pop_Variant13(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant24(__symbols);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant15(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym5.2.clone();
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (6, 19)
-    }
-    pub(crate) fn __reduce36<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // FuncBody = "letcont", ContIdent, "(", Args, ")", "=", FuncBody, "in", FuncBody => ActionFn(26);
-        let __sym8 = __pop_Variant12(__symbols);
-        let __sym7 = __pop_Variant0(__symbols);
-        let __sym6 = __pop_Variant12(__symbols);
-        let __sym5 = __pop_Variant0(__symbols);
-        let __sym4 = __pop_Variant0(__symbols);
-        let __sym3 = __pop_Variant5(__symbols);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym8.2.clone();
-        let __nt = super::__action26::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (9, 19)
-    }
-    pub(crate) fn __reduce37<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // FuncBody = "if", Path, "then", FuncBody, "else", FuncBody => ActionFn(27);
-        let __sym5 = __pop_Variant12(__symbols);
-        let __sym4 = __pop_Variant0(__symbols);
-        let __sym3 = __pop_Variant12(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym5.2.clone();
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action25::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (6, 19)
+    }
+    pub(crate) fn __reduce36<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // FuncBody = "letcont", ContIdent, "(", Args, ")", "=", FuncBody, "in", FuncBody => ActionFn(26);
+        let __sym8 = __pop_Variant13(__symbols);
+        let __sym7 = __pop_Variant0(__symbols);
+        let __sym6 = __pop_Variant13(__symbols);
+        let __sym5 = __pop_Variant0(__symbols);
+        let __sym4 = __pop_Variant0(__symbols);
+        let __sym3 = __pop_Variant5(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym8.2.clone();
+        let __nt = super::__action26::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (9, 19)
+    }
+    pub(crate) fn __reduce37<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // FuncBody = "if", Path, "then", FuncBody, "else", FuncBody => ActionFn(27);
+        let __sym5 = __pop_Variant13(__symbols);
+        let __sym4 = __pop_Variant0(__symbols);
+        let __sym3 = __pop_Variant13(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym5.2.clone();
+        let __nt = super::__action27::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (6, 19)
     }
     pub(crate) fn __reduce38<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // FuncBody = "call", ContIdent, "(", Comma<Path>, ")", "ret", ContIdent => ActionFn(28);
-        let __sym6 = __pop_Variant8(__symbols);
+        // FuncBody = "call", ContIdent, "(", Comma<Local>, ")", "ret", ContIdent => ActionFn(28);
+        let __sym6 = __pop_Variant9(__symbols);
         let __sym5 = __pop_Variant0(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant7(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym6.2.clone();
-        let __nt = super::__action28::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action28::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (7, 19)
     }
     pub(crate) fn __reduce39<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // FuncBody = "jump", ContIdent, "(", Comma<Path>, ")" => ActionFn(29);
+        // FuncBody = "jump", ContIdent, "(", Comma<Local>, ")" => ActionFn(29);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant7(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym4.2.clone();
-        let __nt = super::__action29::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action29::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (5, 19)
     }
     pub(crate) fn __reduce40<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // FuncBody = "abort" => ActionFn(30);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action30::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action30::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (1, 19)
     }
     pub(crate) fn __reduce41<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Ident = r#"([a-zA-Z][a-zA-Z0-9_]*|_[a-zA-Z0-9_]+)"# => ActionFn(4);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        let __nt = super::__action4::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
         (1, 20)
     }
     pub(crate) fn __reduce42<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i8" => ActionFn(33);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action33::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action33::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce43<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i16" => ActionFn(34);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action34::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action34::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce44<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i32" => ActionFn(35);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action35::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action35::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce45<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i64" => ActionFn(36);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action36::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce46<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i128" => ActionFn(37);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action37::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action37::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce47<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u8" => ActionFn(38);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action38::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action38::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce48<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u16" => ActionFn(39);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action39::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce49<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u32" => ActionFn(40);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action40::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce50<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u64" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action41::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action41::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce51<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u128" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action42::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action42::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce52<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup1, ExprLevel2> = LeftAssoc<OpGroup1, ExprLevel2>, OpGroup1, ExprLevel2 => ActionFn(65);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action65::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action65::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 22)
     }
     pub(crate) fn __reduce53<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup1, ExprLevel2> = ExprLevel2 => ActionFn(66);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action66::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action66::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 22)
     }
     pub(crate) fn __reduce54<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup3, ExprLevel4> = LeftAssoc<OpGroup3, ExprLevel4>, OpGroup3, ExprLevel4 => ActionFn(63);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action63::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action63::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 23)
     }
     pub(crate) fn __reduce55<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup3, ExprLevel4> = ExprLevel4 => ActionFn(64);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action64::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action64::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 23)
     }
     pub(crate) fn __reduce56<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Literal = "true" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action10::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        let __nt = super::__action10::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 24)
     }
     pub(crate) fn __reduce57<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Literal = "false" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        let __nt = super::__action11::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 24)
     }
     pub(crate) fn __reduce58<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Literal = r#"[0-9]+"# => ActionFn(12);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action12::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        let __nt = super::__action12::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 24)
     }
     pub(crate) fn __reduce59<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Local = Ident => ActionFn(5);
-        let __sym0 = __pop_Variant8(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        let __nt = super::__action5::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 25)
     }
     pub(crate) fn __reduce60<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // Local? = Local => ActionFn(82);
+        let __sym0 = __pop_Variant1(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action82::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 26)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // Local? =  => ActionFn(83);
+        let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+        let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+        let __nt = super::__action83::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (0, 26)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup1 = "&&" => ActionFn(55);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 26)
+        let __nt = super::__action55::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 27)
     }
-    pub(crate) fn __reduce61<
+    pub(crate) fn __reduce63<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = "<" => ActionFn(56);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action56::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce62<
+    pub(crate) fn __reduce64<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = "<=" => ActionFn(57);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action57::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce63<
+    pub(crate) fn __reduce65<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = ">" => ActionFn(58);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action58::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action58::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce64<
+    pub(crate) fn __reduce66<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = ">=" => ActionFn(59);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action59::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action59::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce65<
+    pub(crate) fn __reduce67<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = "==" => ActionFn(60);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action60::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action60::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce66<
+    pub(crate) fn __reduce68<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup3 = "+" => ActionFn(61);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action61::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 28)
-    }
-    pub(crate) fn __reduce67<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // Operand = Path => ActionFn(15);
-        let __sym0 = __pop_Variant1(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action15::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 29)
-    }
-    pub(crate) fn __reduce68<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // Operand = Literal => ActionFn(16);
-        let __sym0 = __pop_Variant14(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action16::<>(input, __sym0);
+        let __nt = super::__action61::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant17(__nt), __end));
         (1, 29)
     }
     pub(crate) fn __reduce69<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path = Local => ActionFn(105);
-        let __sym0 = __pop_Variant15(__symbols);
+        // Operand = Path => ActionFn(15);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action105::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
+        let __nt = super::__action15::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
         (1, 30)
     }
     pub(crate) fn __reduce70<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path = Local, Projection+ => ActionFn(106);
-        let __sym1 = __pop_Variant22(__symbols);
+        // Operand = Literal => ActionFn(16);
         let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym1.2.clone();
-        let __nt = super::__action106::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
-        (2, 30)
+        let __end = __sym0.2.clone();
+        let __nt = super::__action16::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 30)
     }
     pub(crate) fn __reduce71<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path? = Path => ActionFn(82);
+        // Path = Local => ActionFn(105);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action82::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        let __nt = super::__action105::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
         (1, 31)
     }
     pub(crate) fn __reduce72<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path? =  => ActionFn(83);
-        let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-        let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action83::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (0, 31)
+        // Path = Local, Projection+ => ActionFn(106);
+        let __sym1 = __pop_Variant22(__symbols);
+        let __sym0 = __pop_Variant1(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym1.2.clone();
+        let __nt = super::__action106::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (2, 31)
     }
     pub(crate) fn __reduce73<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Pred = LeftAssoc<OpGroup1, ExprLevel2>, OpGroup1, ExprLevel2 => ActionFn(47);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action47::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action47::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 32)
     }
     pub(crate) fn __reduce74<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Pred = ExprLevel2 => ActionFn(48);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action48::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action48::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 32)
     }
     pub(crate) fn __reduce75<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // PredUnOp = "!" => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action62::<>(input, __sym0);
+        let __nt = super::__action62::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant20(__nt), __end));
         (1, 33)
     }
     pub(crate) fn __reduce76<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection = ".", r#"[0-9]+"# => ActionFn(13);
@@ -4066,75 +4259,83 @@ mod __parse__Fn {
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action13::<>(input, __sym0, __sym1);
+        let __nt = super::__action13::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant21(__nt), __end));
         (2, 34)
     }
     pub(crate) fn __reduce77<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection* =  => ActionFn(68);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action68::<>(input, &__start, &__end);
+        let __nt = super::__action68::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (0, 35)
     }
     pub(crate) fn __reduce78<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection* = Projection+ => ActionFn(69);
         let __sym0 = __pop_Variant22(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action69::<>(input, __sym0);
+        let __nt = super::__action69::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (1, 35)
     }
     pub(crate) fn __reduce79<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection+ = Projection => ActionFn(80);
         let __sym0 = __pop_Variant21(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action80::<>(input, __sym0);
+        let __nt = super::__action80::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (1, 36)
     }
     pub(crate) fn __reduce80<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection+ = Projection+, Projection => ActionFn(81);
@@ -4142,256 +4343,282 @@ mod __parse__Fn {
         let __sym0 = __pop_Variant22(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action81::<>(input, __sym0, __sym1);
+        let __nt = super::__action81::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (2, 36)
     }
     pub(crate) fn __reduce81<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "+" => ActionFn(19);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action19::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce82<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "<" => ActionFn(20);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action20::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce83<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "<=" => ActionFn(21);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action21::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce84<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "==" => ActionFn(22);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action22::<>(input, __sym0);
+        let __nt = super::__action22::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce85<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = ">=" => ActionFn(23);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action23::<>(input, __sym0);
+        let __nt = super::__action23::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce86<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = ">" => ActionFn(24);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action24::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce87<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RValue = Operand => ActionFn(17);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action17::<>(input, __sym0);
+        let __nt = super::__action17::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant24(__nt), __end));
         (1, 38)
     }
     pub(crate) fn __reduce88<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RValue = Operand, RBinOp, Operand => ActionFn(18);
-        let __sym2 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant18(__symbols);
         let __sym1 = __pop_Variant23(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action18::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant24(__nt), __end));
         (3, 38)
     }
     pub(crate) fn __reduce89<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent = Local, ":", "{", BasicType, "|", Pred, "}" => ActionFn(7);
         let __sym6 = __pop_Variant0(__symbols);
-        let __sym5 = __pop_Variant19(__symbols);
+        let __sym5 = __pop_Variant10(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant6(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym6.2.clone();
-        let __nt = super::__action7::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        let __nt = super::__action7::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (7, 39)
     }
     pub(crate) fn __reduce90<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent = Local, ":", Type => ActionFn(8);
         let __sym2 = __pop_Variant26(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action8::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (3, 39)
     }
     pub(crate) fn __reduce91<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent? = Tydent => ActionFn(75);
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action75::<>(input, __sym0);
+        let __nt = super::__action75::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant25(__nt), __end));
         (1, 40)
     }
     pub(crate) fn __reduce92<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent? =  => ActionFn(76);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action76::<>(input, &__start, &__end);
+        let __nt = super::__action76::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant25(__nt), __end));
         (0, 40)
     }
     pub(crate) fn __reduce93<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Type = "fn", "(", Args, ")", "->", Tydent => ActionFn(43);
@@ -4403,92 +4630,100 @@ mod __parse__Fn {
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym5.2.clone();
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+        let __nt = super::__action43::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (6, 41)
     }
     pub(crate) fn __reduce94<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Type = "{", Local, ":", BasicType, "|", Pred, "}" => ActionFn(44);
         let __sym6 = __pop_Variant0(__symbols);
-        let __sym5 = __pop_Variant19(__symbols);
+        let __sym5 = __pop_Variant10(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant6(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym6.2.clone();
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        let __nt = super::__action44::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (7, 41)
     }
     pub(crate) fn __reduce95<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Type = "(", Comma<Tydent>, ")" => ActionFn(45);
+        // Type = "(", Args, ")" => ActionFn(45);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant5(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action45::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action45::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (3, 41)
     }
     pub(crate) fn __reduce96<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Type = BasicType => ActionFn(46);
         let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action46::<>(input, __sym0);
+        let __nt = super::__action46::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (1, 41)
     }
     pub(crate) fn __reduce98<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // __Fns = Fns => ActionFn(0);
-        let __sym0 = __pop_Variant11(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action0::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action0::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 43)
     }
 }
@@ -4507,35 +4742,35 @@ mod __parse__Fns {
     use self::__lalrpop_util::state_machine as __state_machine;
     use super::__intern_token::Token;
     #[allow(dead_code)]
-    pub enum __Symbol<'input>
+    pub enum __Symbol<'input, 'cx>
      {
         Variant0(&'input str),
-        Variant1(Path),
-        Variant2(::std::vec::Vec<Path>),
-        Variant3(Tydent),
-        Variant4(::std::vec::Vec<Tydent>),
-        Variant5(Vec<Tydent>),
+        Variant1(Local),
+        Variant2(::std::vec::Vec<Local>),
+        Variant3(Tydent<'cx>),
+        Variant4(::std::vec::Vec<Tydent<'cx>>),
+        Variant5(&'cx Slice<Tydent<'cx>>),
         Variant6(BasicType),
-        Variant7(Vec<Path>),
-        Variant8(Symbol),
-        Variant9(Box<Pred>),
-        Variant10(FnDef),
-        Variant11(::std::vec::Vec<FnDef>),
-        Variant12(Box<FuncBody>),
-        Variant13(IntTy),
-        Variant14(Literal),
-        Variant15(Local),
-        Variant16(PredBinOp),
-        Variant17(Operand),
-        Variant18(::std::option::Option<Path>),
-        Variant19(Pred),
+        Variant7(Vec<Local>),
+        Variant8(Vec<Tydent<'cx>>),
+        Variant9(Symbol),
+        Variant10(&'cx Pred<'cx>),
+        Variant11(FnDef<'cx>),
+        Variant12(::std::vec::Vec<FnDef<'cx>>),
+        Variant13(&'cx FuncBody<'cx>),
+        Variant14(IntTy),
+        Variant15(Literal),
+        Variant16(::std::option::Option<Local>),
+        Variant17(PredBinOp),
+        Variant18(Operand<'cx>),
+        Variant19(Path<'cx>),
         Variant20(PredUnOp),
         Variant21(Projection),
         Variant22(::std::vec::Vec<Projection>),
         Variant23(RBinOp),
-        Variant24(RValue),
-        Variant25(::std::option::Option<Tydent>),
-        Variant26(Type),
+        Variant24(RValue<'cx>),
+        Variant25(::std::option::Option<Tydent<'cx>>),
+        Variant26(&'cx Type<'cx>),
     }
     const __ACTION: &'static [i16] = &[
         // State 0
@@ -4653,13 +4888,13 @@ mod __parse__Fns {
         // State 56
         0, -25, 0, 0, 80, 0, 0, 0, 0, -25, -25, 0, -25, -25, -25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -25, 0, 0,
         // State 57
-        0, -69, 0, 0, -69, 0, 0, 0, 0, -69, -69, 0, -69, -69, -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0,
+        0, -71, 0, 0, -71, 0, 0, 0, 0, -71, -71, 0, -71, -71, -71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0,
         // State 58
-        0, -70, 0, -70, -70, -70, 0, 83, 0, -70, -70, 0, -70, -70, -70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0,
+        0, -72, 0, 0, -72, 0, 0, 83, 0, -72, -72, 0, -72, -72, -72, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -72, 0, 0, 0, 0, -72, 0, 0, 0, 0, 0, 0, 0, 0, -72, 0, 0,
         // State 59
         0, -28, 0, 0, -28, 0, 0, 0, 0, -28, -28, 0, -28, -28, -28, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -28, 0, 0,
         // State 60
-        0, -68, 0, 0, -68, 0, 0, 0, 0, -68, -68, 0, -68, -68, -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0,
+        0, -70, 0, 0, -70, 0, 0, 0, 0, -70, -70, 0, -70, -70, -70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -70, 0, 0,
         // State 61
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 84, 0, 0,
         // State 62
@@ -4681,27 +4916,27 @@ mod __parse__Fns {
         // State 70
         64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 9, 67,
         // State 71
-        -62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -62, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -62, 0, 0, 0, 0, 0, 0, 0, 0, -62, -62,
-        // State 72
-        -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, -63, -63,
-        // State 73
-        -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, -66, -66,
-        // State 74
         -64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -64, 0, 0, 0, 0, 0, 0, 0, 0, -64, -64,
-        // State 75
+        // State 72
         -65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -65, 0, 0, 0, 0, 0, 0, 0, 0, -65, -65,
+        // State 73
+        -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -68, 0, 0, 0, 0, 0, 0, 0, 0, -68, -68,
+        // State 74
+        -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -66, 0, 0, 0, 0, 0, 0, 0, 0, -66, -66,
+        // State 75
+        -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, -67, -67,
         // State 76
         64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 9, 67,
         // State 77
-        -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -61, 0, 0, 0, 0, 0, 0, 0, 0, -61, -61,
+        -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -63, 0, 0, 0, 0, 0, 0, 0, 0, -63, -63,
         // State 78
         64, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 65, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 66, 0, 0, 0, 0, 0, 0, 0, 0, 9, 67,
         // State 79
-        -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -67, 0, 0, 0, 0, 0, 0, 0, 0, -67, -67,
+        -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -69, 0, 0, 0, 0, 0, 0, 0, 0, -69, -69,
         // State 80
-        0, -80, 0, -80, -80, -80, 0, -80, 0, -80, -80, 0, -80, -80, -80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0,
+        0, -80, 0, 0, -80, 0, 0, -80, 0, -80, -80, 0, -80, -80, -80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0, 0, 0, -80, 0, 0, 0, 0, 0, 0, 0, 0, -80, 0, 0,
         // State 81
-        0, -71, 0, -71, -71, -71, 0, 83, 0, -71, -71, 0, -71, -71, -71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0, 0, 0, -71, 0, 0, 0, 0, 0, 0, 0, 0, -71, 0, 0,
+        0, -73, 0, 0, -73, 0, 0, 83, 0, -73, -73, 0, -73, -73, -73, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -73, 0, 0, 0, 0, -73, 0, 0, 0, 0, 0, 0, 0, 0, -73, 0, 0,
         // State 82
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 93,
         // State 83
@@ -4721,9 +4956,9 @@ mod __parse__Fns {
         // State 90
         0, -55, 0, 0, -55, 0, 0, 0, 0, -55, -55, 0, -55, -55, -55, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -55, 0, 0,
         // State 91
-        0, -81, 0, -81, -81, -81, 0, -81, 0, -81, -81, 0, -81, -81, -81, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0, 0, 0, -81, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0,
+        0, -81, 0, 0, -81, 0, 0, -81, 0, -81, -81, 0, -81, -81, -81, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0, 0, 0, -81, 0, 0, 0, 0, 0, 0, 0, 0, -81, 0, 0,
         // State 92
-        0, -77, 0, -77, -77, -77, 0, -77, 0, -77, -77, 0, -77, -77, -77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0, 0, 0, -77, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0,
+        0, -77, 0, 0, -77, 0, 0, -77, 0, -77, -77, 0, -77, -77, -77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0, 0, 0, -77, 0, 0, 0, 0, 0, 0, 0, 0, -77, 0, 0,
         // State 93
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 102, 0, 0,
         // State 94
@@ -5169,7 +5404,7 @@ mod __parse__Fns {
         // State 24
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 25
-        0, 0, 0, 0, 0, 11, 0, 0, 0, 41, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 11, 41, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
         // State 26
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 27
@@ -5213,7 +5448,7 @@ mod __parse__Fns {
         // State 46
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 47
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 53, 54, 55, 0, 0, 0, 0, 0, 14, 0, 56, 57, 58, 59, 0, 0, 0, 60, 61, 0, 62, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 53, 54, 55, 0, 0, 0, 0, 0, 14, 0, 56, 57, 58, 59, 0, 0, 0, 0, 60, 61, 62, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 48
         0, 0, 0, 0, 0, 0, 0, 68, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 24, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 49
@@ -5223,15 +5458,15 @@ mod __parse__Fns {
         // State 51
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 52
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 71, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 53
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 54
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 55
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 77, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 56
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 79, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 57
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 58
@@ -5243,7 +5478,7 @@ mod __parse__Fns {
         // State 61
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 62
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 60, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 85, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 0, 60, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 63
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 64
@@ -5259,7 +5494,7 @@ mod __parse__Fns {
         // State 69
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 88, 0, 0, 0, 0,
         // State 70
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 54, 55, 0, 0, 0, 0, 0, 14, 0, 0, 57, 58, 59, 0, 0, 0, 60, 61, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 89, 54, 55, 0, 0, 0, 0, 0, 14, 0, 0, 57, 58, 59, 0, 0, 0, 0, 60, 61, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 71
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 72
@@ -5271,11 +5506,11 @@ mod __parse__Fns {
         // State 75
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 76
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 90, 53, 54, 55, 0, 0, 0, 0, 0, 14, 0, 0, 57, 58, 59, 0, 0, 0, 60, 61, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 90, 53, 54, 55, 0, 0, 0, 0, 0, 14, 0, 0, 57, 58, 59, 0, 0, 0, 0, 60, 61, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 77
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 78
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 55, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 60, 61, 0, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 91, 55, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 0, 60, 61, 0, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 79
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 80
@@ -5289,7 +5524,7 @@ mod __parse__Fns {
         // State 84
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 85
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 53, 54, 55, 0, 0, 0, 0, 0, 14, 0, 56, 57, 58, 59, 0, 0, 0, 60, 61, 0, 94, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 52, 53, 54, 55, 0, 0, 0, 0, 0, 14, 0, 56, 57, 58, 59, 0, 0, 0, 0, 60, 61, 94, 63, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 86
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 95, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 87
@@ -5313,7 +5548,7 @@ mod __parse__Fns {
         // State 96
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 103, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 97
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 59, 0, 0, 0, 0, 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 59, 0, 0, 0, 0, 0, 104, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 98
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 105, 0, 0, 0, 0, 0, 0, 0, 0, 0, 8, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 99
@@ -5333,17 +5568,17 @@ mod __parse__Fns {
         // State 106
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 107
-        0, 0, 113, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 59, 0, 0, 0, 0, 115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 113, 0, 0, 0, 0, 0, 114, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 108
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 116, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 109
-        0, 0, 113, 0, 0, 0, 0, 0, 117, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 59, 0, 0, 0, 0, 115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 113, 0, 0, 0, 0, 0, 117, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 115, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 110
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 118, 61, 0, 0, 0, 0, 0, 0, 0, 119, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 0, 118, 61, 0, 0, 0, 0, 0, 0, 119, 0, 0, 0, 0, 0,
         // State 111
         0, 0, 0, 0, 0, 11, 120, 0, 0, 13, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 16, 0, 0, 0, 0,
         // State 112
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 59, 0, 0, 0, 0, 121, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 0, 121, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 113
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 114
@@ -5369,7 +5604,7 @@ mod __parse__Fns {
         // State 124
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 125
-        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 138, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
+        0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 14, 0, 0, 0, 58, 59, 0, 0, 0, 0, 138, 61, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 126
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
         // State 127
@@ -5462,21 +5697,22 @@ mod __parse__Fns {
             }
         }).collect()
     }
-    pub struct __StateMachine<'input>
-    where 
+    pub struct __StateMachine<'input, 'cx>
+    where 'cx: 'cx
     {
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
-        __phantom: ::std::marker::PhantomData<(&'input ())>,
+        __phantom: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     }
-    impl<'input> __state_machine::ParserDefinition for __StateMachine<'input>
-    where 
+    impl<'input, 'cx> __state_machine::ParserDefinition for __StateMachine<'input, 'cx>
+    where 'cx: 'cx
     {
         type Location = usize;
         type Error = &'static str;
         type Token = Token<'input>;
         type TokenIndex = usize;
-        type Symbol = __Symbol<'input>;
-        type Success = ::std::vec::Vec<FnDef>;
+        type Symbol = __Symbol<'input, 'cx>;
+        type Success = ::std::vec::Vec<FnDef<'cx>>;
         type StateIndex = i16;
         type Action = i16;
         type ReduceIndex = i16;
@@ -5494,7 +5730,7 @@ mod __parse__Fns {
 
         #[inline]
         fn token_to_index(&self, token: &Self::Token) -> Option<usize> {
-            __token_to_integer(token, ::std::marker::PhantomData::<(&())>)
+            __token_to_integer(token, ::std::marker::PhantomData::<(&(), &())>)
         }
 
         #[inline]
@@ -5518,7 +5754,7 @@ mod __parse__Fns {
         }
 
         fn token_to_symbol(&self, token_index: usize, token: Self::Token) -> Self::Symbol {
-            __token_to_symbol(token_index, token, ::std::marker::PhantomData::<(&())>)
+            __token_to_symbol(token_index, token, ::std::marker::PhantomData::<(&(), &())>)
         }
 
         fn expected_tokens(&self, state: i16) -> Vec<String> {
@@ -5546,24 +5782,26 @@ mod __parse__Fns {
             symbols: &mut Vec<__state_machine::SymbolTriple<Self>>,
         ) -> Option<__state_machine::ParseResult<Self>> {
             __reduce(
+                self.arena,
                 self.input,
                 action,
                 start_location,
                 states,
                 symbols,
-                ::std::marker::PhantomData::<(&())>,
+                ::std::marker::PhantomData::<(&(), &())>,
             )
         }
 
         fn simulate_reduce(&self, action: i16) -> __state_machine::SimulatedReduce<Self> {
-            __simulate_reduce(action, ::std::marker::PhantomData::<(&())>)
+            __simulate_reduce(action, ::std::marker::PhantomData::<(&(), &())>)
         }
     }
     fn __token_to_integer<
         'input,
+        'cx,
     >(
         __token: &Token<'input>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> Option<usize>
     {
         match *__token {
@@ -5616,11 +5854,12 @@ mod __parse__Fns {
     }
     fn __token_to_symbol<
         'input,
+        'cx,
     >(
         __token_index: usize,
         __token: Token<'input>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> __Symbol<'input>
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> __Symbol<'input, 'cx>
     {
         match __token_index {
             0 => match __token {
@@ -5804,10 +6043,13 @@ mod __parse__Fns {
     }
     fn __simulate_reduce<
         'input,
+        'cx,
     >(
         __reduce_index: i16,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> __state_machine::SimulatedReduce<__StateMachine<'input>>
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> __state_machine::SimulatedReduce<__StateMachine<'input, 'cx>>
+    where
+        'cx: 'cx,
     {
         match __reduce_index {
             0 => {
@@ -6178,8 +6420,8 @@ mod __parse__Fns {
             }
             61 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    states_to_pop: 0,
+                    nonterminal_produced: 26,
                 }
             }
             62 => {
@@ -6191,19 +6433,19 @@ mod __parse__Fns {
             63 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    nonterminal_produced: 28,
                 }
             }
             64 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    nonterminal_produced: 28,
                 }
             }
             65 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 27,
+                    nonterminal_produced: 28,
                 }
             }
             66 => {
@@ -6215,7 +6457,7 @@ mod __parse__Fns {
             67 => {
                 __state_machine::SimulatedReduce::Reduce {
                     states_to_pop: 1,
-                    nonterminal_produced: 29,
+                    nonterminal_produced: 28,
                 }
             }
             68 => {
@@ -6232,7 +6474,7 @@ mod __parse__Fns {
             }
             70 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 2,
+                    states_to_pop: 1,
                     nonterminal_produced: 30,
                 }
             }
@@ -6244,7 +6486,7 @@ mod __parse__Fns {
             }
             72 => {
                 __state_machine::SimulatedReduce::Reduce {
-                    states_to_pop: 0,
+                    states_to_pop: 2,
                     nonterminal_produced: 31,
                 }
             }
@@ -6419,16 +6661,19 @@ mod __parse__Fns {
         #[allow(dead_code)]
         pub fn parse<
             'input,
+            'cx,
         >(
             &self,
+            arena: &'cx CpsArena<'cx>,
             input: &'input str,
-        ) -> Result<::std::vec::Vec<FnDef>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
+        ) -> Result<::std::vec::Vec<FnDef<'cx>>, __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>
         {
             let mut __tokens = self.builder.matcher(input);
             let __r = __state_machine::Parser::drive(
                 __StateMachine {
+                    arena,
                     input,
-                    __phantom: ::std::marker::PhantomData::<(&())>,
+                    __phantom: ::std::marker::PhantomData::<(&(), &())>,
                 },
                 __tokens,
             );
@@ -6437,316 +6682,318 @@ mod __parse__Fns {
     }
     pub(crate) fn __reduce<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> Option<Result<::std::vec::Vec<FnDef>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> Option<Result<::std::vec::Vec<FnDef<'cx>>,__lalrpop_util::ParseError<usize, Token<'input>, &'static str>>>
     {
         let (__pop_states, __nonterminal) = match __action {
             0 => {
-                __reduce0(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce0(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             1 => {
-                __reduce1(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce1(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             2 => {
-                __reduce2(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce2(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             3 => {
-                __reduce3(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce3(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             4 => {
-                __reduce4(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce4(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             5 => {
-                __reduce5(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce5(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             6 => {
-                __reduce6(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce6(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             7 => {
-                __reduce7(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce7(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             8 => {
-                __reduce8(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce8(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             9 => {
-                __reduce9(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce9(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             10 => {
-                __reduce10(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce10(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             11 => {
-                __reduce11(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce11(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             12 => {
-                __reduce12(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce12(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             13 => {
-                __reduce13(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce13(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             14 => {
-                __reduce14(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce14(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             15 => {
-                __reduce15(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce15(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             16 => {
-                __reduce16(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce16(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             17 => {
-                __reduce17(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce17(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             18 => {
-                __reduce18(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce18(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             19 => {
-                __reduce19(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce19(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             20 => {
-                __reduce20(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce20(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             21 => {
-                __reduce21(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce21(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             22 => {
-                __reduce22(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce22(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             23 => {
-                __reduce23(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce23(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             24 => {
-                __reduce24(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce24(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             25 => {
-                __reduce25(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce25(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             26 => {
-                __reduce26(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce26(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             27 => {
-                __reduce27(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce27(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             28 => {
-                __reduce28(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce28(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             29 => {
-                __reduce29(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce29(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             30 => {
-                __reduce30(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce30(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             31 => {
-                __reduce31(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce31(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             32 => {
-                __reduce32(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce32(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             33 => {
-                __reduce33(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce33(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             34 => {
-                __reduce34(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce34(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             35 => {
-                __reduce35(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce35(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             36 => {
-                __reduce36(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce36(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             37 => {
-                __reduce37(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce37(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             38 => {
-                __reduce38(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce38(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             39 => {
-                __reduce39(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce39(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             40 => {
-                __reduce40(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce40(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             41 => {
-                __reduce41(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce41(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             42 => {
-                __reduce42(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce42(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             43 => {
-                __reduce43(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce43(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             44 => {
-                __reduce44(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce44(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             45 => {
-                __reduce45(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce45(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             46 => {
-                __reduce46(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce46(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             47 => {
-                __reduce47(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce47(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             48 => {
-                __reduce48(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce48(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             49 => {
-                __reduce49(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce49(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             50 => {
-                __reduce50(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce50(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             51 => {
-                __reduce51(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce51(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             52 => {
-                __reduce52(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce52(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             53 => {
-                __reduce53(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce53(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             54 => {
-                __reduce54(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce54(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             55 => {
-                __reduce55(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce55(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             56 => {
-                __reduce56(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce56(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             57 => {
-                __reduce57(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce57(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             58 => {
-                __reduce58(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce58(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             59 => {
-                __reduce59(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce59(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             60 => {
-                __reduce60(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce60(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             61 => {
-                __reduce61(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce61(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             62 => {
-                __reduce62(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce62(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             63 => {
-                __reduce63(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce63(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             64 => {
-                __reduce64(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce64(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             65 => {
-                __reduce65(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce65(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             66 => {
-                __reduce66(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce66(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             67 => {
-                __reduce67(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce67(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             68 => {
-                __reduce68(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce68(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             69 => {
-                __reduce69(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce69(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             70 => {
-                __reduce70(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce70(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             71 => {
-                __reduce71(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce71(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             72 => {
-                __reduce72(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce72(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             73 => {
-                __reduce73(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce73(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             74 => {
-                __reduce74(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce74(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             75 => {
-                __reduce75(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce75(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             76 => {
-                __reduce76(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce76(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             77 => {
-                __reduce77(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce77(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             78 => {
-                __reduce78(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce78(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             79 => {
-                __reduce79(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce79(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             80 => {
-                __reduce80(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce80(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             81 => {
-                __reduce81(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce81(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             82 => {
-                __reduce82(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce82(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             83 => {
-                __reduce83(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce83(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             84 => {
-                __reduce84(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce84(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             85 => {
-                __reduce85(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce85(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             86 => {
-                __reduce86(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce86(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             87 => {
-                __reduce87(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce87(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             88 => {
-                __reduce88(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce88(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             89 => {
-                __reduce89(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce89(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             90 => {
-                __reduce90(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce90(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             91 => {
-                __reduce91(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce91(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             92 => {
-                __reduce92(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce92(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             93 => {
-                __reduce93(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce93(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             94 => {
-                __reduce94(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce94(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             95 => {
-                __reduce95(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce95(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             96 => {
-                __reduce96(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce96(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             97 => {
-                __reduce97(input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&())>)
+                __reduce97(arena, input, __action, __lookahead_start, __states, __symbols, ::std::marker::PhantomData::<(&(), &())>)
             }
             98 => {
                 // __Fns = Fns => ActionFn(0);
-                let __sym0 = __pop_Variant11(__symbols);
+                let __sym0 = __pop_Variant12(__symbols);
                 let __start = __sym0.0.clone();
                 let __end = __sym0.2.clone();
-                let __nt = super::__action0::<>(input, __sym0);
+                let __nt = super::__action0::<>(arena, input, __sym0);
                 return Some(Ok(__nt));
             }
             _ => panic!("invalid action code {}", __action)
@@ -6760,8 +7007,9 @@ mod __parse__Fns {
     }
     fn __pop_Variant6<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, BasicType, usize)
      {
         match __symbols.pop().unwrap() {
@@ -6769,55 +7017,24 @@ mod __parse__Fns {
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant12<
+    fn __pop_Variant11<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Box<FuncBody>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, FnDef<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant12(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
-    fn __pop_Variant9<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Box<Pred>, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant9(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
-    fn __pop_Variant10<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, FnDef, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant10(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
-    fn __pop_Variant13<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, IntTy, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant13(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant11(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant14<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Literal, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, IntTy, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant14(__v), __r) => (__l, __v, __r),
@@ -6826,63 +7043,69 @@ mod __parse__Fns {
     }
     fn __pop_Variant15<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Local, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Literal, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant15(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant17<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Operand, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant17(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
     fn __pop_Variant1<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Path, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Local, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant1(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
+    fn __pop_Variant18<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Operand<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant18(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
     fn __pop_Variant19<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Pred, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Path<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant19(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant16<
+    fn __pop_Variant17<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, PredBinOp, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant16(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant17(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant20<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, PredUnOp, usize)
      {
         match __symbols.pop().unwrap() {
@@ -6892,8 +7115,9 @@ mod __parse__Fns {
     }
     fn __pop_Variant21<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, Projection, usize)
      {
         match __symbols.pop().unwrap() {
@@ -6903,8 +7127,9 @@ mod __parse__Fns {
     }
     fn __pop_Variant23<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, RBinOp, usize)
      {
         match __symbols.pop().unwrap() {
@@ -6914,108 +7139,106 @@ mod __parse__Fns {
     }
     fn __pop_Variant24<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, RValue, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, RValue<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant24(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant8<
+    fn __pop_Variant9<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, Symbol, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant8(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant9(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant3<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Tydent, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Tydent<'cx>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant3(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant26<
-      'input,
-    >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Type, usize)
-     {
-        match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant26(__v), __r) => (__l, __v, __r),
-            _ => panic!("symbol type mismatch")
-        }
-    }
     fn __pop_Variant7<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Path>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Vec<Local>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant7(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant5<
+    fn __pop_Variant8<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, Vec<Tydent>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, Vec<Tydent<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant5(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant8(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant18<
+    fn __pop_Variant16<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::option::Option<Path>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::option::Option<Local>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant18(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant16(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant25<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::option::Option<Tydent>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::option::Option<Tydent<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant25(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
-    fn __pop_Variant11<
+    fn __pop_Variant12<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::vec::Vec<FnDef>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::vec::Vec<FnDef<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
-            (__l, __Symbol::Variant11(__v), __r) => (__l, __v, __r),
+            (__l, __Symbol::Variant12(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
     fn __pop_Variant2<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::vec::Vec<Path>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::vec::Vec<Local>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant2(__v), __r) => (__l, __v, __r),
@@ -7024,8 +7247,9 @@ mod __parse__Fns {
     }
     fn __pop_Variant22<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, ::std::vec::Vec<Projection>, usize)
      {
         match __symbols.pop().unwrap() {
@@ -7035,19 +7259,69 @@ mod __parse__Fns {
     }
     fn __pop_Variant4<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
-    ) -> (usize, ::std::vec::Vec<Tydent>, usize)
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, ::std::vec::Vec<Tydent<'cx>>, usize)
      {
         match __symbols.pop().unwrap() {
             (__l, __Symbol::Variant4(__v), __r) => (__l, __v, __r),
             _ => panic!("symbol type mismatch")
         }
     }
+    fn __pop_Variant13<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx FuncBody<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant13(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
+    fn __pop_Variant10<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx Pred<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant10(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
+    fn __pop_Variant5<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx Slice<Tydent<'cx>>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant5(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
+    fn __pop_Variant26<
+      'input,
+      'cx,
+    >(
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
+    ) -> (usize, &'cx Type<'cx>, usize)
+     {
+        match __symbols.pop().unwrap() {
+            (__l, __Symbol::Variant26(__v), __r) => (__l, __v, __r),
+            _ => panic!("symbol type mismatch")
+        }
+    }
     fn __pop_Variant0<
       'input,
+      'cx,
     >(
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>
     ) -> (usize, &'input str, usize)
      {
         match __symbols.pop().unwrap() {
@@ -7057,111 +7331,123 @@ mod __parse__Fns {
     }
     pub(crate) fn __reduce0<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",") = Path, "," => ActionFn(86);
+        // (<Local> ",") = Local, "," => ActionFn(86);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action86::<>(input, __sym0, __sym1);
+        let __nt = super::__action86::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (2, 0)
     }
     pub(crate) fn __reduce1<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")* =  => ActionFn(84);
+        // (<Local> ",")* =  => ActionFn(84);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action84::<>(input, &__start, &__end);
+        let __nt = super::__action84::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (0, 1)
     }
     pub(crate) fn __reduce2<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")* = (<Path> ",")+ => ActionFn(85);
+        // (<Local> ",")* = (<Local> ",")+ => ActionFn(85);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action85::<>(input, __sym0);
+        let __nt = super::__action85::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (1, 1)
     }
     pub(crate) fn __reduce3<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")+ = Path, "," => ActionFn(91);
+        // (<Local> ",")+ = Local, "," => ActionFn(91);
         let __sym1 = __pop_Variant0(__symbols);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action91::<>(input, __sym0, __sym1);
+        let __nt = super::__action91::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (2, 2)
     }
     pub(crate) fn __reduce4<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // (<Path> ",")+ = (<Path> ",")+, Path, "," => ActionFn(92);
+        // (<Local> ",")+ = (<Local> ",")+, Local, "," => ActionFn(92);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action92::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action92::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant2(__nt), __end));
         (3, 2)
     }
     pub(crate) fn __reduce5<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",") = Tydent, "," => ActionFn(79);
@@ -7169,56 +7455,62 @@ mod __parse__Fns {
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action79::<>(input, __sym0, __sym1);
+        let __nt = super::__action79::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (2, 3)
     }
     pub(crate) fn __reduce6<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")* =  => ActionFn(77);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action77::<>(input, &__start, &__end);
+        let __nt = super::__action77::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (0, 4)
     }
     pub(crate) fn __reduce7<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")* = (<Tydent> ",")+ => ActionFn(78);
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action78::<>(input, __sym0);
+        let __nt = super::__action78::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (1, 4)
     }
     pub(crate) fn __reduce8<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")+ = Tydent, "," => ActionFn(95);
@@ -7226,19 +7518,21 @@ mod __parse__Fns {
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action95::<>(input, __sym0, __sym1);
+        let __nt = super::__action95::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (2, 5)
     }
     pub(crate) fn __reduce9<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // (<Tydent> ",")+ = (<Tydent> ",")+, Tydent, "," => ActionFn(96);
@@ -7247,189 +7541,209 @@ mod __parse__Fns {
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action96::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action96::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant4(__nt), __end));
         (3, 5)
     }
     pub(crate) fn __reduce10<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Args = Comma<Tydent> => ActionFn(9);
-        let __sym0 = __pop_Variant5(__symbols);
+        let __sym0 = __pop_Variant8(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action9::<>(input, __sym0);
+        let __nt = super::__action9::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant5(__nt), __end));
         (1, 6)
     }
     pub(crate) fn __reduce11<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // BasicType = "bool" => ActionFn(31);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action31::<>(input, __sym0);
+        let __nt = super::__action31::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 7)
     }
     pub(crate) fn __reduce12<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // BasicType = IntTy => ActionFn(32);
-        let __sym0 = __pop_Variant13(__symbols);
+        let __sym0 = __pop_Variant14(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action32::<>(input, __sym0);
+        let __nt = super::__action32::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant6(__nt), __end));
         (1, 7)
     }
     pub(crate) fn __reduce13<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> = Path => ActionFn(101);
+        // Comma<Local> = Local => ActionFn(101);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action101::<>(input, __sym0);
+        let __nt = super::__action101::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (1, 8)
     }
     pub(crate) fn __reduce14<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> =  => ActionFn(102);
+        // Comma<Local> =  => ActionFn(102);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action102::<>(input, &__start, &__end);
+        let __nt = super::__action102::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (0, 8)
     }
     pub(crate) fn __reduce15<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> = (<Path> ",")+, Path => ActionFn(103);
+        // Comma<Local> = (<Local> ",")+, Local => ActionFn(103);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action103::<>(input, __sym0, __sym1);
+        let __nt = super::__action103::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (2, 8)
     }
     pub(crate) fn __reduce16<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Comma<Path> = (<Path> ",")+ => ActionFn(104);
+        // Comma<Local> = (<Local> ",")+ => ActionFn(104);
         let __sym0 = __pop_Variant2(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action104::<>(input, __sym0);
+        let __nt = super::__action104::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant7(__nt), __end));
         (1, 8)
     }
     pub(crate) fn __reduce17<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> = Tydent => ActionFn(107);
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action107::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action107::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 9)
     }
     pub(crate) fn __reduce18<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> =  => ActionFn(108);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action108::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action108::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (0, 9)
     }
     pub(crate) fn __reduce19<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> = (<Tydent> ",")+, Tydent => ActionFn(109);
@@ -7437,1130 +7751,1244 @@ mod __parse__Fns {
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action109::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action109::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (2, 9)
     }
     pub(crate) fn __reduce20<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Comma<Tydent> = (<Tydent> ",")+ => ActionFn(110);
         let __sym0 = __pop_Variant4(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action110::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant5(__nt), __end));
+        let __nt = super::__action110::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
         (1, 9)
     }
     pub(crate) fn __reduce21<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ContIdent = Ident => ActionFn(6);
-        let __sym0 = __pop_Variant8(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action6::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        let __nt = super::__action6::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
         (1, 10)
     }
     pub(crate) fn __reduce22<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel2 = ExprLevel3, OpGroup2, ExprLevel3 => ActionFn(49);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action49::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action49::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 11)
     }
     pub(crate) fn __reduce23<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel2 = ExprLevel3 => ActionFn(50);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action50::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action50::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 11)
     }
     pub(crate) fn __reduce24<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel3 = LeftAssoc<OpGroup3, ExprLevel4> => ActionFn(51);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action51::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action51::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 12)
     }
     pub(crate) fn __reduce25<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel4 = PredUnOp, ExprLevel5 => ActionFn(52);
-        let __sym1 = __pop_Variant9(__symbols);
+        let __sym1 = __pop_Variant10(__symbols);
         let __sym0 = __pop_Variant20(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action52::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action52::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (2, 13)
     }
     pub(crate) fn __reduce26<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel4 = ExprLevel5 => ActionFn(53);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action53::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action53::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 13)
     }
     pub(crate) fn __reduce27<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // ExprLevel5 = Operand => ActionFn(54);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action54::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action54::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 14)
     }
     pub(crate) fn __reduce28<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn = "fn", ContIdent, "(", Args, ")", "ret", ContIdent, "(", Tydent, ")", "=", FuncBody => ActionFn(3);
-        let __sym11 = __pop_Variant12(__symbols);
+        let __sym11 = __pop_Variant13(__symbols);
         let __sym10 = __pop_Variant0(__symbols);
         let __sym9 = __pop_Variant0(__symbols);
         let __sym8 = __pop_Variant3(__symbols);
         let __sym7 = __pop_Variant0(__symbols);
-        let __sym6 = __pop_Variant8(__symbols);
+        let __sym6 = __pop_Variant9(__symbols);
         let __sym5 = __pop_Variant0(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant5(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym11.2.clone();
-        let __nt = super::__action3::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8, __sym9, __sym10, __sym11);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        let __nt = super::__action3::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8, __sym9, __sym10, __sym11);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
         (12, 15)
     }
     pub(crate) fn __reduce29<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn* =  => ActionFn(71);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action71::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action71::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (0, 16)
     }
     pub(crate) fn __reduce30<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn* = Fn+ => ActionFn(72);
-        let __sym0 = __pop_Variant11(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action72::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action72::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 16)
     }
     pub(crate) fn __reduce31<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn+ = Fn => ActionFn(73);
-        let __sym0 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action73::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action73::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 17)
     }
     pub(crate) fn __reduce32<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fn+ = Fn+, Fn => ActionFn(74);
-        let __sym1 = __pop_Variant10(__symbols);
-        let __sym0 = __pop_Variant11(__symbols);
+        let __sym1 = __pop_Variant11(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action74::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action74::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (2, 17)
     }
     pub(crate) fn __reduce33<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fns =  => ActionFn(99);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action99::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action99::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (0, 18)
     }
     pub(crate) fn __reduce34<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Fns = Fn+ => ActionFn(100);
-        let __sym0 = __pop_Variant11(__symbols);
+        let __sym0 = __pop_Variant12(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action100::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
+        let __nt = super::__action100::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
         (1, 18)
     }
     pub(crate) fn __reduce35<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // FuncBody = "let", Local, "=", RValue, "in", FuncBody => ActionFn(25);
-        let __sym5 = __pop_Variant12(__symbols);
+        let __sym5 = __pop_Variant13(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant24(__symbols);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant15(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym5.2.clone();
-        let __nt = super::__action25::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (6, 19)
-    }
-    pub(crate) fn __reduce36<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // FuncBody = "letcont", ContIdent, "(", Args, ")", "=", FuncBody, "in", FuncBody => ActionFn(26);
-        let __sym8 = __pop_Variant12(__symbols);
-        let __sym7 = __pop_Variant0(__symbols);
-        let __sym6 = __pop_Variant12(__symbols);
-        let __sym5 = __pop_Variant0(__symbols);
-        let __sym4 = __pop_Variant0(__symbols);
-        let __sym3 = __pop_Variant5(__symbols);
-        let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
-        let __sym0 = __pop_Variant0(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym8.2.clone();
-        let __nt = super::__action26::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
-        (9, 19)
-    }
-    pub(crate) fn __reduce37<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // FuncBody = "if", Path, "then", FuncBody, "else", FuncBody => ActionFn(27);
-        let __sym5 = __pop_Variant12(__symbols);
-        let __sym4 = __pop_Variant0(__symbols);
-        let __sym3 = __pop_Variant12(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym5.2.clone();
-        let __nt = super::__action27::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action25::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (6, 19)
+    }
+    pub(crate) fn __reduce36<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // FuncBody = "letcont", ContIdent, "(", Args, ")", "=", FuncBody, "in", FuncBody => ActionFn(26);
+        let __sym8 = __pop_Variant13(__symbols);
+        let __sym7 = __pop_Variant0(__symbols);
+        let __sym6 = __pop_Variant13(__symbols);
+        let __sym5 = __pop_Variant0(__symbols);
+        let __sym4 = __pop_Variant0(__symbols);
+        let __sym3 = __pop_Variant5(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym8.2.clone();
+        let __nt = super::__action26::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6, __sym7, __sym8);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        (9, 19)
+    }
+    pub(crate) fn __reduce37<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // FuncBody = "if", Path, "then", FuncBody, "else", FuncBody => ActionFn(27);
+        let __sym5 = __pop_Variant13(__symbols);
+        let __sym4 = __pop_Variant0(__symbols);
+        let __sym3 = __pop_Variant13(__symbols);
+        let __sym2 = __pop_Variant0(__symbols);
+        let __sym1 = __pop_Variant19(__symbols);
+        let __sym0 = __pop_Variant0(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym5.2.clone();
+        let __nt = super::__action27::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (6, 19)
     }
     pub(crate) fn __reduce38<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // FuncBody = "call", ContIdent, "(", Comma<Path>, ")", "ret", ContIdent => ActionFn(28);
-        let __sym6 = __pop_Variant8(__symbols);
+        // FuncBody = "call", ContIdent, "(", Comma<Local>, ")", "ret", ContIdent => ActionFn(28);
+        let __sym6 = __pop_Variant9(__symbols);
         let __sym5 = __pop_Variant0(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant7(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym6.2.clone();
-        let __nt = super::__action28::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action28::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (7, 19)
     }
     pub(crate) fn __reduce39<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // FuncBody = "jump", ContIdent, "(", Comma<Path>, ")" => ActionFn(29);
+        // FuncBody = "jump", ContIdent, "(", Comma<Local>, ")" => ActionFn(29);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant7(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant8(__symbols);
+        let __sym1 = __pop_Variant9(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym4.2.clone();
-        let __nt = super::__action29::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action29::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (5, 19)
     }
     pub(crate) fn __reduce40<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // FuncBody = "abort" => ActionFn(30);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action30::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant12(__nt), __end));
+        let __nt = super::__action30::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
         (1, 19)
     }
     pub(crate) fn __reduce41<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Ident = r#"([a-zA-Z][a-zA-Z0-9_]*|_[a-zA-Z0-9_]+)"# => ActionFn(4);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action4::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant8(__nt), __end));
+        let __nt = super::__action4::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
         (1, 20)
     }
     pub(crate) fn __reduce42<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i8" => ActionFn(33);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action33::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action33::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce43<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i16" => ActionFn(34);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action34::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action34::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce44<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i32" => ActionFn(35);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action35::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action35::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce45<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i64" => ActionFn(36);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action36::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action36::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce46<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "i128" => ActionFn(37);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action37::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action37::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce47<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u8" => ActionFn(38);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action38::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action38::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce48<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u16" => ActionFn(39);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action39::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action39::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce49<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u32" => ActionFn(40);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action40::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action40::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce50<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u64" => ActionFn(41);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action41::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action41::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce51<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // IntTy = "u128" => ActionFn(42);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action42::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant13(__nt), __end));
+        let __nt = super::__action42::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
         (1, 21)
     }
     pub(crate) fn __reduce52<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup1, ExprLevel2> = LeftAssoc<OpGroup1, ExprLevel2>, OpGroup1, ExprLevel2 => ActionFn(65);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action65::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action65::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 22)
     }
     pub(crate) fn __reduce53<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup1, ExprLevel2> = ExprLevel2 => ActionFn(66);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action66::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action66::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 22)
     }
     pub(crate) fn __reduce54<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup3, ExprLevel4> = LeftAssoc<OpGroup3, ExprLevel4>, OpGroup3, ExprLevel4 => ActionFn(63);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action63::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action63::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 23)
     }
     pub(crate) fn __reduce55<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // LeftAssoc<OpGroup3, ExprLevel4> = ExprLevel4 => ActionFn(64);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action64::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant9(__nt), __end));
+        let __nt = super::__action64::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 23)
     }
     pub(crate) fn __reduce56<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Literal = "true" => ActionFn(10);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action10::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        let __nt = super::__action10::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 24)
     }
     pub(crate) fn __reduce57<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Literal = "false" => ActionFn(11);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action11::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        let __nt = super::__action11::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 24)
     }
     pub(crate) fn __reduce58<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Literal = r#"[0-9]+"# => ActionFn(12);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action12::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant14(__nt), __end));
+        let __nt = super::__action12::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
         (1, 24)
     }
     pub(crate) fn __reduce59<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Local = Ident => ActionFn(5);
-        let __sym0 = __pop_Variant8(__symbols);
+        let __sym0 = __pop_Variant9(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action5::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant15(__nt), __end));
+        let __nt = super::__action5::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
         (1, 25)
     }
     pub(crate) fn __reduce60<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // Local? = Local => ActionFn(82);
+        let __sym0 = __pop_Variant1(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym0.2.clone();
+        let __nt = super::__action82::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (1, 26)
+    }
+    pub(crate) fn __reduce61<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
+    ) -> (usize, usize)
+    {
+        // Local? =  => ActionFn(83);
+        let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
+        let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
+        let __nt = super::__action83::<>(arena, input, &__start, &__end);
+        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
+        (0, 26)
+    }
+    pub(crate) fn __reduce62<
+        'input,
+        'cx,
+    >(
+        arena: &'cx CpsArena<'cx>,
+        input: &'input str,
+        __action: i16,
+        __lookahead_start: Option<&usize>,
+        __states: &mut ::std::vec::Vec<i16>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup1 = "&&" => ActionFn(55);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action55::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 26)
+        let __nt = super::__action55::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 27)
     }
-    pub(crate) fn __reduce61<
+    pub(crate) fn __reduce63<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = "<" => ActionFn(56);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action56::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action56::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce62<
+    pub(crate) fn __reduce64<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = "<=" => ActionFn(57);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action57::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action57::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce63<
+    pub(crate) fn __reduce65<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = ">" => ActionFn(58);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action58::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action58::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce64<
+    pub(crate) fn __reduce66<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = ">=" => ActionFn(59);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action59::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action59::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce65<
+    pub(crate) fn __reduce67<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup2 = "==" => ActionFn(60);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action60::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 27)
+        let __nt = super::__action60::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
+        (1, 28)
     }
-    pub(crate) fn __reduce66<
+    pub(crate) fn __reduce68<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // OpGroup3 = "+" => ActionFn(61);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action61::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant16(__nt), __end));
-        (1, 28)
-    }
-    pub(crate) fn __reduce67<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // Operand = Path => ActionFn(15);
-        let __sym0 = __pop_Variant1(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action15::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant17(__nt), __end));
-        (1, 29)
-    }
-    pub(crate) fn __reduce68<
-        'input,
-    >(
-        input: &'input str,
-        __action: i16,
-        __lookahead_start: Option<&usize>,
-        __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
-    ) -> (usize, usize)
-    {
-        // Operand = Literal => ActionFn(16);
-        let __sym0 = __pop_Variant14(__symbols);
-        let __start = __sym0.0.clone();
-        let __end = __sym0.2.clone();
-        let __nt = super::__action16::<>(input, __sym0);
+        let __nt = super::__action61::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant17(__nt), __end));
         (1, 29)
     }
     pub(crate) fn __reduce69<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path = Local => ActionFn(105);
-        let __sym0 = __pop_Variant15(__symbols);
+        // Operand = Path => ActionFn(15);
+        let __sym0 = __pop_Variant19(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action105::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
+        let __nt = super::__action15::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
         (1, 30)
     }
     pub(crate) fn __reduce70<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path = Local, Projection+ => ActionFn(106);
-        let __sym1 = __pop_Variant22(__symbols);
+        // Operand = Literal => ActionFn(16);
         let __sym0 = __pop_Variant15(__symbols);
         let __start = __sym0.0.clone();
-        let __end = __sym1.2.clone();
-        let __nt = super::__action106::<>(input, __sym0, __sym1);
-        __symbols.push((__start, __Symbol::Variant1(__nt), __end));
-        (2, 30)
+        let __end = __sym0.2.clone();
+        let __nt = super::__action16::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        (1, 30)
     }
     pub(crate) fn __reduce71<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path? = Path => ActionFn(82);
+        // Path = Local => ActionFn(105);
         let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action82::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
+        let __nt = super::__action105::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
         (1, 31)
     }
     pub(crate) fn __reduce72<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Path? =  => ActionFn(83);
-        let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
-        let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action83::<>(input, &__start, &__end);
-        __symbols.push((__start, __Symbol::Variant18(__nt), __end));
-        (0, 31)
+        // Path = Local, Projection+ => ActionFn(106);
+        let __sym1 = __pop_Variant22(__symbols);
+        let __sym0 = __pop_Variant1(__symbols);
+        let __start = __sym0.0.clone();
+        let __end = __sym1.2.clone();
+        let __nt = super::__action106::<>(arena, input, __sym0, __sym1);
+        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        (2, 31)
     }
     pub(crate) fn __reduce73<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Pred = LeftAssoc<OpGroup1, ExprLevel2>, OpGroup1, ExprLevel2 => ActionFn(47);
-        let __sym2 = __pop_Variant9(__symbols);
-        let __sym1 = __pop_Variant16(__symbols);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym2 = __pop_Variant10(__symbols);
+        let __sym1 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action47::<>(input, __sym0, __sym1, __sym2);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action47::<>(arena, input, __sym0, __sym1, __sym2);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (3, 32)
     }
     pub(crate) fn __reduce74<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Pred = ExprLevel2 => ActionFn(48);
-        let __sym0 = __pop_Variant9(__symbols);
+        let __sym0 = __pop_Variant10(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action48::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant19(__nt), __end));
+        let __nt = super::__action48::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
         (1, 32)
     }
     pub(crate) fn __reduce75<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // PredUnOp = "!" => ActionFn(62);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action62::<>(input, __sym0);
+        let __nt = super::__action62::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant20(__nt), __end));
         (1, 33)
     }
     pub(crate) fn __reduce76<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection = ".", r#"[0-9]+"# => ActionFn(13);
@@ -8568,75 +8996,83 @@ mod __parse__Fns {
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action13::<>(input, __sym0, __sym1);
+        let __nt = super::__action13::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant21(__nt), __end));
         (2, 34)
     }
     pub(crate) fn __reduce77<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection* =  => ActionFn(68);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action68::<>(input, &__start, &__end);
+        let __nt = super::__action68::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (0, 35)
     }
     pub(crate) fn __reduce78<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection* = Projection+ => ActionFn(69);
         let __sym0 = __pop_Variant22(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action69::<>(input, __sym0);
+        let __nt = super::__action69::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (1, 35)
     }
     pub(crate) fn __reduce79<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection+ = Projection => ActionFn(80);
         let __sym0 = __pop_Variant21(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action80::<>(input, __sym0);
+        let __nt = super::__action80::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (1, 36)
     }
     pub(crate) fn __reduce80<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Projection+ = Projection+, Projection => ActionFn(81);
@@ -8644,256 +9080,282 @@ mod __parse__Fns {
         let __sym0 = __pop_Variant22(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym1.2.clone();
-        let __nt = super::__action81::<>(input, __sym0, __sym1);
+        let __nt = super::__action81::<>(arena, input, __sym0, __sym1);
         __symbols.push((__start, __Symbol::Variant22(__nt), __end));
         (2, 36)
     }
     pub(crate) fn __reduce81<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "+" => ActionFn(19);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action19::<>(input, __sym0);
+        let __nt = super::__action19::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce82<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "<" => ActionFn(20);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action20::<>(input, __sym0);
+        let __nt = super::__action20::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce83<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "<=" => ActionFn(21);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action21::<>(input, __sym0);
+        let __nt = super::__action21::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce84<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = "==" => ActionFn(22);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action22::<>(input, __sym0);
+        let __nt = super::__action22::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce85<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = ">=" => ActionFn(23);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action23::<>(input, __sym0);
+        let __nt = super::__action23::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce86<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RBinOp = ">" => ActionFn(24);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action24::<>(input, __sym0);
+        let __nt = super::__action24::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant23(__nt), __end));
         (1, 37)
     }
     pub(crate) fn __reduce87<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RValue = Operand => ActionFn(17);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action17::<>(input, __sym0);
+        let __nt = super::__action17::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant24(__nt), __end));
         (1, 38)
     }
     pub(crate) fn __reduce88<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // RValue = Operand, RBinOp, Operand => ActionFn(18);
-        let __sym2 = __pop_Variant17(__symbols);
+        let __sym2 = __pop_Variant18(__symbols);
         let __sym1 = __pop_Variant23(__symbols);
-        let __sym0 = __pop_Variant17(__symbols);
+        let __sym0 = __pop_Variant18(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action18::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action18::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant24(__nt), __end));
         (3, 38)
     }
     pub(crate) fn __reduce89<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent = Local, ":", "{", BasicType, "|", Pred, "}" => ActionFn(7);
         let __sym6 = __pop_Variant0(__symbols);
-        let __sym5 = __pop_Variant19(__symbols);
+        let __sym5 = __pop_Variant10(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant6(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym6.2.clone();
-        let __nt = super::__action7::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        let __nt = super::__action7::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (7, 39)
     }
     pub(crate) fn __reduce90<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent = Local, ":", Type => ActionFn(8);
         let __sym2 = __pop_Variant26(__symbols);
         let __sym1 = __pop_Variant0(__symbols);
-        let __sym0 = __pop_Variant15(__symbols);
+        let __sym0 = __pop_Variant1(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action8::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action8::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant3(__nt), __end));
         (3, 39)
     }
     pub(crate) fn __reduce91<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent? = Tydent => ActionFn(75);
         let __sym0 = __pop_Variant3(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action75::<>(input, __sym0);
+        let __nt = super::__action75::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant25(__nt), __end));
         (1, 40)
     }
     pub(crate) fn __reduce92<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Tydent? =  => ActionFn(76);
         let __start = __symbols.last().map(|s| s.2.clone()).unwrap_or_default();
         let __end = __lookahead_start.cloned().unwrap_or_else(|| __start.clone());
-        let __nt = super::__action76::<>(input, &__start, &__end);
+        let __nt = super::__action76::<>(arena, input, &__start, &__end);
         __symbols.push((__start, __Symbol::Variant25(__nt), __end));
         (0, 40)
     }
     pub(crate) fn __reduce93<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Type = "fn", "(", Args, ")", "->", Tydent => ActionFn(43);
@@ -8905,92 +9367,100 @@ mod __parse__Fns {
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym5.2.clone();
-        let __nt = super::__action43::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
+        let __nt = super::__action43::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (6, 41)
     }
     pub(crate) fn __reduce94<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Type = "{", Local, ":", BasicType, "|", Pred, "}" => ActionFn(44);
         let __sym6 = __pop_Variant0(__symbols);
-        let __sym5 = __pop_Variant19(__symbols);
+        let __sym5 = __pop_Variant10(__symbols);
         let __sym4 = __pop_Variant0(__symbols);
         let __sym3 = __pop_Variant6(__symbols);
         let __sym2 = __pop_Variant0(__symbols);
-        let __sym1 = __pop_Variant15(__symbols);
+        let __sym1 = __pop_Variant1(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym6.2.clone();
-        let __nt = super::__action44::<>(input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
+        let __nt = super::__action44::<>(arena, input, __sym0, __sym1, __sym2, __sym3, __sym4, __sym5, __sym6);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (7, 41)
     }
     pub(crate) fn __reduce95<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
-        // Type = "(", Comma<Tydent>, ")" => ActionFn(45);
+        // Type = "(", Args, ")" => ActionFn(45);
         let __sym2 = __pop_Variant0(__symbols);
         let __sym1 = __pop_Variant5(__symbols);
         let __sym0 = __pop_Variant0(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym2.2.clone();
-        let __nt = super::__action45::<>(input, __sym0, __sym1, __sym2);
+        let __nt = super::__action45::<>(arena, input, __sym0, __sym1, __sym2);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (3, 41)
     }
     pub(crate) fn __reduce96<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // Type = BasicType => ActionFn(46);
         let __sym0 = __pop_Variant6(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action46::<>(input, __sym0);
+        let __nt = super::__action46::<>(arena, input, __sym0);
         __symbols.push((__start, __Symbol::Variant26(__nt), __end));
         (1, 41)
     }
     pub(crate) fn __reduce97<
         'input,
+        'cx,
     >(
+        arena: &'cx CpsArena<'cx>,
         input: &'input str,
         __action: i16,
         __lookahead_start: Option<&usize>,
         __states: &mut ::std::vec::Vec<i16>,
-        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input>,usize)>,
-        _: ::std::marker::PhantomData<(&'input ())>,
+        __symbols: &mut ::std::vec::Vec<(usize,__Symbol<'input, 'cx>,usize)>,
+        _: ::std::marker::PhantomData<(&'input (), &'cx ())>,
     ) -> (usize, usize)
     {
         // __Fn = Fn => ActionFn(1);
-        let __sym0 = __pop_Variant10(__symbols);
+        let __sym0 = __pop_Variant11(__symbols);
         let __start = __sym0.0.clone();
         let __end = __sym0.2.clone();
-        let __nt = super::__action1::<>(input, __sym0);
-        __symbols.push((__start, __Symbol::Variant10(__nt), __end));
+        let __nt = super::__action1::<>(arena, input, __sym0);
+        __symbols.push((__start, __Symbol::Variant11(__nt), __end));
         (1, 42)
     }
 }
@@ -9181,10 +9651,12 @@ pub use self::__intern_token::Token;
 #[allow(unused_variables)]
 fn __action0<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, ::std::vec::Vec<FnDef>, usize),
-) -> ::std::vec::Vec<FnDef>
+    (_, __0, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     (__0)
 }
@@ -9192,10 +9664,12 @@ fn __action0<
 #[allow(unused_variables)]
 fn __action1<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, FnDef, usize),
-) -> FnDef
+    (_, __0, _): (usize, FnDef<'cx>, usize),
+) -> FnDef<'cx>
 {
     (__0)
 }
@@ -9203,10 +9677,12 @@ fn __action1<
 #[allow(unused_variables)]
 fn __action2<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, ::std::vec::Vec<FnDef>, usize),
-) -> ::std::vec::Vec<FnDef>
+    (_, __0, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     (__0)
 }
@@ -9214,21 +9690,23 @@ fn __action2<
 #[allow(unused_variables)]
 fn __action3<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, name, _): (usize, Symbol, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, args, _): (usize, Vec<Tydent>, usize),
+    (_, args, _): (usize, &'cx Slice<Tydent<'cx>>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, cont, _): (usize, Symbol, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, ret, _): (usize, Tydent, usize),
+    (_, ret, _): (usize, Tydent<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, body, _): (usize, Box<FuncBody>, usize),
-) -> FnDef
+    (_, body, _): (usize, &'cx FuncBody<'cx>, usize),
+) -> FnDef<'cx>
 {
     FnDef { name, args, cont, ret, body }
 }
@@ -9236,7 +9714,9 @@ fn __action3<
 #[allow(unused_variables)]
 fn __action4<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Symbol
@@ -9247,7 +9727,9 @@ fn __action4<
 #[allow(unused_variables)]
 fn __action5<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Symbol, usize),
 ) -> Local
@@ -9258,7 +9740,9 @@ fn __action5<
 #[allow(unused_variables)]
 fn __action6<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Symbol, usize),
 ) -> Symbol
@@ -9269,29 +9753,33 @@ fn __action6<
 #[allow(unused_variables)]
 fn __action7<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ident, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, ty, _): (usize, BasicType, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, pred, _): (usize, Pred, usize),
+    (_, pred, _): (usize, &'cx Pred<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Tydent
+) -> Tydent<'cx>
 {
-    Tydent { ident, reft: Type::Reft { ident, ty, pred }, }
+    Tydent { ident, reft: arena.refts.intern(Type::Reft { ident, ty, pred }) }
 }
 
 #[allow(unused_variables)]
 fn __action8<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ident, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, reft, _): (usize, Type, usize),
-) -> Tydent
+    (_, reft, _): (usize, &'cx Type<'cx>, usize),
+) -> Tydent<'cx>
 {
     Tydent { ident, reft }
 }
@@ -9299,18 +9787,22 @@ fn __action8<
 #[allow(unused_variables)]
 fn __action9<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Vec<Tydent>, usize),
-) -> Vec<Tydent>
+    (_, __0, _): (usize, Vec<Tydent<'cx>>, usize),
+) -> &'cx Slice<Tydent<'cx>>
 {
-    (__0)
+    arena.tyd_args.alloc(__0)
 }
 
 #[allow(unused_variables)]
 fn __action10<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Literal
@@ -9321,7 +9813,9 @@ fn __action10<
 #[allow(unused_variables)]
 fn __action11<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Literal
@@ -9332,7 +9826,9 @@ fn __action11<
 #[allow(unused_variables)]
 fn __action12<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> Literal
@@ -9343,7 +9839,9 @@ fn __action12<
 #[allow(unused_variables)]
 fn __action13<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, &'input str, usize),
@@ -9355,22 +9853,26 @@ fn __action13<
 #[allow(unused_variables)]
 fn __action14<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ident, _): (usize, Local, usize),
     (_, projs, _): (usize, ::std::vec::Vec<Projection>, usize),
-) -> Path
+) -> Path<'cx>
 {
-    Path { ident:ident, projs:projs }
+    Path { ident, projs: arena.projs.alloc(projs) }
 }
 
 #[allow(unused_variables)]
 fn __action15<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Path, usize),
-) -> Operand
+    (_, __0, _): (usize, Path<'cx>, usize),
+) -> Operand<'cx>
 {
     Operand::Path(__0)
 }
@@ -9378,10 +9880,12 @@ fn __action15<
 #[allow(unused_variables)]
 fn __action16<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Literal, usize),
-) -> Operand
+) -> Operand<'cx>
 {
     Operand::Lit(__0)
 }
@@ -9389,10 +9893,12 @@ fn __action16<
 #[allow(unused_variables)]
 fn __action17<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Operand, usize),
-) -> RValue
+    (_, __0, _): (usize, Operand<'cx>, usize),
+) -> RValue<'cx>
 {
     RValue::Op(__0)
 }
@@ -9400,12 +9906,14 @@ fn __action17<
 #[allow(unused_variables)]
 fn __action18<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, arg1, _): (usize, Operand, usize),
+    (_, arg1, _): (usize, Operand<'cx>, usize),
     (_, op, _): (usize, RBinOp, usize),
-    (_, arg2, _): (usize, Operand, usize),
-) -> RValue
+    (_, arg2, _): (usize, Operand<'cx>, usize),
+) -> RValue<'cx>
 {
     RValue::Binary(op, arg1, arg2)
 }
@@ -9413,7 +9921,9 @@ fn __action18<
 #[allow(unused_variables)]
 fn __action19<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> RBinOp
@@ -9424,7 +9934,9 @@ fn __action19<
 #[allow(unused_variables)]
 fn __action20<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> RBinOp
@@ -9435,7 +9947,9 @@ fn __action20<
 #[allow(unused_variables)]
 fn __action21<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> RBinOp
@@ -9446,7 +9960,9 @@ fn __action21<
 #[allow(unused_variables)]
 fn __action22<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> RBinOp
@@ -9457,7 +9973,9 @@ fn __action22<
 #[allow(unused_variables)]
 fn __action23<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> RBinOp
@@ -9468,7 +9986,9 @@ fn __action23<
 #[allow(unused_variables)]
 fn __action24<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> RBinOp
@@ -9479,101 +9999,115 @@ fn __action24<
 #[allow(unused_variables)]
 fn __action25<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __1, _): (usize, RValue, usize),
+    (_, __1, _): (usize, RValue<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __2, _): (usize, Box<FuncBody>, usize),
-) -> Box<FuncBody>
+    (_, __2, _): (usize, &'cx FuncBody<'cx>, usize),
+) -> &'cx FuncBody<'cx>
 {
-    Box::new(FuncBody::Let(__0, __1, __2))
+    arena.bodies.intern(FuncBody::Let(__0, __1, __2))
 }
 
 #[allow(unused_variables)]
 fn __action26<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Symbol, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __1, _): (usize, Vec<Tydent>, usize),
+    (_, __1, _): (usize, &'cx Slice<Tydent<'cx>>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __2, _): (usize, Box<FuncBody>, usize),
+    (_, __2, _): (usize, &'cx FuncBody<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __3, _): (usize, Box<FuncBody>, usize),
-) -> Box<FuncBody>
+    (_, __3, _): (usize, &'cx FuncBody<'cx>, usize),
+) -> &'cx FuncBody<'cx>
 {
-    Box::new(FuncBody::LetCont(__0, __1, __2, __3))
+    arena.bodies.intern(FuncBody::LetCont(__0, __1, __2, __3))
 }
 
 #[allow(unused_variables)]
 fn __action27<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Path, usize),
+    (_, __0, _): (usize, Path<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __1, _): (usize, Box<FuncBody>, usize),
+    (_, __1, _): (usize, &'cx FuncBody<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __2, _): (usize, Box<FuncBody>, usize),
-) -> Box<FuncBody>
+    (_, __2, _): (usize, &'cx FuncBody<'cx>, usize),
+) -> &'cx FuncBody<'cx>
 {
-    Box::new(FuncBody::Ite(__0, __1, __2))
+    arena.bodies.intern(FuncBody::Ite(__0, __1, __2))
 }
 
 #[allow(unused_variables)]
 fn __action28<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Symbol, usize),
+    (_, ident, _): (usize, Symbol, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __1, _): (usize, Vec<Path>, usize),
+    (_, ls, _): (usize, Vec<Local>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __2, _): (usize, Symbol, usize),
-) -> Box<FuncBody>
+    (_, kid, _): (usize, Symbol, usize),
+) -> &'cx FuncBody<'cx>
 {
-    Box::new(FuncBody::Call(__0, __1, __2))
+    arena.bodies.intern(FuncBody::Call(ident, arena.loc_args.alloc(ls), kid))
 }
 
 #[allow(unused_variables)]
 fn __action29<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Symbol, usize),
+    (_, ident, _): (usize, Symbol, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, __1, _): (usize, Vec<Path>, usize),
+    (_, ls, _): (usize, Vec<Local>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Box<FuncBody>
+) -> &'cx FuncBody<'cx>
 {
-    Box::new(FuncBody::Jump(__0, __1))
+    arena.bodies.intern(FuncBody::Jump(ident, arena.loc_args.alloc(ls)))
 }
 
 #[allow(unused_variables)]
 fn __action30<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Box<FuncBody>
+) -> &'cx FuncBody<'cx>
 {
-    Box::new(FuncBody::Abort)
+    arena.bodies.intern(FuncBody::Abort)
 }
 
 #[allow(unused_variables)]
 fn __action31<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> BasicType
@@ -9584,7 +10118,9 @@ fn __action31<
 #[allow(unused_variables)]
 fn __action32<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, IntTy, usize),
 ) -> BasicType
@@ -9595,7 +10131,9 @@ fn __action32<
 #[allow(unused_variables)]
 fn __action33<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9606,7 +10144,9 @@ fn __action33<
 #[allow(unused_variables)]
 fn __action34<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9617,7 +10157,9 @@ fn __action34<
 #[allow(unused_variables)]
 fn __action35<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9628,7 +10170,9 @@ fn __action35<
 #[allow(unused_variables)]
 fn __action36<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9639,7 +10183,9 @@ fn __action36<
 #[allow(unused_variables)]
 fn __action37<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9650,7 +10196,9 @@ fn __action37<
 #[allow(unused_variables)]
 fn __action38<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9661,7 +10209,9 @@ fn __action38<
 #[allow(unused_variables)]
 fn __action39<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9672,7 +10222,9 @@ fn __action39<
 #[allow(unused_variables)]
 fn __action40<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9683,7 +10235,9 @@ fn __action40<
 #[allow(unused_variables)]
 fn __action41<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9694,7 +10248,9 @@ fn __action41<
 #[allow(unused_variables)]
 fn __action42<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> IntTy
@@ -9705,108 +10261,124 @@ fn __action42<
 #[allow(unused_variables)]
 fn __action43<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, args, _): (usize, Vec<Tydent>, usize),
+    (_, args, _): (usize, &'cx Slice<Tydent<'cx>>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, ret, _): (usize, Tydent, usize),
-) -> Type
+    (_, ret, _): (usize, Tydent<'cx>, usize),
+) -> &'cx Type<'cx>
 {
-    Type::Fn { args, ret: Box::new(ret) }
+    arena.refts.intern(Type::Fn { args, ret })
 }
 
 #[allow(unused_variables)]
 fn __action44<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, ident, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, ty, _): (usize, BasicType, usize),
     (_, _, _): (usize, &'input str, usize),
-    (_, pred, _): (usize, Pred, usize),
+    (_, pred, _): (usize, &'cx Pred<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Type
+) -> &'cx Type<'cx>
 {
-    Type::Reft { ident, ty, pred }
+    arena.refts.intern(Type::Reft { ident, ty, pred })
 }
 
 #[allow(unused_variables)]
 fn __action45<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
-    (_, __0, _): (usize, Vec<Tydent>, usize),
+    (_, __0, _): (usize, &'cx Slice<Tydent<'cx>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Type
+) -> &'cx Type<'cx>
 {
-    Type::Prod(__0)
+    arena.refts.intern(Type::Prod(__0))
 }
 
 #[allow(unused_variables)]
 fn __action46<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ty, _): (usize, BasicType, usize),
-) -> Type
+) -> &'cx Type<'cx>
 {
-    Type::Reft {
+    arena.refts.intern(Type::Reft {
         ident: Symbol::intern("_v"),
         ty,
-        pred: Pred::Op(Operand::Lit(Literal::Bool(true)))
-    }
+        pred: arena.preds.intern(Pred::Op(Operand::Lit(Literal::Bool(true))))
+    })
 }
 
 #[allow(unused_variables)]
 fn __action47<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, e1, _): (usize, Box<Pred>, usize),
+    (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
-    (_, e2, _): (usize, Box<Pred>, usize),
-) -> Pred
+    (_, e2, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
-    Pred::Binary(op, e1, e2)
+    arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
 fn __action48<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Pred
+    (_, __0, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
-    *__0
+    __0
 }
 
 #[allow(unused_variables)]
 fn __action49<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, e1, _): (usize, Box<Pred>, usize),
+    (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
-    (_, e2, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, e2, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
-    box Pred::Binary(op, e1, e2)
+    arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
 fn __action50<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, __0, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
     (__0)
 }
@@ -9814,10 +10386,12 @@ fn __action50<
 #[allow(unused_variables)]
 fn __action51<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, __0, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
     (__0)
 }
@@ -9825,22 +10399,26 @@ fn __action51<
 #[allow(unused_variables)]
 fn __action52<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, op, _): (usize, PredUnOp, usize),
-    (_, e, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, e, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
-    box Pred::Unary(op, e)
+    arena.preds.intern(Pred::Unary(op, e))
 }
 
 #[allow(unused_variables)]
 fn __action53<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, __0, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
     (__0)
 }
@@ -9848,18 +10426,22 @@ fn __action53<
 #[allow(unused_variables)]
 fn __action54<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Operand, usize),
-) -> Box<Pred>
+    (_, __0, _): (usize, Operand<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
-    Box::new(Pred::Op(__0))
+    arena.preds.intern(Pred::Op(__0))
 }
 
 #[allow(unused_variables)]
 fn __action55<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredBinOp
@@ -9870,7 +10452,9 @@ fn __action55<
 #[allow(unused_variables)]
 fn __action56<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredBinOp
@@ -9881,7 +10465,9 @@ fn __action56<
 #[allow(unused_variables)]
 fn __action57<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredBinOp
@@ -9892,7 +10478,9 @@ fn __action57<
 #[allow(unused_variables)]
 fn __action58<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredBinOp
@@ -9903,7 +10491,9 @@ fn __action58<
 #[allow(unused_variables)]
 fn __action59<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredBinOp
@@ -9914,7 +10504,9 @@ fn __action59<
 #[allow(unused_variables)]
 fn __action60<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredBinOp
@@ -9925,7 +10517,9 @@ fn __action60<
 #[allow(unused_variables)]
 fn __action61<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredBinOp
@@ -9936,7 +10530,9 @@ fn __action61<
 #[allow(unused_variables)]
 fn __action62<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
 ) -> PredUnOp
@@ -9947,23 +10543,27 @@ fn __action62<
 #[allow(unused_variables)]
 fn __action63<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, e1, _): (usize, Box<Pred>, usize),
+    (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
-    (_, e2, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, e2, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
-    box Pred::Binary(op, e1, e2)
+    arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
 fn __action64<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, __0, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
     (__0)
 }
@@ -9971,23 +10571,27 @@ fn __action64<
 #[allow(unused_variables)]
 fn __action65<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, e1, _): (usize, Box<Pred>, usize),
+    (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
-    (_, e2, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, e2, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
-    box Pred::Binary(op, e1, e2)
+    arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
 fn __action66<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Box<Pred>, usize),
-) -> Box<Pred>
+    (_, __0, _): (usize, &'cx Pred<'cx>, usize),
+) -> &'cx Pred<'cx>
 {
     (__0)
 }
@@ -9995,11 +10599,13 @@ fn __action66<
 #[allow(unused_variables)]
 fn __action67<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<Path>, usize),
-    (_, e, _): (usize, ::std::option::Option<Path>, usize),
-) -> Vec<Path>
+    (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
+    (_, e, _): (usize, ::std::option::Option<Local>, usize),
+) -> Vec<Local>
 {
     match e {
         None => v,
@@ -10014,7 +10620,9 @@ fn __action67<
 #[allow(unused_variables)]
 fn __action68<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
@@ -10026,7 +10634,9 @@ fn __action68<
 #[allow(unused_variables)]
 fn __action69<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Projection>, usize),
 ) -> ::std::vec::Vec<Projection>
@@ -10037,11 +10647,13 @@ fn __action69<
 #[allow(unused_variables)]
 fn __action70<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<Tydent>, usize),
-    (_, e, _): (usize, ::std::option::Option<Tydent>, usize),
-) -> Vec<Tydent>
+    (_, v, _): (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
+    (_, e, _): (usize, ::std::option::Option<Tydent<'cx>>, usize),
+) -> Vec<Tydent<'cx>>
 {
     match e {
         None => v,
@@ -10056,11 +10668,13 @@ fn __action70<
 #[allow(unused_variables)]
 fn __action71<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<FnDef>
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     vec![]
 }
@@ -10068,10 +10682,12 @@ fn __action71<
 #[allow(unused_variables)]
 fn __action72<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<FnDef>, usize),
-) -> ::std::vec::Vec<FnDef>
+    (_, v, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     v
 }
@@ -10079,10 +10695,12 @@ fn __action72<
 #[allow(unused_variables)]
 fn __action73<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, FnDef, usize),
-) -> ::std::vec::Vec<FnDef>
+    (_, __0, _): (usize, FnDef<'cx>, usize),
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     vec![__0]
 }
@@ -10090,11 +10708,13 @@ fn __action73<
 #[allow(unused_variables)]
 fn __action74<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<FnDef>, usize),
-    (_, e, _): (usize, FnDef, usize),
-) -> ::std::vec::Vec<FnDef>
+    (_, v, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
+    (_, e, _): (usize, FnDef<'cx>, usize),
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -10102,10 +10722,12 @@ fn __action74<
 #[allow(unused_variables)]
 fn __action75<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Tydent, usize),
-) -> ::std::option::Option<Tydent>
+    (_, __0, _): (usize, Tydent<'cx>, usize),
+) -> ::std::option::Option<Tydent<'cx>>
 {
     Some(__0)
 }
@@ -10113,11 +10735,13 @@ fn __action75<
 #[allow(unused_variables)]
 fn __action76<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<Tydent>
+) -> ::std::option::Option<Tydent<'cx>>
 {
     None
 }
@@ -10125,11 +10749,13 @@ fn __action76<
 #[allow(unused_variables)]
 fn __action77<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Tydent>
+) -> ::std::vec::Vec<Tydent<'cx>>
 {
     vec![]
 }
@@ -10137,10 +10763,12 @@ fn __action77<
 #[allow(unused_variables)]
 fn __action78<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<Tydent>, usize),
-) -> ::std::vec::Vec<Tydent>
+    (_, v, _): (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
+) -> ::std::vec::Vec<Tydent<'cx>>
 {
     v
 }
@@ -10148,11 +10776,13 @@ fn __action78<
 #[allow(unused_variables)]
 fn __action79<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Tydent, usize),
+    (_, __0, _): (usize, Tydent<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Tydent
+) -> Tydent<'cx>
 {
     (__0)
 }
@@ -10160,7 +10790,9 @@ fn __action79<
 #[allow(unused_variables)]
 fn __action80<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Projection, usize),
 ) -> ::std::vec::Vec<Projection>
@@ -10171,7 +10803,9 @@ fn __action80<
 #[allow(unused_variables)]
 fn __action81<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Projection>, usize),
     (_, e, _): (usize, Projection, usize),
@@ -10183,10 +10817,12 @@ fn __action81<
 #[allow(unused_variables)]
 fn __action82<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Path, usize),
-) -> ::std::option::Option<Path>
+    (_, __0, _): (usize, Local, usize),
+) -> ::std::option::Option<Local>
 {
     Some(__0)
 }
@@ -10194,11 +10830,13 @@ fn __action82<
 #[allow(unused_variables)]
 fn __action83<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<Path>
+) -> ::std::option::Option<Local>
 {
     None
 }
@@ -10206,11 +10844,13 @@ fn __action83<
 #[allow(unused_variables)]
 fn __action84<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Path>
+) -> ::std::vec::Vec<Local>
 {
     vec![]
 }
@@ -10218,10 +10858,12 @@ fn __action84<
 #[allow(unused_variables)]
 fn __action85<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<Path>, usize),
-) -> ::std::vec::Vec<Path>
+    (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
+) -> ::std::vec::Vec<Local>
 {
     v
 }
@@ -10229,11 +10871,13 @@ fn __action85<
 #[allow(unused_variables)]
 fn __action86<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Path, usize),
+    (_, __0, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Path
+) -> Local
 {
     (__0)
 }
@@ -10241,10 +10885,12 @@ fn __action86<
 #[allow(unused_variables)]
 fn __action87<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Path, usize),
-) -> ::std::vec::Vec<Path>
+    (_, __0, _): (usize, Local, usize),
+) -> ::std::vec::Vec<Local>
 {
     vec![__0]
 }
@@ -10252,11 +10898,13 @@ fn __action87<
 #[allow(unused_variables)]
 fn __action88<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<Path>, usize),
-    (_, e, _): (usize, Path, usize),
-) -> ::std::vec::Vec<Path>
+    (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
+    (_, e, _): (usize, Local, usize),
+) -> ::std::vec::Vec<Local>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -10264,10 +10912,12 @@ fn __action88<
 #[allow(unused_variables)]
 fn __action89<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, __0, _): (usize, Tydent, usize),
-) -> ::std::vec::Vec<Tydent>
+    (_, __0, _): (usize, Tydent<'cx>, usize),
+) -> ::std::vec::Vec<Tydent<'cx>>
 {
     vec![__0]
 }
@@ -10275,11 +10925,13 @@ fn __action89<
 #[allow(unused_variables)]
 fn __action90<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    (_, v, _): (usize, ::std::vec::Vec<Tydent>, usize),
-    (_, e, _): (usize, Tydent, usize),
-) -> ::std::vec::Vec<Tydent>
+    (_, v, _): (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
+    (_, e, _): (usize, Tydent<'cx>, usize),
+) -> ::std::vec::Vec<Tydent<'cx>>
 {
     { let mut v = v; v.push(e); v }
 }
@@ -10287,21 +10939,25 @@ fn __action90<
 #[allow(unused_variables)]
 fn __action91<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, Path, usize),
+    __0: (usize, Local, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Path>
+) -> ::std::vec::Vec<Local>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action86(
+        arena,
         input,
         __0,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action87(
+        arena,
         input,
         __temp0,
     )
@@ -10310,22 +10966,26 @@ fn __action91<
 #[allow(unused_variables)]
 fn __action92<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Path>, usize),
-    __1: (usize, Path, usize),
+    __0: (usize, ::std::vec::Vec<Local>, usize),
+    __1: (usize, Local, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Path>
+) -> ::std::vec::Vec<Local>
 {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
     let __temp0 = __action86(
+        arena,
         input,
         __1,
         __2,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action88(
+        arena,
         input,
         __0,
         __temp0,
@@ -10335,20 +10995,24 @@ fn __action92<
 #[allow(unused_variables)]
 fn __action93<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::option::Option<Path>, usize),
-) -> Vec<Path>
+    __0: (usize, ::std::option::Option<Local>, usize),
+) -> Vec<Local>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
     let __temp0 = __action84(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action67(
+        arena,
         input,
         __temp0,
         __0,
@@ -10358,20 +11022,24 @@ fn __action93<
 #[allow(unused_variables)]
 fn __action94<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Path>, usize),
-    __1: (usize, ::std::option::Option<Path>, usize),
-) -> Vec<Path>
+    __0: (usize, ::std::vec::Vec<Local>, usize),
+    __1: (usize, ::std::option::Option<Local>, usize),
+) -> Vec<Local>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action85(
+        arena,
         input,
         __0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action67(
+        arena,
         input,
         __temp0,
         __1,
@@ -10381,21 +11049,25 @@ fn __action94<
 #[allow(unused_variables)]
 fn __action95<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, Tydent, usize),
+    __0: (usize, Tydent<'cx>, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Tydent>
+) -> ::std::vec::Vec<Tydent<'cx>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action79(
+        arena,
         input,
         __0,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action89(
+        arena,
         input,
         __temp0,
     )
@@ -10404,22 +11076,26 @@ fn __action95<
 #[allow(unused_variables)]
 fn __action96<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Tydent>, usize),
-    __1: (usize, Tydent, usize),
+    __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
+    __1: (usize, Tydent<'cx>, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Tydent>
+) -> ::std::vec::Vec<Tydent<'cx>>
 {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
     let __temp0 = __action79(
+        arena,
         input,
         __1,
         __2,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action90(
+        arena,
         input,
         __0,
         __temp0,
@@ -10429,20 +11105,24 @@ fn __action96<
 #[allow(unused_variables)]
 fn __action97<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::option::Option<Tydent>, usize),
-) -> Vec<Tydent>
+    __0: (usize, ::std::option::Option<Tydent<'cx>>, usize),
+) -> Vec<Tydent<'cx>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
     let __temp0 = __action77(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action70(
+        arena,
         input,
         __temp0,
         __0,
@@ -10452,20 +11132,24 @@ fn __action97<
 #[allow(unused_variables)]
 fn __action98<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Tydent>, usize),
-    __1: (usize, ::std::option::Option<Tydent>, usize),
-) -> Vec<Tydent>
+    __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
+    __1: (usize, ::std::option::Option<Tydent<'cx>>, usize),
+) -> Vec<Tydent<'cx>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action78(
+        arena,
         input,
         __0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action70(
+        arena,
         input,
         __temp0,
         __1,
@@ -10475,21 +11159,25 @@ fn __action98<
 #[allow(unused_variables)]
 fn __action99<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<FnDef>
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
     let __temp0 = __action71(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action2(
+        arena,
         input,
         __temp0,
     )
@@ -10498,19 +11186,23 @@ fn __action99<
 #[allow(unused_variables)]
 fn __action100<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<FnDef>, usize),
-) -> ::std::vec::Vec<FnDef>
+    __0: (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
+) -> ::std::vec::Vec<FnDef<'cx>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action72(
+        arena,
         input,
         __0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action2(
+        arena,
         input,
         __temp0,
     )
@@ -10519,19 +11211,23 @@ fn __action100<
 #[allow(unused_variables)]
 fn __action101<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, Path, usize),
-) -> Vec<Path>
+    __0: (usize, Local, usize),
+) -> Vec<Local>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action82(
+        arena,
         input,
         __0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action93(
+        arena,
         input,
         __temp0,
     )
@@ -10540,21 +11236,25 @@ fn __action101<
 #[allow(unused_variables)]
 fn __action102<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Path>
+) -> Vec<Local>
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
     let __temp0 = __action83(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action93(
+        arena,
         input,
         __temp0,
     )
@@ -10563,20 +11263,24 @@ fn __action102<
 #[allow(unused_variables)]
 fn __action103<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Path>, usize),
-    __1: (usize, Path, usize),
-) -> Vec<Path>
+    __0: (usize, ::std::vec::Vec<Local>, usize),
+    __1: (usize, Local, usize),
+) -> Vec<Local>
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action82(
+        arena,
         input,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action94(
+        arena,
         input,
         __0,
         __temp0,
@@ -10586,20 +11290,24 @@ fn __action103<
 #[allow(unused_variables)]
 fn __action104<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Path>, usize),
-) -> Vec<Path>
+    __0: (usize, ::std::vec::Vec<Local>, usize),
+) -> Vec<Local>
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action83(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action94(
+        arena,
         input,
         __0,
         __temp0,
@@ -10609,20 +11317,24 @@ fn __action104<
 #[allow(unused_variables)]
 fn __action105<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Local, usize),
-) -> Path
+) -> Path<'cx>
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action68(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action14(
+        arena,
         input,
         __0,
         __temp0,
@@ -10632,20 +11344,24 @@ fn __action105<
 #[allow(unused_variables)]
 fn __action106<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Local, usize),
     __1: (usize, ::std::vec::Vec<Projection>, usize),
-) -> Path
+) -> Path<'cx>
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action69(
+        arena,
         input,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action14(
+        arena,
         input,
         __0,
         __temp0,
@@ -10655,19 +11371,23 @@ fn __action106<
 #[allow(unused_variables)]
 fn __action107<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, Tydent, usize),
-) -> Vec<Tydent>
+    __0: (usize, Tydent<'cx>, usize),
+) -> Vec<Tydent<'cx>>
 {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action75(
+        arena,
         input,
         __0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action97(
+        arena,
         input,
         __temp0,
     )
@@ -10676,21 +11396,25 @@ fn __action107<
 #[allow(unused_variables)]
 fn __action108<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Tydent>
+) -> Vec<Tydent<'cx>>
 {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
     let __temp0 = __action76(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action97(
+        arena,
         input,
         __temp0,
     )
@@ -10699,20 +11423,24 @@ fn __action108<
 #[allow(unused_variables)]
 fn __action109<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Tydent>, usize),
-    __1: (usize, Tydent, usize),
-) -> Vec<Tydent>
+    __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
+    __1: (usize, Tydent<'cx>, usize),
+) -> Vec<Tydent<'cx>>
 {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
     let __temp0 = __action75(
+        arena,
         input,
         __1,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action98(
+        arena,
         input,
         __0,
         __temp0,
@@ -10722,36 +11450,40 @@ fn __action109<
 #[allow(unused_variables)]
 fn __action110<
     'input,
+    'cx,
 >(
+    arena: &'cx CpsArena<'cx>,
     input: &'input str,
-    __0: (usize, ::std::vec::Vec<Tydent>, usize),
-) -> Vec<Tydent>
+    __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
+) -> Vec<Tydent<'cx>>
 {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
     let __temp0 = __action76(
+        arena,
         input,
         &__start0,
         &__end0,
     );
     let __temp0 = (__start0, __temp0, __end0);
     __action98(
+        arena,
         input,
         __0,
         __temp0,
     )
 }
 
-pub trait __ToTriple<'input, > {
+pub trait __ToTriple<'input, 'cx, > {
     fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>;
 }
 
-impl<'input, > __ToTriple<'input, > for (usize, Token<'input>, usize) {
+impl<'input, 'cx, > __ToTriple<'input, 'cx, > for (usize, Token<'input>, usize) {
     fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
         Ok(value)
     }
 }
-impl<'input, > __ToTriple<'input, > for Result<(usize, Token<'input>, usize), &'static str> {
+impl<'input, 'cx, > __ToTriple<'input, 'cx, > for Result<(usize, Token<'input>, usize), &'static str> {
     fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
         match value {
             Ok(v) => Ok(v),

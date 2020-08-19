@@ -4,7 +4,7 @@ use std::str::FromStr;
 use crate::cps::ast::*;
 use rustc_span::Symbol;
 
-grammar;
+grammar<'cx>(arena: &'cx CpsArena<'cx>);
 
 pub Fns = Fn*;
 
@@ -20,7 +20,7 @@ Comma<T>: Vec<T> = {
     }
 };
 
-pub Fn: FnDef =
+pub Fn: FnDef<'cx> =
     "fn" <name: ContIdent> "(" <args: Args> ")" "ret" <cont: ContIdent> "(" <ret: Tydent> ")" "=" <body: FuncBody> =>
         FnDef { name, args, cont, ret, body };
 
@@ -28,11 +28,12 @@ Ident: Symbol = r"([a-zA-Z][a-zA-Z0-9_]*|_[a-zA-Z0-9_]+)" => Symbol::intern(<>);
 Local: Local = Ident;
 ContIdent: Symbol = Ident;
 
-Tydent: Tydent = {
-    <ident: Local> ":" "{" <ty: BasicType> "|" <pred: Pred> "}" => Tydent { ident, reft: Type::Reft { ident, ty, pred }, },
+Tydent: Tydent<'cx> = {
+    <ident: Local> ":" "{" <ty: BasicType> "|" <pred: Pred> "}" => Tydent { ident, reft: arena.refts.intern(Type::Reft { ident, ty, pred }) },
     <ident: Local> ":" <reft: Type> => Tydent { ident, reft },
 };
-Args = Comma<Tydent>;
+
+Args: &'cx Slice<Tydent<'cx>> = Comma<Tydent> => arena.tyd_args.alloc(<>);
 
 Literal: Literal = {
     "true" => Literal::Bool(true),
@@ -42,14 +43,14 @@ Literal: Literal = {
 
 Projection: Projection = "." <r"[0-9]+"> => usize::from_str(<>).unwrap();
 
-Path: Path = <ident: Local> <projs: Projection*> => Path { <> };
+Path: Path<'cx> = <ident: Local> <projs: Projection*> => Path { ident, projs: arena.projs.alloc(projs) };
 
-Operand: Operand = {
+Operand: Operand<'cx> = {
     Path => Operand::Path(<>),
     Literal => Operand::Lit(<>),
 };
 
-RValue: RValue = {
+RValue: RValue<'cx> = {
     Operand => RValue::Op(<>),
     <arg1: Operand> <op: RBinOp> <arg2: Operand> => RValue::Binary(op, arg1, arg2),
 };
@@ -63,13 +64,13 @@ RBinOp: RBinOp = {
     ">" => RBinOp::Gt,
 };
 
-FuncBody: Box<FuncBody> = {
-    "let" <Local> "=" <RValue> "in" <FuncBody> => Box::new(FuncBody::Let(<>)),
-    "letcont" <ContIdent> "(" <Args> ")" "=" <FuncBody> "in" <FuncBody> => Box::new(FuncBody::LetCont(<>)),
-    "if" <Path> "then" <FuncBody> "else" <FuncBody> => Box::new(FuncBody::Ite(<>)),
-    "call" <ContIdent> "(" <Comma<Path>> ")" "ret" <ContIdent> => Box::new(FuncBody::Call(<>)),
-    "jump" <ContIdent> "(" <Comma<Path>> ")" => Box::new(FuncBody::Jump(<>)),
-    "abort" => Box::new(FuncBody::Abort),
+FuncBody: &'cx FuncBody<'cx> = {
+    "let" <Local> "=" <RValue> "in" <FuncBody> => arena.bodies.intern(FuncBody::Let(<>)),
+    "letcont" <ContIdent> "(" <Args> ")" "=" <FuncBody> "in" <FuncBody> => arena.bodies.intern(FuncBody::LetCont(<>)),
+    "if" <Path> "then" <FuncBody> "else" <FuncBody> => arena.bodies.intern(FuncBody::Ite(<>)),
+    "call" <ident: ContIdent> "(" <ls: Comma<Local>> ")" "ret" <kid: ContIdent> => arena.bodies.intern(FuncBody::Call(ident, arena.loc_args.alloc(ls), kid)),
+    "jump" <ident: ContIdent> "(" <ls: Comma<Local>> ")" => arena.bodies.intern(FuncBody::Jump(ident, arena.loc_args.alloc(ls))),
+    "abort" => arena.bodies.intern(FuncBody::Abort),
 };
 
 BasicType: BasicType = {
@@ -90,47 +91,47 @@ IntTy: IntTy = {
     "u128" => IntTy::U128,
 };
 
-Type: Type = {
-    "fn" "(" <args: Args> ")" "->" <ret: Tydent> => Type::Fn { args, ret: Box::new(ret) },
-    "{" <ident: Local> ":" <ty: BasicType> "|" <pred: Pred> "}" => Type::Reft { ident, ty, pred },
-    "(" <Comma<Tydent>> ")" => Type::Prod(<>),
-    <ty: BasicType> => Type::Reft {
+Type: &'cx Type<'cx> = {
+    "fn" "(" <args: Args> ")" "->" <ret: Tydent> => arena.refts.intern(Type::Fn { args, ret }),
+    "{" <ident: Local> ":" <ty: BasicType> "|" <pred: Pred> "}" => arena.refts.intern(Type::Reft { ident, ty, pred }),
+    "(" <Args> ")" => arena.refts.intern(Type::Prod(<>)),
+    <ty: BasicType> => arena.refts.intern(Type::Reft {
         ident: Symbol::intern("_v"),
         ty,
-        pred: Pred::Op(Operand::Lit(Literal::Bool(true)))
-    },
+        pred: arena.preds.intern(Pred::Op(Operand::Lit(Literal::Bool(true))))
+    }),
 };
 
-LeftAssoc<OpGroup, NextExprLevel>: Box<Pred> = {
+LeftAssoc<OpGroup, NextExprLevel>: &'cx Pred<'cx> = {
     <e1: LeftAssoc<OpGroup, NextExprLevel>>
     <op: OpGroup>
     <e2: NextExprLevel> =>
-        box Pred::Binary(op, e1, e2),
+        arena.preds.intern(Pred::Binary(op, e1, e2)),
     NextExprLevel,
 };
 
-Pred: Pred = {
+Pred: &'cx Pred<'cx> = {
     <e1: LeftAssoc<OpGroup1, ExprLevel2>>
     <op: OpGroup1>
     <e2: ExprLevel2> =>
-        Pred::Binary(op, e1, e2),
-    ExprLevel2 => *<>,
+        arena.preds.intern(Pred::Binary(op, e1, e2)),
+    ExprLevel2 => <>,
 };
 
-ExprLevel2: Box<Pred> = {
+ExprLevel2: &'cx Pred<'cx> = {
     <e1: ExprLevel3> <op: OpGroup2> <e2: ExprLevel3> =>
-        box Pred::Binary(op, e1, e2),
+        arena.preds.intern(Pred::Binary(op, e1, e2)),
     ExprLevel3,
 }
 
-ExprLevel3: Box<Pred> = LeftAssoc<OpGroup3, ExprLevel4>;
+ExprLevel3: &'cx Pred<'cx> = LeftAssoc<OpGroup3, ExprLevel4>;
 
-ExprLevel4: Box<Pred> = {
-    <op: PredUnOp> <e: ExprLevel5> => box Pred::Unary(op, e),
+ExprLevel4: &'cx Pred<'cx> = {
+    <op: PredUnOp> <e: ExprLevel5> => arena.preds.intern(Pred::Unary(op, e)),
     ExprLevel5,
 }
 
-ExprLevel5: Box<Pred> = Operand => Box::new(Pred::Op(<>));
+ExprLevel5: &'cx Pred<'cx> = Operand => arena.preds.intern(Pred::Op(<>));
 
 OpGroup1: PredBinOp = {
     "&&" => PredBinOp::And,

@@ -8,41 +8,26 @@ mod tests {
     use super::*;
     use rustc_ast::attr::with_default_session_globals;
 
-    const CPS_SUM_TEXT: &str = r"
-fn sum(n: {i32 | n >= 0}) ret k(v: {i32 | v >= n}) =
-  letcont loop(i1: {i32 | i1 >= 0}, r1: {i32 | r1 >= i1}) =
-    let t0 = i1 <= n in
-    if t0 then
-      let t1 = r1 + i1 in
-      if t1.1 then
-        let t2 = i1 + 1 in
-        if t2.1 then jump loop(t1.0, t2.0) else abort
-      else
-        abort
-    else
-      jump k(r1)
-  in
-  let i0 = 0 in
-  let r0 = 0 in
-  jump loop(i0, r0)
-";
-
     const CPS_COUNT_ZEROS_TEXT: &str = r"
 fn f(n: {i32 | n >= 0}) ret k(v: i32) = jump k(n)
 
 fn count_zeros(limit: {i32 | limit >= 0}) ret k(v: {i32 | v >= 0}) =
-  letcont b0(i1: {i32 | i1 >= 0}, c1: {i32 | r1 >= 0}) =
+  letcont b0(i1: {i32 | i1 >= 0}, c1: {i32 | c1 >= 0}) =
     let t0 = i1 < limit in
     if t0 then
       letcont b1(x: i32) =
         letcont b2(c3: {i32 | c3 >= 0}) =
           let t3 = i1 + 1 in
-          if t3.1 then jump b0(t3.0, c3) else abort
+          let a1 = t3.0 in
+          let b1 = t3.1 in
+          if b1 then jump b0(a1, c3) else abort
         in
         let t1 = x == 0 in
         if t1 then
           let t2 = c1 + 1 in
-          if t2.1 then jump b2(t2.0) else abort
+          let a1 = t2.1 in
+          let a2 = t2.0 in
+          if a1 then jump b2(a2) else abort
         else
           jump b2(c1)
       in
@@ -54,14 +39,6 @@ fn count_zeros(limit: {i32 | limit >= 0}) ret k(v: {i32 | v >= 0}) =
   let c0 = 0 in
   jump b0(i0, c0)
 ";
-    #[test]
-    fn cps_smt_sum() {
-        with_default_session_globals(|| {
-            let fns = parser::FnsParser::new().parse(CPS_SUM_TEXT).unwrap();
-            let mut cgen = constraint::ConstraintGen::new();
-            dbg!(cgen.check_fns(fns).expect("cgen failed"));
-        });
-    }
 
     #[test]
     fn cps_smt_count_zeros() {

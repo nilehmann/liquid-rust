@@ -14,7 +14,7 @@ enum Token<'a, T, U> {
     Paren,
 }
 
-impl Expr2Smt<()> for Pred {
+impl Expr2Smt<()> for Pred<'_> {
     fn expr_to_smt2<Writer: Write>(&self, w: &mut Writer, _info: ()) -> SmtRes<()> {
         let mut stack = vec![Token::Expr(self)];
         while let Some(token) = stack.pop() {
@@ -49,7 +49,7 @@ impl Expr2Smt<()> for Pred {
     }
 }
 
-impl Expr2Smt<()> for Constraint {
+impl Expr2Smt<()> for Constraint<'_> {
     fn expr_to_smt2<Writer: Write>(&self, w: &mut Writer, info: ()) -> SmtRes<()> {
         let mut stack: Vec<Token<Constraint, Pred>> = vec![Token::Expr(self)];
         while let Some(token) = stack.pop() {
