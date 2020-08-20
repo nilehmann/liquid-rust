@@ -4,6 +4,7 @@
 use crate::context::ArenaInterner;
 
 use rustc_arena::TypedArena;
+use rustc_span::Span;
 pub use rustc_span::Symbol;
 
 use std::fmt;
@@ -77,6 +78,7 @@ pub struct FnDef<'cx> {
     pub cont: ContIdent,
     pub ret: Tydent<'cx>,
     pub body: &'cx FuncBody<'cx>,
+    pub span: Span,
 }
 
 /// A Local is an identifier for some local variable (a fn arg or a let-bound
@@ -166,7 +168,7 @@ impl fmt::Display for Operand<'_> {
 
 impl<'cx> Operand<'cx> {
     /// Substitute all occurrences of symbols in `from` with their respective symbol in `to` in this operand
-    pub fn subst(&self, subst: &Subst) -> Operand {
+    pub fn run_subst(&self, subst: &Subst) -> Operand {
         match self {
             Operand::Path(og) => {
                 Operand::Path(og.run_subst(subst))
@@ -314,16 +316,16 @@ impl<'cx> Pred<'cx> {
     pub fn run_subst(&'cx self, arena: &'cx CpsArena<'cx>, subst: &Subst) -> &'cx Pred<'cx> {
         match self {
             Pred::Op(op) => {
-                arena.preds.intern(Pred::Op(op.subst(subst)))
+                arena.preds.intern(Pred::Op(op.run_subst(subst)))
             }
-            Pred::Unary(un, op) => {
-                let new_op = op.run_subst(arena, subst);
-                arena.preds.intern(Pred::Unary(*un, new_op))
+            Pred::Unary(un, p) => {
+                let new_p = p.run_subst(arena, subst);
+                arena.preds.intern(Pred::Unary(*un, new_p))
             }
-            Pred::Binary(bin, o1, o2) => {
-                let new_op1 = o1.run_subst(arena, subst);
-                let new_op2 = o2.run_subst(arena, subst);
-                arena.preds.intern(Pred::Binary(*bin, new_op1, new_op2))
+            Pred::Binary(bin, p1, p2) => {
+                let new_p1 = p1.run_subst(arena, subst);
+                let new_p2 = p2.run_subst(arena, subst);
+                arena.preds.intern(Pred::Binary(*bin, new_p1, new_p2))
             }
         }
     }
@@ -385,3 +387,4 @@ impl From<RBinOp> for PredBinOp {
         }
     }
 }
+

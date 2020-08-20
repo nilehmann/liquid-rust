@@ -1,8 +1,8 @@
 #![allow(clippy::all)]
 #![allow(unused_parens)]
 use std::str::FromStr;
-use crate::cps::ast::*;
-use rustc_span::Symbol;
+use crate::{cps::ast::*, syntax::span_with_offset};
+use rustc_span::{BytePos, Span, SyntaxContext, Symbol};
 
 grammar<'cx>(arena: &'cx CpsArena<'cx>);
 
@@ -21,8 +21,8 @@ Comma<T>: Vec<T> = {
 };
 
 pub Fn: FnDef<'cx> =
-    "fn" <name: ContIdent> "(" <args: Args> ")" "ret" <cont: ContIdent> "(" <ret: Tydent> ")" "=" <body: FuncBody> =>
-        FnDef { name, args, cont, ret, body };
+    <lo: @L> "fn" <name: ContIdent> "(" <args: Args> ")" "ret" <cont: ContIdent> "(" <ret: Tydent> ")" "=" <body: FuncBody> <hi: @R> =>
+        FnDef { name, args, cont, ret, body, span: span_with_offset(lo, hi, BytePos(0), SyntaxContext::root()) };
 
 Ident: Symbol = r"([a-zA-Z][a-zA-Z0-9_]*|_[a-zA-Z0-9_]+)" => Symbol::intern(<>);
 Local: Local = Ident;
