@@ -2,7 +2,7 @@
 #![allow(unused_parens)]
 use std::str::FromStr;
 use crate::{cps::ast::*, syntax::span_with_offset};
-use rustc_span::{BytePos, Span, SyntaxContext, Symbol};
+use rustc_span::{BytePos, SyntaxContext, Symbol};
 
 grammar<'cx>(arena: &'cx CpsArena<'cx>);
 

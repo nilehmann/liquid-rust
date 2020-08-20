@@ -375,8 +375,6 @@ impl<'cx> ConstraintGen<'cx> {
                         &self.tenv,
                         RValue::Op(Operand::from_local(self.cps_arena, *arg)),
                     )?;
-                    // TODO: substitution is a little broke; problem:
-                    // {x: i32 | x >= 0}[y.0/x] => {x: i32 | y.0 >= 0}
                     let s = Subst::new(&idents, &args);
                     let r = self.subtype(t, tyd.reft.run_subst(self.cps_arena, &s))?;
 

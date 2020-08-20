@@ -7,7 +7,7 @@ use rustc_arena::TypedArena;
 use rustc_span::Span;
 pub use rustc_span::Symbol;
 
-use std::fmt;
+use std::{collections::HashMap, fmt};
 
 // This is for LALRPOP :/
 pub type Slice<T> = [T];
@@ -21,10 +21,11 @@ pub struct CpsArena<'cx> {
     pub tyd_args: TypedArena<Vec<Tydent<'cx>>>,
     pub loc_args: TypedArena<Vec<Local>>,
     pub projs: TypedArena<Vec<Projection>>,
+    // pub substs: TypedArena<Subst>,
 }
 
 impl CpsArena<'_> {
-    fn new() -> Self {
+    pub fn new() -> Self {
         let preds = ArenaInterner::new(TypedArena::default());
         let refts = ArenaInterner::new(TypedArena::default());
         let bodies = ArenaInterner::new(TypedArena::default());
@@ -330,6 +331,12 @@ impl<'cx> Pred<'cx> {
         }
     }
 
+    // pub fn defer_subst(&self, arena: &'cx CpsArena<'cx>, from: &[Local], to: &[Local]) -> DeferredPred<'cx> {
+    //     let dp = DeferredPred::new(arena, self);
+
+    //     dp.defer_subst(arena, from, to)
+    // }
+
     pub fn from_local(arena: &'cx CpsArena<'cx>, l: Local) -> &'cx Pred<'cx> {
         arena.preds.intern(Pred::Op(Operand::from_local(arena, l)))
     }
@@ -338,6 +345,32 @@ impl<'cx> Pred<'cx> {
         arena.preds.intern(Pred::Op(op))
     }
 }
+
+// #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+// pub struct DeferredPred<'cx> {
+//     pub pred: &'cx Pred<'cx>,
+//     pub subst_map: &'cx Subst,
+// }
+// 
+// impl DeferredPred<'_> {
+//     pub fn new(arena: &CpsArena, pred: &Pred) -> Self {
+//         let subst_map = arena.substs.alloc(HashMap::new());
+// 
+//         DeferredPred { pred, subst_map }
+//     }
+// 
+//     pub fn defer_subst(&self, _arena: &CpsArena, from: &[Local], to: &[Local]) -> &Self {
+//         for (f, t) in from.iter().zip(to.iter()) {
+//             self.subst_map.insert(*f, *t);
+//         }
+// 
+//         self
+//     }
+// 
+//     pub fn run_subst(&self, arena: &CpsArena) -> &Pred {
+//         self.pred.run_subst(arena, &self.subst_map)
+//     }
+// }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PredUnOp {

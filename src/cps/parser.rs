@@ -1,10 +1,10 @@
 // auto-generated: "lalrpop 0.17.2"
-// sha256: 2e3533f41f498e8ca4f398d69c3efa6dcb86e6eb78151112aa2fc890e8c392
+// sha256: 2499eacc51d6d344ab10f9edb62e6e8025cd52f728350defc5d2ce865e0e67f
 #![allow(clippy::all)]
 #![allow(unused_parens)]
 use std::str::FromStr;
 use crate::{cps::ast::*, syntax::span_with_offset};
-use rustc_span::{BytePos, Span, SyntaxContext, Symbol};
+use rustc_span::{BytePos, SyntaxContext, Symbol};
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -16,7 +16,7 @@ mod __parse__Fn {
 
     use std::str::FromStr;
     use crate::{cps::ast::*, syntax::span_with_offset};
-    use rustc_span::{BytePos, Span, SyntaxContext, Symbol};
+    use rustc_span::{BytePos, SyntaxContext, Symbol};
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -4806,7 +4806,7 @@ mod __parse__Fns {
 
     use std::str::FromStr;
     use crate::{cps::ast::*, syntax::span_with_offset};
-    use rustc_span::{BytePos, Span, SyntaxContext, Symbol};
+    use rustc_span::{BytePos, SyntaxContext, Symbol};
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]
@@ -9612,7 +9612,7 @@ mod __intern_token {
     #![allow(unused_imports)]
     use std::str::FromStr;
     use crate::{cps::ast::*, syntax::span_with_offset};
-    use rustc_span::{BytePos, Span, SyntaxContext, Symbol};
+    use rustc_span::{BytePos, SyntaxContext, Symbol};
     #[allow(unused_extern_crates)]
     extern crate lalrpop_util as __lalrpop_util;
     #[allow(unused_imports)]

@@ -6,7 +6,37 @@ pub mod smt;
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    use crate::context::ArenaInterner;
+    use rustc_arena::TypedArena;
     use rustc_ast::attr::with_default_session_globals;
+
+    const CPS_SUM_TEXT: &str = r"
+fn sum(n: {i32 | n >= 0}) ret k(v: {i32 | v >= n}) =
+  letcont loop(i: {i32 | i >= 0}, r: {i32 | r >= i}) =
+    let c0 = i <= n in
+    if c0 then
+      let i1 = i + 1 in
+      let i1v = i1.0 in
+      let i1o = i1.1 in
+      if i1o then
+        let r1 = r + i1v in
+        let r1v = r1.0 in
+        let r1o = r1.1 in
+        if r1o then
+          jump loop(i1v, r1v)
+        else
+          abort
+      else
+        abort
+    else
+      abort
+  in
+  let i0 = 0 in
+  let r0 = 0 in
+  jump loop(i0, r0)
+";
+
 
     const CPS_COUNT_ZEROS_TEXT: &str = r"
 fn f(n: {i32 | n >= 0}) ret k(v: i32) = jump k(n)
@@ -41,10 +71,25 @@ fn count_zeros(limit: {i32 | limit >= 0}) ret k(v: {i32 | v >= 0}) =
 ";
 
     #[test]
+    fn cps_smt_sum() {
+        with_default_session_globals(|| {
+            let cps_arena = ast::CpsArena::new();
+            let cgen_arena = ArenaInterner::new(TypedArena::default());
+            
+            let fns = parser::FnsParser::new().parse(&cps_arena, CPS_SUM_TEXT).unwrap();
+            let mut cgen = constraint::ConstraintGen::new(&cps_arena, &cgen_arena);
+            cgen.check_fns(fns).expect("cgen failed");
+        });
+    }
+
+    #[test]
     fn cps_smt_count_zeros() {
         with_default_session_globals(|| {
-            let fns = parser::FnsParser::new().parse(CPS_COUNT_ZEROS_TEXT).unwrap();
-            let mut cgen = constraint::ConstraintGen::new();
+            let cps_arena = ast::CpsArena::new();
+            let cgen_arena = ArenaInterner::new(TypedArena::default());
+            
+            let fns = parser::FnsParser::new().parse(&cps_arena, CPS_COUNT_ZEROS_TEXT).unwrap();
+            let mut cgen = constraint::ConstraintGen::new(&cps_arena, &cgen_arena);
             cgen.check_fns(fns).expect("cgen failed");
         });
     }
