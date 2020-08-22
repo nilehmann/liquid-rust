@@ -39,7 +39,7 @@ impl Expr2Smt<()> for Pred<'_> {
                     stack.push(Token::Space);
                     stack.push(Token::Expr(p1));
                 }
-                Token::Alt(()) => {},
+                Token::Alt(()) => {}
                 Token::Space => write!(w, " ")?,
                 Token::Paren => write!(w, ")")?,
             }

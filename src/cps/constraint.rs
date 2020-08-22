@@ -35,7 +35,10 @@ pub struct ConstraintGen<'cx> {
 }
 
 impl<'cx> ConstraintGen<'cx> {
-    pub fn new(cps_arena: &'cx CpsArena<'cx>, cgen_arena: &'cx ArenaInterner<'cx, Constraint<'cx>>) -> Self {
+    pub fn new(
+        cps_arena: &'cx CpsArena<'cx>,
+        cgen_arena: &'cx ArenaInterner<'cx, Constraint<'cx>>,
+    ) -> Self {
         let p = cps_arena
             .preds
             .intern(Pred::Op(Operand::Lit(Literal::Bool(true))));
@@ -51,7 +54,12 @@ impl<'cx> ConstraintGen<'cx> {
         }
     }
 
-    fn bind1(&self, name: Local, ty: &'cx Type<'cx>, rest: &'cx Constraint<'cx>) -> &'cx Constraint<'cx> {
+    fn bind1(
+        &self,
+        name: Local,
+        ty: &'cx Type<'cx>,
+        rest: &'cx Constraint<'cx>,
+    ) -> &'cx Constraint<'cx> {
         match ty {
             Type::Reft { ident, ty, pred } => self.cgen_arena.intern(Constraint::Forall {
                 ident: name,
@@ -86,49 +94,93 @@ impl<'cx> ConstraintGen<'cx> {
     /// the first type is a subtype of the second.
     ///
     /// If no valid constraint could be produced, returns None
-    fn subtype(&self, a: &'cx Type<'cx>, b: &'cx Type<'cx>) -> Option<&'cx Constraint<'cx>> {
+    fn subtype(&self, a: DeferType<'cx>, b: DeferType<'cx>) -> Option<&'cx Constraint<'cx>> {
         match (a, b) {
             (
-                Type::Reft {
-                    ident: ia,
-                    ty: ba,
-                    pred: pa,
+                d1
+                @
+                DeferType {
+                    reft: Type::Reft { .. },
+                    ..
                 },
-                Type::Reft {
-                    ident: ib,
-                    ty: bb,
-                    pred: pb,
+                d2
+                @
+                DeferType {
+                    reft: Type::Reft { .. },
+                    ..
                 },
             ) => {
-                // If we're checking two scalar types, we check if a value of former's base
-                // type would be assignable to the latter's base type.
-                if ba.assignable_to(*bb) {
-                    let ibs = &[*ib];
-                    let ias = &[*ia];
-                    let s = Subst::new(ibs, ias);
-                    Some(self.cgen_arena.intern(Constraint::Forall {
-                        ident: *ia,
-                        ty: *ba,
-                        hyp: pa,
-                        con: self.cgen_arena.intern(Constraint::Pred(pb.run_subst(self.cps_arena, &s))),
-                    }))
-                } else {
-                    None
+                let t1 = d1.run_subst(self.cps_arena);
+                let t2 = d2.run_subst(self.cps_arena);
+
+                match (t1, t2) {
+                    (
+                        Type::Reft {
+                            ident: ia,
+                            ty: ba,
+                            pred: pa,
+                        },
+                        Type::Reft {
+                            ident: ib,
+                            ty: bb,
+                            pred: pb,
+                        },
+                    ) => {
+                        // If we're checking two scalar types, we check if a value of former's base
+                        // type would be assignable to the latter's base type.
+                        if ba.assignable_to(*bb) {
+                            let ibs = &[*ib];
+                            let ias = &[*ia];
+                            let s = Subst::new(ibs, ias);
+                            Some(self.cgen_arena.intern(
+                                Constraint::Forall {
+                                    ident: *ia,
+                                    ty: *ba,
+                                    hyp: pa,
+                                    con:
+                                        self.cgen_arena.intern(Constraint::Pred(
+                                            pb.run_subst(self.cps_arena, &s),
+                                        )),
+                                },
+                            ))
+                        } else {
+                            None
+                        }
+                    }
+                    _ => unreachable!(),
                 }
             }
-            (Type::Fn { args: a1s, ret: r1 }, Type::Fn { args: a2s, ret: r2 }) => {
+            (
+                DeferType {
+                    reft: Type::Fn { args: a1s, ret: r1 },
+                    subst: s1,
+                },
+                DeferType {
+                    reft: Type::Fn { args: a2s, ret: r2 },
+                    subst: s2,
+                },
+            ) => {
                 // We first create a constraint on the return types of the fns
                 let a1is = a1s.iter().map(|x| x.ident).collect::<Vec<Symbol>>();
                 let a2is = a2s.iter().map(|x| x.ident).collect::<Vec<Symbol>>();
 
                 let s = Subst::new(&a1is, &a2is);
 
-                let mut res = self.subtype(r1.reft.run_subst(self.cps_arena, &s), r2.reft)?;
+                let mut res = self.subtype(
+                    r1.reft.extend_subst(self.cps_arena, s1, &s),
+                    r2.reft.as_deferred(s2),
+                )?;
 
                 for (a1, a2) in a1s.into_iter().zip(a2s.into_iter()).rev() {
-                    let sub = self.subtype(a2.reft, a1.reft.run_subst(self.cps_arena, &s))?;
+                    let sub = self.subtype(
+                        a2.reft.as_deferred(s2),
+                        a1.reft.extend_subst(self.cps_arena, s2, &s),
+                    )?;
                     // TODO: self.cps_arena.tyd_args.alloc(vec![*a2]) sucks
-                    res = self.bind(self.cps_arena.tyd_args.alloc(vec![*a2]), self.cgen_arena.intern(Constraint::Conj(res, sub)));
+                    res = self.bind(
+                        self.cps_arena.tyd_args.alloc(vec![*a2]),
+                        self.cgen_arena.intern(Constraint::Conj(res, sub)),
+                    );
                 }
 
                 Some(res)
@@ -351,13 +403,16 @@ impl<'cx> ConstraintGen<'cx> {
                             &self.tenv,
                             RValue::Op(Operand::from_local(self.cps_arena, *arg)),
                         )?;
-                        let r = self.subtype(t, tyd.reft.run_subst(self.cps_arena, &subst))?;
+                        let r =
+                            self.subtype(t.into(), tyd.reft.defer_subst(self.cps_arena, &subst))?;
 
                         res = self.cgen_arena.intern(Constraint::Conj(r, res));
                     }
 
-                    let c =
-                        self.subtype(ret.reft.run_subst(self.cps_arena, &subst), kty[0].reft)?;
+                    let c = self.subtype(
+                        ret.reft.defer_subst(self.cps_arena, &subst),
+                        kty[0].reft.into(),
+                    )?;
 
                     Some(self.cgen_arena.intern(Constraint::Conj(c, res)))
                 } else {
@@ -376,7 +431,7 @@ impl<'cx> ConstraintGen<'cx> {
                         RValue::Op(Operand::from_local(self.cps_arena, *arg)),
                     )?;
                     let s = Subst::new(&idents, &args);
-                    let r = self.subtype(t, tyd.reft.run_subst(self.cps_arena, &s))?;
+                    let r = self.subtype(t.into(), tyd.reft.defer_subst(self.cps_arena, &s))?;
 
                     res = self.cgen_arena.intern(Constraint::Conj(r, res));
                 }

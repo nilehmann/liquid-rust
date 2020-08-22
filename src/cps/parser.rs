@@ -2,9 +2,9 @@
 // sha256: 2499eacc51d6d344ab10f9edb62e6e8025cd52f728350defc5d2ce865e0e67f
 #![allow(clippy::all)]
 #![allow(unused_parens)]
-use std::str::FromStr;
 use crate::{cps::ast::*, syntax::span_with_offset};
-use rustc_span::{BytePos, SyntaxContext, Symbol};
+use rustc_span::{BytePos, Symbol, SyntaxContext};
+use std::str::FromStr;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -9791,49 +9791,34 @@ mod __intern_token {
 pub use self::__intern_token::Token;
 
 #[allow(unused_variables)]
-fn __action0<
-    'input,
-    'cx,
->(
+fn __action0<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
+) -> ::std::vec::Vec<FnDef<'cx>> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action1<
-    'input,
-    'cx,
->(
+fn __action1<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, FnDef<'cx>, usize),
-) -> FnDef<'cx>
-{
+) -> FnDef<'cx> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action2<
-    'input,
-    'cx,
->(
+fn __action2<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
+) -> ::std::vec::Vec<FnDef<'cx>> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action3<
-    'input,
-    'cx,
->(
+fn __action3<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, lo, _): (usize, usize, usize),
@@ -9850,55 +9835,46 @@ fn __action3<
     (_, _, _): (usize, &'input str, usize),
     (_, body, _): (usize, &'cx FuncBody<'cx>, usize),
     (_, hi, _): (usize, usize, usize),
-) -> FnDef<'cx>
-{
-    FnDef { name, args, cont, ret, body, span: span_with_offset(lo, hi, BytePos(0), SyntaxContext::root()) }
+) -> FnDef<'cx> {
+    FnDef {
+        name,
+        args,
+        cont,
+        ret,
+        body,
+        span: span_with_offset(lo, hi, BytePos(0), SyntaxContext::root()),
+    }
 }
 
 #[allow(unused_variables)]
-fn __action4<
-    'input,
-    'cx,
->(
+fn __action4<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Symbol
-{
+) -> Symbol {
     Symbol::intern(__0)
 }
 
 #[allow(unused_variables)]
-fn __action5<
-    'input,
-    'cx,
->(
+fn __action5<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Symbol, usize),
-) -> Local
-{
+) -> Local {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action6<
-    'input,
-    'cx,
->(
+fn __action6<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Symbol, usize),
-) -> Symbol
-{
+) -> Symbol {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action7<
-    'input,
-    'cx,
->(
+fn __action7<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ident, _): (usize, Local, usize),
@@ -9908,243 +9884,177 @@ fn __action7<
     (_, _, _): (usize, &'input str, usize),
     (_, pred, _): (usize, &'cx Pred<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Tydent<'cx>
-{
-    Tydent { ident, reft: arena.refts.intern(Type::Reft { ident, ty, pred }) }
+) -> Tydent<'cx> {
+    Tydent {
+        ident,
+        reft: arena.refts.intern(Type::Reft { ident, ty, pred }),
+    }
 }
 
 #[allow(unused_variables)]
-fn __action8<
-    'input,
-    'cx,
->(
+fn __action8<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ident, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, reft, _): (usize, &'cx Type<'cx>, usize),
-) -> Tydent<'cx>
-{
+) -> Tydent<'cx> {
     Tydent { ident, reft }
 }
 
 #[allow(unused_variables)]
-fn __action9<
-    'input,
-    'cx,
->(
+fn __action9<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Vec<Tydent<'cx>>, usize),
-) -> &'cx Slice<Tydent<'cx>>
-{
+) -> &'cx Slice<Tydent<'cx>> {
     arena.tyd_args.alloc(__0)
 }
 
 #[allow(unused_variables)]
-fn __action10<
-    'input,
-    'cx,
->(
+fn __action10<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Literal
-{
+) -> Literal {
     Literal::Bool(true)
 }
 
 #[allow(unused_variables)]
-fn __action11<
-    'input,
-    'cx,
->(
+fn __action11<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Literal
-{
+) -> Literal {
     Literal::Bool(false)
 }
 
 #[allow(unused_variables)]
-fn __action12<
-    'input,
-    'cx,
->(
+fn __action12<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Literal
-{
+) -> Literal {
     Literal::Int(i128::from_str(__0).unwrap())
 }
 
 #[allow(unused_variables)]
-fn __action13<
-    'input,
-    'cx,
->(
+fn __action13<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, &'input str, usize),
-) -> Projection
-{
+) -> Projection {
     usize::from_str(__0).unwrap()
 }
 
 #[allow(unused_variables)]
-fn __action14<
-    'input,
-    'cx,
->(
+fn __action14<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ident, _): (usize, Local, usize),
     (_, projs, _): (usize, ::std::vec::Vec<Projection>, usize),
-) -> Path<'cx>
-{
-    Path { ident, projs: arena.projs.alloc(projs) }
+) -> Path<'cx> {
+    Path {
+        ident,
+        projs: arena.projs.alloc(projs),
+    }
 }
 
 #[allow(unused_variables)]
-fn __action15<
-    'input,
-    'cx,
->(
+fn __action15<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Path<'cx>, usize),
-) -> Operand<'cx>
-{
+) -> Operand<'cx> {
     Operand::Path(__0)
 }
 
 #[allow(unused_variables)]
-fn __action16<
-    'input,
-    'cx,
->(
+fn __action16<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Literal, usize),
-) -> Operand<'cx>
-{
+) -> Operand<'cx> {
     Operand::Lit(__0)
 }
 
 #[allow(unused_variables)]
-fn __action17<
-    'input,
-    'cx,
->(
+fn __action17<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Operand<'cx>, usize),
-) -> RValue<'cx>
-{
+) -> RValue<'cx> {
     RValue::Op(__0)
 }
 
 #[allow(unused_variables)]
-fn __action18<
-    'input,
-    'cx,
->(
+fn __action18<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, arg1, _): (usize, Operand<'cx>, usize),
     (_, op, _): (usize, RBinOp, usize),
     (_, arg2, _): (usize, Operand<'cx>, usize),
-) -> RValue<'cx>
-{
+) -> RValue<'cx> {
     RValue::Binary(op, arg1, arg2)
 }
 
 #[allow(unused_variables)]
-fn __action19<
-    'input,
-    'cx,
->(
+fn __action19<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> RBinOp
-{
+) -> RBinOp {
     RBinOp::CheckedAdd
 }
 
 #[allow(unused_variables)]
-fn __action20<
-    'input,
-    'cx,
->(
+fn __action20<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> RBinOp
-{
+) -> RBinOp {
     RBinOp::Lt
 }
 
 #[allow(unused_variables)]
-fn __action21<
-    'input,
-    'cx,
->(
+fn __action21<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> RBinOp
-{
+) -> RBinOp {
     RBinOp::Le
 }
 
 #[allow(unused_variables)]
-fn __action22<
-    'input,
-    'cx,
->(
+fn __action22<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> RBinOp
-{
+) -> RBinOp {
     RBinOp::Eq
 }
 
 #[allow(unused_variables)]
-fn __action23<
-    'input,
-    'cx,
->(
+fn __action23<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> RBinOp
-{
+) -> RBinOp {
     RBinOp::Ge
 }
 
 #[allow(unused_variables)]
-fn __action24<
-    'input,
-    'cx,
->(
+fn __action24<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> RBinOp
-{
+) -> RBinOp {
     RBinOp::Gt
 }
 
 #[allow(unused_variables)]
-fn __action25<
-    'input,
-    'cx,
->(
+fn __action25<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -10153,16 +10063,12 @@ fn __action25<
     (_, __1, _): (usize, RValue<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __2, _): (usize, &'cx FuncBody<'cx>, usize),
-) -> &'cx FuncBody<'cx>
-{
+) -> &'cx FuncBody<'cx> {
     arena.bodies.intern(FuncBody::Let(__0, __1, __2))
 }
 
 #[allow(unused_variables)]
-fn __action26<
-    'input,
-    'cx,
->(
+fn __action26<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -10174,16 +10080,12 @@ fn __action26<
     (_, __2, _): (usize, &'cx FuncBody<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __3, _): (usize, &'cx FuncBody<'cx>, usize),
-) -> &'cx FuncBody<'cx>
-{
+) -> &'cx FuncBody<'cx> {
     arena.bodies.intern(FuncBody::LetCont(__0, __1, __2, __3))
 }
 
 #[allow(unused_variables)]
-fn __action27<
-    'input,
-    'cx,
->(
+fn __action27<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -10192,16 +10094,12 @@ fn __action27<
     (_, __1, _): (usize, &'cx FuncBody<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __2, _): (usize, &'cx FuncBody<'cx>, usize),
-) -> &'cx FuncBody<'cx>
-{
+) -> &'cx FuncBody<'cx> {
     arena.bodies.intern(FuncBody::Ite(__0, __1, __2))
 }
 
 #[allow(unused_variables)]
-fn __action28<
-    'input,
-    'cx,
->(
+fn __action28<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -10211,16 +10109,14 @@ fn __action28<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, kid, _): (usize, Symbol, usize),
-) -> &'cx FuncBody<'cx>
-{
-    arena.bodies.intern(FuncBody::Call(ident, arena.loc_args.alloc(ls), kid))
+) -> &'cx FuncBody<'cx> {
+    arena
+        .bodies
+        .intern(FuncBody::Call(ident, arena.loc_args.alloc(ls), kid))
 }
 
 #[allow(unused_variables)]
-fn __action29<
-    'input,
-    'cx,
->(
+fn __action29<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -10228,185 +10124,131 @@ fn __action29<
     (_, _, _): (usize, &'input str, usize),
     (_, ls, _): (usize, Vec<Local>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> &'cx FuncBody<'cx>
-{
-    arena.bodies.intern(FuncBody::Jump(ident, arena.loc_args.alloc(ls)))
+) -> &'cx FuncBody<'cx> {
+    arena
+        .bodies
+        .intern(FuncBody::Jump(ident, arena.loc_args.alloc(ls)))
 }
 
 #[allow(unused_variables)]
-fn __action30<
-    'input,
-    'cx,
->(
+fn __action30<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> &'cx FuncBody<'cx>
-{
+) -> &'cx FuncBody<'cx> {
     arena.bodies.intern(FuncBody::Abort)
 }
 
 #[allow(unused_variables)]
-fn __action31<
-    'input,
-    'cx,
->(
+fn __action31<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BasicType
-{
+) -> BasicType {
     BasicType::Bool
 }
 
 #[allow(unused_variables)]
-fn __action32<
-    'input,
-    'cx,
->(
+fn __action32<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, IntTy, usize),
-) -> BasicType
-{
+) -> BasicType {
     BasicType::Int(__0)
 }
 
 #[allow(unused_variables)]
-fn __action33<
-    'input,
-    'cx,
->(
+fn __action33<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::I8
 }
 
 #[allow(unused_variables)]
-fn __action34<
-    'input,
-    'cx,
->(
+fn __action34<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::I16
 }
 
 #[allow(unused_variables)]
-fn __action35<
-    'input,
-    'cx,
->(
+fn __action35<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::I32
 }
 
 #[allow(unused_variables)]
-fn __action36<
-    'input,
-    'cx,
->(
+fn __action36<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::I64
 }
 
 #[allow(unused_variables)]
-fn __action37<
-    'input,
-    'cx,
->(
+fn __action37<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::I128
 }
 
 #[allow(unused_variables)]
-fn __action38<
-    'input,
-    'cx,
->(
+fn __action38<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::U8
 }
 
 #[allow(unused_variables)]
-fn __action39<
-    'input,
-    'cx,
->(
+fn __action39<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::U16
 }
 
 #[allow(unused_variables)]
-fn __action40<
-    'input,
-    'cx,
->(
+fn __action40<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::U32
 }
 
 #[allow(unused_variables)]
-fn __action41<
-    'input,
-    'cx,
->(
+fn __action41<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::U64
 }
 
 #[allow(unused_variables)]
-fn __action42<
-    'input,
-    'cx,
->(
+fn __action42<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> IntTy
-{
+) -> IntTy {
     IntTy::U128
 }
 
 #[allow(unused_variables)]
-fn __action43<
-    'input,
-    'cx,
->(
+fn __action43<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -10415,16 +10257,12 @@ fn __action43<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, ret, _): (usize, Tydent<'cx>, usize),
-) -> &'cx Type<'cx>
-{
+) -> &'cx Type<'cx> {
     arena.refts.intern(Type::Fn { args, ret })
 }
 
 #[allow(unused_variables)]
-fn __action44<
-    'input,
-    'cx,
->(
+fn __action44<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
@@ -10434,323 +10272,232 @@ fn __action44<
     (_, _, _): (usize, &'input str, usize),
     (_, pred, _): (usize, &'cx Pred<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> &'cx Type<'cx>
-{
+) -> &'cx Type<'cx> {
     arena.refts.intern(Type::Reft { ident, ty, pred })
 }
 
 #[allow(unused_variables)]
-fn __action45<
-    'input,
-    'cx,
->(
+fn __action45<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, &'cx Slice<Tydent<'cx>>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> &'cx Type<'cx>
-{
+) -> &'cx Type<'cx> {
     arena.refts.intern(Type::Prod(__0))
 }
 
 #[allow(unused_variables)]
-fn __action46<
-    'input,
-    'cx,
->(
+fn __action46<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, ty, _): (usize, BasicType, usize),
-) -> &'cx Type<'cx>
-{
+) -> &'cx Type<'cx> {
     arena.refts.intern(Type::Reft {
         ident: Symbol::intern("_v"),
         ty,
-        pred: arena.preds.intern(Pred::Op(Operand::Lit(Literal::Bool(true))))
+        pred: arena
+            .preds
+            .intern(Pred::Op(Operand::Lit(Literal::Bool(true)))),
     })
 }
 
 #[allow(unused_variables)]
-fn __action47<
-    'input,
-    'cx,
->(
+fn __action47<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
     (_, e2, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
-fn __action48<
-    'input,
-    'cx,
->(
+fn __action48<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action49<
-    'input,
-    'cx,
->(
+fn __action49<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
     (_, e2, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
-fn __action50<
-    'input,
-    'cx,
->(
+fn __action50<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action51<
-    'input,
-    'cx,
->(
+fn __action51<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action52<
-    'input,
-    'cx,
->(
+fn __action52<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, op, _): (usize, PredUnOp, usize),
     (_, e, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     arena.preds.intern(Pred::Unary(op, e))
 }
 
 #[allow(unused_variables)]
-fn __action53<
-    'input,
-    'cx,
->(
+fn __action53<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action54<
-    'input,
-    'cx,
->(
+fn __action54<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Operand<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     arena.preds.intern(Pred::Op(__0))
 }
 
 #[allow(unused_variables)]
-fn __action55<
-    'input,
-    'cx,
->(
+fn __action55<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredBinOp
-{
+) -> PredBinOp {
     PredBinOp::And
 }
 
 #[allow(unused_variables)]
-fn __action56<
-    'input,
-    'cx,
->(
+fn __action56<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredBinOp
-{
+) -> PredBinOp {
     PredBinOp::Lt
 }
 
 #[allow(unused_variables)]
-fn __action57<
-    'input,
-    'cx,
->(
+fn __action57<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredBinOp
-{
+) -> PredBinOp {
     PredBinOp::Le
 }
 
 #[allow(unused_variables)]
-fn __action58<
-    'input,
-    'cx,
->(
+fn __action58<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredBinOp
-{
+) -> PredBinOp {
     PredBinOp::Gt
 }
 
 #[allow(unused_variables)]
-fn __action59<
-    'input,
-    'cx,
->(
+fn __action59<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredBinOp
-{
+) -> PredBinOp {
     PredBinOp::Ge
 }
 
 #[allow(unused_variables)]
-fn __action60<
-    'input,
-    'cx,
->(
+fn __action60<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredBinOp
-{
+) -> PredBinOp {
     PredBinOp::Eq
 }
 
 #[allow(unused_variables)]
-fn __action61<
-    'input,
-    'cx,
->(
+fn __action61<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredBinOp
-{
+) -> PredBinOp {
     PredBinOp::Add
 }
 
 #[allow(unused_variables)]
-fn __action62<
-    'input,
-    'cx,
->(
+fn __action62<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> PredUnOp
-{
+) -> PredUnOp {
     PredUnOp::Not
 }
 
 #[allow(unused_variables)]
-fn __action63<
-    'input,
-    'cx,
->(
+fn __action63<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
     (_, e2, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
-fn __action64<
-    'input,
-    'cx,
->(
+fn __action64<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action65<
-    'input,
-    'cx,
->(
+fn __action65<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, e1, _): (usize, &'cx Pred<'cx>, usize),
     (_, op, _): (usize, PredBinOp, usize),
     (_, e2, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     arena.preds.intern(Pred::Binary(op, e1, e2))
 }
 
 #[allow(unused_variables)]
-fn __action66<
-    'input,
-    'cx,
->(
+fn __action66<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, &'cx Pred<'cx>, usize),
-) -> &'cx Pred<'cx>
-{
+) -> &'cx Pred<'cx> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action67<
-    'input,
-    'cx,
->(
+fn __action67<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
     (_, e, _): (usize, ::std::option::Option<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     match e {
         None => v,
         Some(e) => {
@@ -10762,43 +10509,31 @@ fn __action67<
 }
 
 #[allow(unused_variables)]
-fn __action68<
-    'input,
-    'cx,
->(
+fn __action68<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Projection>
-{
+) -> ::std::vec::Vec<Projection> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action69<
-    'input,
-    'cx,
->(
+fn __action69<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Projection>, usize),
-) -> ::std::vec::Vec<Projection>
-{
+) -> ::std::vec::Vec<Projection> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action70<
-    'input,
-    'cx,
->(
+fn __action70<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
     (_, e, _): (usize, ::std::option::Option<Tydent<'cx>>, usize),
-) -> Vec<Tydent<'cx>>
-{
+) -> Vec<Tydent<'cx>> {
     match e {
         None => v,
         Some(e) => {
@@ -10810,529 +10545,346 @@ fn __action70<
 }
 
 #[allow(unused_variables)]
-fn __action71<
-    'input,
-    'cx,
->(
+fn __action71<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> usize
-{
+) -> usize {
     __lookbehind.clone()
 }
 
 #[allow(unused_variables)]
-fn __action72<
-    'input,
-    'cx,
->(
+fn __action72<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> usize
-{
+) -> usize {
     __lookahead.clone()
 }
 
 #[allow(unused_variables)]
-fn __action73<
-    'input,
-    'cx,
->(
+fn __action73<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
+) -> ::std::vec::Vec<FnDef<'cx>> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action74<
-    'input,
-    'cx,
->(
+fn __action74<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
+) -> ::std::vec::Vec<FnDef<'cx>> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action75<
-    'input,
-    'cx,
->(
+fn __action75<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, FnDef<'cx>, usize),
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
+) -> ::std::vec::Vec<FnDef<'cx>> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action76<
-    'input,
-    'cx,
->(
+fn __action76<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
     (_, e, _): (usize, FnDef<'cx>, usize),
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<FnDef<'cx>> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action77<
-    'input,
-    'cx,
->(
+fn __action77<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Tydent<'cx>, usize),
-) -> ::std::option::Option<Tydent<'cx>>
-{
+) -> ::std::option::Option<Tydent<'cx>> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action78<
-    'input,
-    'cx,
->(
+fn __action78<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<Tydent<'cx>>
-{
+) -> ::std::option::Option<Tydent<'cx>> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action79<
-    'input,
-    'cx,
->(
+fn __action79<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Tydent<'cx>>
-{
+) -> ::std::vec::Vec<Tydent<'cx>> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action80<
-    'input,
-    'cx,
->(
+fn __action80<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
-) -> ::std::vec::Vec<Tydent<'cx>>
-{
+) -> ::std::vec::Vec<Tydent<'cx>> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action81<
-    'input,
-    'cx,
->(
+fn __action81<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Tydent<'cx>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Tydent<'cx>
-{
+) -> Tydent<'cx> {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action82<
-    'input,
-    'cx,
->(
+fn __action82<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Projection, usize),
-) -> ::std::vec::Vec<Projection>
-{
+) -> ::std::vec::Vec<Projection> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action83<
-    'input,
-    'cx,
->(
+fn __action83<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Projection>, usize),
     (_, e, _): (usize, Projection, usize),
-) -> ::std::vec::Vec<Projection>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<Projection> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action84<
-    'input,
-    'cx,
->(
+fn __action84<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
-) -> ::std::option::Option<Local>
-{
+) -> ::std::option::Option<Local> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action85<
-    'input,
-    'cx,
->(
+fn __action85<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<Local>
-{
+) -> ::std::option::Option<Local> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action86<
-    'input,
-    'cx,
->(
+fn __action86<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action87<
-    'input,
-    'cx,
->(
+fn __action87<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action88<
-    'input,
-    'cx,
->(
+fn __action88<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Local
-{
+) -> Local {
     (__0)
 }
 
 #[allow(unused_variables)]
-fn __action89<
-    'input,
-    'cx,
->(
+fn __action89<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action90<
-    'input,
-    'cx,
->(
+fn __action90<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
     (_, e, _): (usize, Local, usize),
-) -> ::std::vec::Vec<Local>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<Local> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action91<
-    'input,
-    'cx,
->(
+fn __action91<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, __0, _): (usize, Tydent<'cx>, usize),
-) -> ::std::vec::Vec<Tydent<'cx>>
-{
+) -> ::std::vec::Vec<Tydent<'cx>> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action92<
-    'input,
-    'cx,
->(
+fn __action92<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
     (_, e, _): (usize, Tydent<'cx>, usize),
-) -> ::std::vec::Vec<Tydent<'cx>>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<Tydent<'cx>> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action93<
-    'input,
-    'cx,
->(
+fn __action93<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Local, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action88(
-        arena,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action88(arena, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action89(
-        arena,
-        input,
-        __temp0,
-    )
+    __action89(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action94<
-    'input,
-    'cx,
->(
+fn __action94<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
     __1: (usize, Local, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action88(
-        arena,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action88(arena, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action90(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action90(arena, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action95<
-    'input,
-    'cx,
->(
+fn __action95<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::option::Option<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action86(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action86(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action67(
-        arena,
-        input,
-        __temp0,
-        __0,
-    )
+    __action67(arena, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action96<
-    'input,
-    'cx,
->(
+fn __action96<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
     __1: (usize, ::std::option::Option<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action87(
-        arena,
-        input,
-        __0,
-    );
+    let __temp0 = __action87(arena, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action67(
-        arena,
-        input,
-        __temp0,
-        __1,
-    )
+    __action67(arena, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action97<
-    'input,
-    'cx,
->(
+fn __action97<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Tydent<'cx>, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Tydent<'cx>>
-{
+) -> ::std::vec::Vec<Tydent<'cx>> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action81(
-        arena,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action81(arena, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action91(
-        arena,
-        input,
-        __temp0,
-    )
+    __action91(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action98<
-    'input,
-    'cx,
->(
+fn __action98<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
     __1: (usize, Tydent<'cx>, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Tydent<'cx>>
-{
+) -> ::std::vec::Vec<Tydent<'cx>> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action81(
-        arena,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action81(arena, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action92(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action92(arena, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action99<
-    'input,
-    'cx,
->(
+fn __action99<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::option::Option<Tydent<'cx>>, usize),
-) -> Vec<Tydent<'cx>>
-{
+) -> Vec<Tydent<'cx>> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action79(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action79(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action70(
-        arena,
-        input,
-        __temp0,
-        __0,
-    )
+    __action70(arena, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action100<
-    'input,
-    'cx,
->(
+fn __action100<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
     __1: (usize, ::std::option::Option<Tydent<'cx>>, usize),
-) -> Vec<Tydent<'cx>>
-{
+) -> Vec<Tydent<'cx>> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action80(
-        arena,
-        input,
-        __0,
-    );
+    let __temp0 = __action80(arena, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action70(
-        arena,
-        input,
-        __temp0,
-        __1,
-    )
+    __action70(arena, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action101<
-    'input,
-    'cx,
->(
+fn __action101<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -11348,42 +10900,18 @@ fn __action101<
     __10: (usize, &'input str, usize),
     __11: (usize, &'cx FuncBody<'cx>, usize),
     __12: (usize, usize, usize),
-) -> FnDef<'cx>
-{
+) -> FnDef<'cx> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action72(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action72(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
     __action3(
-        arena,
-        input,
-        __temp0,
-        __0,
-        __1,
-        __2,
-        __3,
-        __4,
-        __5,
-        __6,
-        __7,
-        __8,
-        __9,
-        __10,
-        __11,
-        __12,
+        arena, input, __temp0, __0, __1, __2, __3, __4, __5, __6, __7, __8, __9, __10, __11, __12,
     )
 }
 
 #[allow(unused_variables)]
-fn __action102<
-    'input,
-    'cx,
->(
+fn __action102<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, &'input str, usize),
@@ -11398,365 +10926,204 @@ fn __action102<
     __9: (usize, &'input str, usize),
     __10: (usize, &'input str, usize),
     __11: (usize, &'cx FuncBody<'cx>, usize),
-) -> FnDef<'cx>
-{
+) -> FnDef<'cx> {
     let __start0 = __11.2.clone();
     let __end0 = __11.2.clone();
-    let __temp0 = __action71(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action71(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
     __action101(
-        arena,
-        input,
-        __0,
-        __1,
-        __2,
-        __3,
-        __4,
-        __5,
-        __6,
-        __7,
-        __8,
-        __9,
-        __10,
-        __11,
-        __temp0,
+        arena, input, __0, __1, __2, __3, __4, __5, __6, __7, __8, __9, __10, __11, __temp0,
     )
 }
 
 #[allow(unused_variables)]
-fn __action103<
-    'input,
-    'cx,
->(
+fn __action103<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
+) -> ::std::vec::Vec<FnDef<'cx>> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action73(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action73(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action2(
-        arena,
-        input,
-        __temp0,
-    )
+    __action2(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action104<
-    'input,
-    'cx,
->(
+fn __action104<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<FnDef<'cx>>, usize),
-) -> ::std::vec::Vec<FnDef<'cx>>
-{
+) -> ::std::vec::Vec<FnDef<'cx>> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action74(
-        arena,
-        input,
-        __0,
-    );
+    let __temp0 = __action74(arena, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action2(
-        arena,
-        input,
-        __temp0,
-    )
+    __action2(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action105<
-    'input,
-    'cx,
->(
+fn __action105<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Local, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action84(
-        arena,
-        input,
-        __0,
-    );
+    let __temp0 = __action84(arena, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action95(
-        arena,
-        input,
-        __temp0,
-    )
+    __action95(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action106<
-    'input,
-    'cx,
->(
+fn __action106<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action85(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action85(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action95(
-        arena,
-        input,
-        __temp0,
-    )
+    __action95(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action107<
-    'input,
-    'cx,
->(
+fn __action107<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
     __1: (usize, Local, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action84(
-        arena,
-        input,
-        __1,
-    );
+    let __temp0 = __action84(arena, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action96(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action96(arena, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action108<
-    'input,
-    'cx,
->(
+fn __action108<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action85(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action85(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action96(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action96(arena, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action109<
-    'input,
-    'cx,
->(
+fn __action109<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Local, usize),
-) -> Path<'cx>
-{
+) -> Path<'cx> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action68(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action68(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action14(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action14(arena, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action110<
-    'input,
-    'cx,
->(
+fn __action110<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Local, usize),
     __1: (usize, ::std::vec::Vec<Projection>, usize),
-) -> Path<'cx>
-{
+) -> Path<'cx> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action69(
-        arena,
-        input,
-        __1,
-    );
+    let __temp0 = __action69(arena, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action14(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action14(arena, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action111<
-    'input,
-    'cx,
->(
+fn __action111<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, Tydent<'cx>, usize),
-) -> Vec<Tydent<'cx>>
-{
+) -> Vec<Tydent<'cx>> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action77(
-        arena,
-        input,
-        __0,
-    );
+    let __temp0 = __action77(arena, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action99(
-        arena,
-        input,
-        __temp0,
-    )
+    __action99(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action112<
-    'input,
-    'cx,
->(
+fn __action112<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Tydent<'cx>>
-{
+) -> Vec<Tydent<'cx>> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action78(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action78(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action99(
-        arena,
-        input,
-        __temp0,
-    )
+    __action99(arena, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action113<
-    'input,
-    'cx,
->(
+fn __action113<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
     __1: (usize, Tydent<'cx>, usize),
-) -> Vec<Tydent<'cx>>
-{
+) -> Vec<Tydent<'cx>> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action77(
-        arena,
-        input,
-        __1,
-    );
+    let __temp0 = __action77(arena, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action100(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action100(arena, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action114<
-    'input,
-    'cx,
->(
+fn __action114<'input, 'cx>(
     arena: &'cx CpsArena<'cx>,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Tydent<'cx>>, usize),
-) -> Vec<Tydent<'cx>>
-{
+) -> Vec<Tydent<'cx>> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action78(
-        arena,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action78(arena, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action100(
-        arena,
-        input,
-        __0,
-        __temp0,
-    )
+    __action100(arena, input, __0, __temp0)
 }
 
-pub trait __ToTriple<'input, 'cx, > {
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>;
+pub trait __ToTriple<'input, 'cx> {
+    fn to_triple(
+        value: Self,
+    ) -> Result<
+        (usize, Token<'input>, usize),
+        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+    >;
 }
 
-impl<'input, 'cx, > __ToTriple<'input, 'cx, > for (usize, Token<'input>, usize) {
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
+impl<'input, 'cx> __ToTriple<'input, 'cx> for (usize, Token<'input>, usize) {
+    fn to_triple(
+        value: Self,
+    ) -> Result<
+        (usize, Token<'input>, usize),
+        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+    > {
         Ok(value)
     }
 }
-impl<'input, 'cx, > __ToTriple<'input, 'cx, > for Result<(usize, Token<'input>, usize), &'static str> {
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
+impl<'input, 'cx> __ToTriple<'input, 'cx> for Result<(usize, Token<'input>, usize), &'static str> {
+    fn to_triple(
+        value: Self,
+    ) -> Result<
+        (usize, Token<'input>, usize),
+        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+    > {
         match value {
             Ok(v) => Ok(v),
             Err(error) => Err(__lalrpop_util::ParseError::User { error }),

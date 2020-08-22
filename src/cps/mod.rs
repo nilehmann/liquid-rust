@@ -37,7 +37,6 @@ fn sum(n: {i32 | n >= 0}) ret k(v: {i32 | v >= n}) =
   jump loop(i0, r0)
 ";
 
-
     const CPS_COUNT_ZEROS_TEXT: &str = r"
 fn f(n: {i32 | n >= 0}) ret k(v: i32) = jump k(n)
 
@@ -75,8 +74,10 @@ fn count_zeros(limit: {i32 | limit >= 0}) ret k(v: {i32 | v >= 0}) =
         with_default_session_globals(|| {
             let cps_arena = ast::CpsArena::new();
             let cgen_arena = ArenaInterner::new(TypedArena::default());
-            
-            let fns = parser::FnsParser::new().parse(&cps_arena, CPS_SUM_TEXT).unwrap();
+
+            let fns = parser::FnsParser::new()
+                .parse(&cps_arena, CPS_SUM_TEXT)
+                .unwrap();
             let mut cgen = constraint::ConstraintGen::new(&cps_arena, &cgen_arena);
             cgen.check_fns(fns).expect("cgen failed");
         });
@@ -87,8 +88,10 @@ fn count_zeros(limit: {i32 | limit >= 0}) ret k(v: {i32 | v >= 0}) =
         with_default_session_globals(|| {
             let cps_arena = ast::CpsArena::new();
             let cgen_arena = ArenaInterner::new(TypedArena::default());
-            
-            let fns = parser::FnsParser::new().parse(&cps_arena, CPS_COUNT_ZEROS_TEXT).unwrap();
+
+            let fns = parser::FnsParser::new()
+                .parse(&cps_arena, CPS_COUNT_ZEROS_TEXT)
+                .unwrap();
             let mut cgen = constraint::ConstraintGen::new(&cps_arena, &cgen_arena);
             cgen.check_fns(fns).expect("cgen failed");
         });

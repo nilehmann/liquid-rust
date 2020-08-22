@@ -7,7 +7,7 @@ use rustc_arena::TypedArena;
 use rustc_span::Span;
 pub use rustc_span::Symbol;
 
-use std::{collections::HashMap, fmt};
+use std::fmt;
 
 // This is for LALRPOP :/
 pub type Slice<T> = [T];
@@ -16,12 +16,12 @@ pub struct CpsArena<'cx> {
     pub preds: ArenaInterner<'cx, Pred<'cx>>,
     pub refts: ArenaInterner<'cx, Type<'cx>>,
     pub bodies: ArenaInterner<'cx, FuncBody<'cx>>,
+    pub substs: ArenaInterner<'cx, SubstNode<'cx>>,
 
     // TODO: use ArenaInterner.alloc_slice/alloc_from_iter?
     pub tyd_args: TypedArena<Vec<Tydent<'cx>>>,
     pub loc_args: TypedArena<Vec<Local>>,
     pub projs: TypedArena<Vec<Projection>>,
-    // pub substs: TypedArena<Subst>,
 }
 
 impl CpsArena<'_> {
@@ -29,6 +29,7 @@ impl CpsArena<'_> {
         let preds = ArenaInterner::new(TypedArena::default());
         let refts = ArenaInterner::new(TypedArena::default());
         let bodies = ArenaInterner::new(TypedArena::default());
+        let substs = ArenaInterner::new(TypedArena::default());
 
         let tyd_args = TypedArena::default();
         let loc_args = TypedArena::default();
@@ -38,6 +39,7 @@ impl CpsArena<'_> {
             preds,
             refts,
             bodies,
+            substs,
             tyd_args,
             loc_args,
             projs,
@@ -45,11 +47,6 @@ impl CpsArena<'_> {
     }
 }
 
-// We don't just use a hashmap so that we don't have to constantly
-// allocate hashmaps for substs
-//
-// TODO: We might change this back to a hashmap once we implement
-// deferred substitutions
 pub struct Subst<'a> {
     from: &'a [Local],
     to: &'a [Local],
@@ -59,15 +56,93 @@ impl<'a> Subst<'a> {
     pub fn new(from: &'a [Local], to: &'a [Local]) -> Self {
         Subst { from, to }
     }
-    
+
+    pub fn empty() -> Self {
+        Subst { from: &[], to: &[] }
+    }
+
     pub fn get(&self, l: &Local) -> Option<&Local> {
         for (f, t) in self.from.iter().zip(self.to.iter()) {
             if *l == *f {
-                return Some(t)
+                return Some(t);
             }
         }
 
         None
+    }
+}
+
+/// A DeferSubst is a singly linked list of symbol subtitutions.
+/// It contains a pointer to the last element of the list,
+/// or None of the last element is empty.
+/// We do things this way to facilitate sharing of substitutions across multiple
+/// types.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct DeferSubst<'cx>(Option<&'cx SubstNode<'cx>>);
+
+impl<'cx> DeferSubst<'cx> {
+    pub fn new(arena: &'cx CpsArena<'cx>, fs: &[Local], ts: &[Local]) -> DeferSubst<'cx> {
+        DeferSubst(SubstNode::add_substs(arena, None, fs, ts))
+    }
+
+    pub fn push(self, arena: &'cx CpsArena<'cx>, fs: &[Local], ts: &[Local]) -> DeferSubst<'cx> {
+        DeferSubst(SubstNode::add_substs(arena, self.0, fs, ts))
+    }
+
+    pub fn collect(&self) -> (Vec<Local>, Vec<Local>) {
+        let mut fs = Vec::new();
+        let mut ts = Vec::new();
+
+        let mut last = self.0;
+
+        while let Some(n) = last {
+            fs.push(n.from);
+            ts.push(n.to);
+
+            last = n.prev;
+        }
+
+        (fs, ts)
+    }
+
+    pub fn get(&self, l: &Local) -> Option<Local> {
+        self.0.and_then(|n| n.get(l))
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct SubstNode<'cx> {
+    prev: Option<&'cx SubstNode<'cx>>,
+    from: Local,
+    to: Local,
+}
+
+impl<'cx> SubstNode<'cx> {
+    fn add_substs(
+        arena: &'cx CpsArena<'cx>,
+        prev: Option<&'cx SubstNode<'cx>>,
+        fs: &[Local],
+        ts: &[Local],
+    ) -> Option<&'cx SubstNode<'cx>> {
+        let mut res = prev;
+
+        for (f, t) in fs.iter().zip(ts.iter()) {
+            res = Some(arena.substs.intern(SubstNode {
+                prev: res,
+                from: *f,
+                to: *t,
+            }));
+        }
+
+        res
+    }
+
+    fn get(&self, l: &Local) -> Option<Local> {
+        if self.from == *l {
+            Some(self.to)
+        } else {
+            self.prev.and_then(|p| p.get(l))
+        }
     }
 }
 
@@ -171,9 +246,7 @@ impl<'cx> Operand<'cx> {
     /// Substitute all occurrences of symbols in `from` with their respective symbol in `to` in this operand
     pub fn run_subst(&self, subst: &Subst) -> Operand {
         match self {
-            Operand::Path(og) => {
-                Operand::Path(og.run_subst(subst))
-            }
+            Operand::Path(og) => Operand::Path(og.run_subst(subst)),
             Operand::Lit(l) => Operand::Lit(*l),
         }
     }
@@ -296,12 +369,68 @@ impl<'cx> Type<'cx> {
         }
     }
 
+    pub fn as_deferred(&'cx self, subst: DeferSubst<'cx>) -> DeferType<'cx> {
+        DeferType { reft: self, subst }
+    }
+
+    pub fn defer_subst(&'cx self, arena: &'cx CpsArena<'cx>, subst: &Subst) -> DeferType<'cx> {
+        DeferType::new(arena, self, subst)
+    }
+
+    pub fn extend_subst(
+        &'cx self,
+        arena: &'cx CpsArena<'cx>,
+        ds: DeferSubst<'cx>,
+        subst: &Subst,
+    ) -> DeferType<'cx> {
+        DeferType {
+            reft: self,
+            subst: ds.push(arena, subst.from, subst.to),
+        }
+    }
+
     pub fn from_basic(arena: &'cx CpsArena<'cx>, b: BasicType) -> &'cx Type<'cx> {
         arena.refts.intern(Type::Reft {
             ident: Local::intern("_v").into(),
             ty: b,
-            pred: arena.preds.intern(Pred::Op(Operand::Lit(Literal::Bool(true)))),
+            pred: arena
+                .preds
+                .intern(Pred::Op(Operand::Lit(Literal::Bool(true)))),
         })
+    }
+}
+
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub struct DeferType<'cx> {
+    pub reft: &'cx Type<'cx>,
+    pub subst: DeferSubst<'cx>,
+}
+
+impl<'cx> DeferType<'cx> {
+    pub fn new(arena: &'cx CpsArena<'cx>, reft: &'cx Type<'cx>, subst: &Subst) -> DeferType<'cx> {
+        DeferType {
+            reft,
+            subst: DeferSubst::new(arena, subst.from, subst.to),
+        }
+    }
+
+    pub fn empty(reft: &'cx Type<'cx>) -> DeferType<'cx> {
+        DeferType {
+            reft,
+            subst: DeferSubst(None),
+        }
+    }
+
+    pub fn run_subst(&self, arena: &'cx CpsArena<'cx>) -> &'cx Type<'cx> {
+        let (fs, ts) = self.subst.collect();
+
+        self.reft.run_subst(arena, &Subst::new(&fs[..], &ts[..]))
+    }
+}
+
+impl<'cx> From<&'cx Type<'cx>> for DeferType<'cx> {
+    fn from(x: &'cx Type<'cx>) -> DeferType<'cx> {
+        DeferType::empty(x)
     }
 }
 
@@ -316,9 +445,7 @@ impl<'cx> Pred<'cx> {
     /// Substitute all occurrences of symbols in `from` with their respective symbol in `to` in this predicate
     pub fn run_subst(&'cx self, arena: &'cx CpsArena<'cx>, subst: &Subst) -> &'cx Pred<'cx> {
         match self {
-            Pred::Op(op) => {
-                arena.preds.intern(Pred::Op(op.run_subst(subst)))
-            }
+            Pred::Op(op) => arena.preds.intern(Pred::Op(op.run_subst(subst))),
             Pred::Unary(un, p) => {
                 let new_p = p.run_subst(arena, subst);
                 arena.preds.intern(Pred::Unary(*un, new_p))
@@ -331,12 +458,6 @@ impl<'cx> Pred<'cx> {
         }
     }
 
-    // pub fn defer_subst(&self, arena: &'cx CpsArena<'cx>, from: &[Local], to: &[Local]) -> DeferredPred<'cx> {
-    //     let dp = DeferredPred::new(arena, self);
-
-    //     dp.defer_subst(arena, from, to)
-    // }
-
     pub fn from_local(arena: &'cx CpsArena<'cx>, l: Local) -> &'cx Pred<'cx> {
         arena.preds.intern(Pred::Op(Operand::from_local(arena, l)))
     }
@@ -345,32 +466,6 @@ impl<'cx> Pred<'cx> {
         arena.preds.intern(Pred::Op(op))
     }
 }
-
-// #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
-// pub struct DeferredPred<'cx> {
-//     pub pred: &'cx Pred<'cx>,
-//     pub subst_map: &'cx Subst,
-// }
-// 
-// impl DeferredPred<'_> {
-//     pub fn new(arena: &CpsArena, pred: &Pred) -> Self {
-//         let subst_map = arena.substs.alloc(HashMap::new());
-// 
-//         DeferredPred { pred, subst_map }
-//     }
-// 
-//     pub fn defer_subst(&self, _arena: &CpsArena, from: &[Local], to: &[Local]) -> &Self {
-//         for (f, t) in from.iter().zip(to.iter()) {
-//             self.subst_map.insert(*f, *t);
-//         }
-// 
-//         self
-//     }
-// 
-//     pub fn run_subst(&self, arena: &CpsArena) -> &Pred {
-//         self.pred.run_subst(arena, &self.subst_map)
-//     }
-// }
 
 #[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
 pub enum PredUnOp {
@@ -420,4 +515,3 @@ impl From<RBinOp> for PredBinOp {
         }
     }
 }
-

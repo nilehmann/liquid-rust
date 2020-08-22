@@ -51,7 +51,7 @@ impl<'lr, 'tcx> DominatorTree<'lr, 'tcx> {
 
     /// Finds all of the predicates we know to be true after going through a
     /// terminator for a particular basic block and calls a callback on each
-    /// new predicate. 
+    /// new predicate.
     pub fn find_terminator_preds(
         cx: &LiquidRustCtxt<'lr, 'tcx>,
         tk: &mir::TerminatorKind<'tcx>,
