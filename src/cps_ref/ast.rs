@@ -206,3 +206,9 @@ pub enum Pred {
     Place { var: Var, projection: Vec<u32> },
     BinaryOp(BinOp, Box<Pred>, Box<Pred>),
 }
+
+impl Var {
+    pub fn intern(string: &str) -> Var {
+        Var(Symbol::intern(string))
+    }
+}

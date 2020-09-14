@@ -1,6 +1,5 @@
 pub mod ast;
 pub mod parser;
-pub mod typeck;
 
 #[cfg(test)]
 mod tests {
