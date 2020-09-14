@@ -190,14 +190,6 @@ pub enum TypeLayout {
     Block(u32),
 }
 
-/// A refinement over a basic type { bind: ty | pred }
-#[derive(Debug)]
-pub struct RefineType {
-    pub bind: Var,
-    pub ty: BasicType,
-    pub pred: Pred,
-}
-
 #[derive(Debug, Copy, Clone)]
 pub enum BasicType {
     Bool,
