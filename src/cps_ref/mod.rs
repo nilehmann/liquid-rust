@@ -1,5 +1,6 @@
 pub mod ast;
 pub mod parser;
+pub mod typeck;
 
 #[cfg(test)]
 mod tests {
@@ -89,11 +90,29 @@ fn count_zeros(n0: {v: int | v >= 0}; n: n0) ret k(r: {v: int | v >= 0}; r)=
     }
 
     #[test]
+    fn alloc_pair() {
+        with_default_session_globals(|| {
+            let expr = super::parser::FnParser::new().parse(
+                r####"
+fn alloc_pair(;) ret k(r: {v: int | true}; r)=
+  let p = new((1, 1));
+  t.0 := 1;
+  t.1 := 2;
+  let r = new(1);
+  r := *p.0;
+  jump k(r)
+"####,
+            );
+            assert!(expr.is_ok());
+        });
+    }
+
+    #[test]
     fn length() {
         with_default_session_globals(|| {
             let expr = super::parser::FnParser::new().parse(
                 r####"
-fn length(p0: (x: {v: int | true}, y: {v: int | v >= @x}); p: p0) ret k(r: {v: int | v >= 0}; r)=
+fn length(p0: (x: {v: int | true}, y: {v: int | v >= x}); p: p0) ret k(r: {v: int | v >= 0}; r)=
   let t = new(1);
   t := *p.1 - *p.0;
   jump k(t)

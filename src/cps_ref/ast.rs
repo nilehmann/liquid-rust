@@ -75,9 +75,15 @@ pub enum FnBody {
     /// Aborts the execution of the program
     Abort,
 }
+
+/// An statement
 #[derive(Debug)]
 pub enum Statement {
-    Let(Local, u32),
+    /// Allocates a block of memory and binds the result to a local.
+    /// The type layout is needed for the type system to know the recursive structure
+    /// of the type a priori.
+    Let(Local, TypeLayout),
+    /// Either moves or copies the rvalue to a place.
     Assign(Place, Rvalue),
 }
 
@@ -106,13 +112,13 @@ pub enum Operand {
     Constant(Constant),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum Constant {
     Bool(bool),
     Int(u128),
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum BinOp {
     Add,
     Sub,
@@ -127,7 +133,7 @@ pub enum BinOp {
 pub type Heap = Vec<(Location, Type)>;
 
 /// A location into a block of memory in the heap.
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
 pub struct Location(pub Symbol);
 
 /// An environment maps locals to types.
@@ -136,7 +142,7 @@ pub type Env = Vec<(Local, RefType)>;
 
 /// A Local is an identifier to some local variable introduced with a let
 /// statement.
-#[derive(Debug)]
+#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
 pub struct Local(pub Symbol);
 
 /// A reference type. For now this only contains owned references
@@ -163,34 +169,43 @@ pub enum Type {
     },
     /// A reference type
     Ref(RefType),
-    /// A refinement type
-    Refine(RefineType),
-    /// A dependent tuple. Right now this is limited to tuples over refinements but
-    /// this restriction should be lifted in the future.
-    Tuple(Vec<(Symbol, RefineType)>),
+    /// A refinement type { bind: ty | pred }
+    Refine {
+        bind: Var,
+        ty: BasicType,
+        pred: Pred,
+    },
+    /// A dependent tuple.
+    Tuple(Vec<(Var, Type)>),
+    /// Unitialized
+    Uninit(u32),
 }
 
-/// A refinement over a basic type { ident: ty | pred }
+/// A type layout is used to describe the recursive structure of a type.
+#[derive(Debug)]
+pub enum TypeLayout {
+    /// Tuples decompose memory recursively.
+    Tuple(Vec<TypeLayout>),
+    /// A block of memory that cannot be further decomposed recursively.
+    Block(u32),
+}
+
+/// A refinement over a basic type { bind: ty | pred }
 #[derive(Debug)]
 pub struct RefineType {
-    pub ident: Symbol,
+    pub bind: Var,
     pub ty: BasicType,
     pub pred: Pred,
 }
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub enum BasicType {
     Bool,
     Int,
 }
 
-/// Predicates can refer to heap locations and named fields in a dependent tuple.
-/// We could have them both in the same syntactic category but let's keep them separate for now...
-#[derive(Debug)]
-pub enum Var {
-    Location(Location),
-    Field(Symbol),
-}
+#[derive(Debug, Copy, Clone)]
+pub struct Var(pub Symbol);
 
 /// A refinement type predicate
 #[derive(Debug)]

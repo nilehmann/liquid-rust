@@ -69,8 +69,8 @@
   \infer
   [\textsc{R-assign}]
   {
-    \trval{\Gamma}{\tenv}{R}{\tau}{\Gamma'}{\tenv'} \\\\
-    \lookup{\Gamma}{\tenv}{\pi} = (p, \tau') \\ \text{size}(\tau) = \text{size}(\tau')
+    \trval{\Gamma}{\tenv}{R}{\tau'}{\Gamma'}{\tenv'} \\\\
+    \lookup{\Gamma}{\tenv}{\pi} = (p, \tau) \\ \text{size}(\tau) = \text{size}(\tau')
   }
   {\tinstr{\Gamma}{\tenv}{\assign{\pi}{R}}{(\Gamma'}{\tenv')[\pi\mapsto\tau']}}
 \end{mathpar}
