@@ -5,33 +5,45 @@ pub mod typeck;
 
 #[cfg(test)]
 mod tests {
-    use super::parser::FnParser;
+    use super::{ast::FnDef, parser::FnParser};
     use super::{
         context::{Arena, LiquidRustCtxt},
         typeck::TypeCk,
     };
     use rustc_ast::attr::with_default_session_globals;
 
-    fn session(act: impl for<'lr> FnOnce(&'lr LiquidRustCtxt<'lr>)) {
-        with_default_session_globals(|| {
-            let arena = Arena::default();
-            let cx = LiquidRustCtxt::new(&arena);
-            act(&cx);
-        })
+    struct Session<'lr> {
+        cx: &'lr LiquidRustCtxt<'lr>,
     }
 
-    fn assert_parse(string: &str) {
-        session(|cx| {
-            let expr = FnParser::new().parse(&cx, string);
-            assert!(expr.is_ok());
-        })
+    impl<'lr> Session<'lr> {
+        fn run(act: impl for<'a> FnOnce(Session<'a>)) {
+            with_default_session_globals(|| {
+                let arena = Arena::default();
+                let cx = LiquidRustCtxt::new(&arena);
+                act(Session { cx: &cx });
+            })
+        }
+
+        fn parse(&self, string: &str) -> Option<FnDef<'lr>> {
+            FnParser::new().parse(self.cx, string).ok()
+        }
+
+        fn check_parse(&self, string: &str) {
+            assert!(self.parse(string).is_some());
+        }
+
+        fn check(&self, string: &str) {
+            let _ = TypeCk::check(self.cx, &self.parse(string).unwrap());
+        }
     }
 
     #[test]
     fn abs() {
-        assert_parse(
-            r####"
-fn abs(n0: {v: int | true}; n: own(n0)) ret k(r: {v:int | v >= 0}; own(r)) =
+        Session::run(|sess| {
+            sess.check(
+                r####"
+fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
   let b = new(1);
   b := *n < 0;
   if *n then
@@ -40,20 +52,23 @@ fn abs(n0: {v: int | true}; n: own(n0)) ret k(r: {v:int | v >= 0}; own(r)) =
   else
     jump k(n)
 "####,
-        );
+            );
+        });
     }
 
     #[test]
     fn sum() {
-        assert_parse(
-            r####"
-    fn sum(n0: {v: int | v >= 0}; n: own(n0)) ret k(r: {v:int | v >= 0}; own(r)) =
-      letcont loop(i1: {v: int | v >= 0}, r1: {v: int | v >= i1}; i: own(i1), r: own(r);) =
+        Session::run(|sess| {
+            sess.check(
+                r####"
+    fn sum(n0: {int | _v >= 0}; n: own(n0)) ret k(r: {int | _v >= n0}; own(r)) =
+      letcont loop( n1: {int | _v >= 0}, i1: {int | _v >= 0}, r1: {int | _v >= i1}
+                  ; i: own(i1), r: own(r1), n: own(n1);) =
         let t0 = new(1);
         t0 := *i <= *n;
         if *t0 then
-          let t1 = new(1);
-          t1 := *r + *i;
+          r := *r + *i;
+          i := *i + 1;
           jump loop()
         else
           jump k(r)
@@ -64,20 +79,23 @@ fn abs(n0: {v: int | true}; n: own(n0)) ret k(r: {v:int | v >= 0}; own(r)) =
       r := 0;
       jump loop()
     "####,
-        );
+            );
+        })
     }
 
     #[test]
     fn count_zeros() {
-        assert_parse(
-            r####"
-    fn count_zeros(n0: {v: int | v >= 0}; n: own(n0)) ret k(r: {v: int | v >= 0}; own(r))=
-      letcont b0(i1: {v: int | v >= 0}, c1: {v: int | v >= 0}; i: own(i1), c: own(c1); ) =
+        Session::run(|sess| {
+            sess.check(
+                r####"
+    fn count_zeros(n0: {int | _v >= 0}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r))=
+      letcont b0( n1: {int | _v >= 0}, i1: {int | _v >= 0}, c1: {int | _v >= 0}
+                ; i: own(i1), c: own(c1), n: own(n1); ) =
         let t0 = new(1);
         t0 := *i < *n;
         if *t0 then
-          letcont b1( i2: {v: int | v >= 0}, c2: {v: int | v >= 0}, x0: {v: int | true}
-                    ; i: own(i2), c: own(c2)
+          letcont b1( n2: {int | _v >= 0}, i2: {int | _v >= 0}, c2: {int | _v >= 0}, x0: {int | true}
+                    ; i: own(i2), c: own(c2), n: own(n2)
                     ; x: own(x0)
                     ) =
             let t1 = new(1);
@@ -98,33 +116,38 @@ fn abs(n0: {v: int | true}; n: own(n0)) ret k(r: {v:int | v >= 0}; own(r)) =
       c := 0;
       jump b0()
     "####,
-        );
+            );
+        });
     }
 
     #[test]
     fn alloc_pair() {
-        assert_parse(
-            r####"
-    fn alloc_pair(;) ret k(r: {v: int | true}; own(r))=
+        Session::run(|sess| {
+            sess.check(
+                r####"
+    fn alloc_pair(;) ret k(r: {int | true}; own(r))=
       let p = new((1, 1));
-      t.0 := 1;
-      t.1 := 2;
+      p.0 := 1;
+      p.1 := 2;
       let r = new(1);
       r := *p.0;
       jump k(r)
     "####,
-        );
+            );
+        });
     }
 
     #[test]
     fn length() {
-        assert_parse(
+        Session::run(|sess| {
+            sess.check(
             r####"
-    fn length(p0: (x: {v: int | true}, y: {v: int | v >= x}); p: own(p0)) ret k(r: {v: int | v >= 0}; own(r))=
+    fn length(p0: (@x: {int | true}, @y: {int | _v >= @x}); p: own(p0)) ret k(r: {int | _v >= 0}; own(r))=
       let t = new(1);
       t := *p.1 - *p.0;
       jump k(t)
     "####,
         );
+        });
     }
 }

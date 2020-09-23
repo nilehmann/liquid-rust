@@ -54,7 +54,7 @@ impl<'lr> CommonPreds<'lr> {
         let mk = |pred| interners.intern_pred(pred);
         CommonPreds {
             nu: mk(PredS::Place {
-                var: Var::nu(),
+                var: Var::Nu,
                 projection: vec![],
             }),
             tt: mk(PredS::Constant(Constant::Bool(true))),
@@ -79,11 +79,15 @@ impl<'lr> LiquidRustCtxt<'lr> {
         self.interners.intern_ty(ty)
     }
 
-    pub fn mk_refine(&'lr self, bind: Var, ty: BasicType, pred: Pred<'lr>) -> Ty<'lr> {
-        self.mk_ty(TyS::Refine { bind, ty, pred })
+    pub fn mk_own_ref(&'lr self, location: Location) -> Ty<'lr> {
+        self.mk_ty(TyS::OwnRef(location))
     }
 
-    pub fn mk_tuple(&'lr self, fields: &[(Var, Ty<'lr>)]) -> Ty<'lr> {
+    pub fn mk_refine(&'lr self, ty: BasicType, pred: Pred<'lr>) -> Ty<'lr> {
+        self.mk_ty(TyS::Refine { ty, pred })
+    }
+
+    pub fn mk_tuple(&'lr self, fields: &[(Field, Ty<'lr>)]) -> Ty<'lr> {
         self.mk_ty(TyS::Tuple(fields.into()))
     }
 
@@ -97,7 +101,7 @@ impl<'lr> LiquidRustCtxt<'lr> {
                 let fields = fields
                     .iter()
                     .enumerate()
-                    .map(|(i, f)| (Var::field(i as u32), self.mk_ty_for_layout(f)))
+                    .map(|(i, f)| (Field::nth(i as u32), self.mk_ty_for_layout(f)))
                     .collect();
                 self.mk_ty(TyS::Tuple(fields))
             }

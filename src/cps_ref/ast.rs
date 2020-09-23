@@ -1,3 +1,5 @@
+use std::fmt::Debug;
+
 pub use rustc_span::Symbol;
 
 /// A function definition
@@ -101,6 +103,15 @@ pub struct Place {
     pub projection: Vec<u32>,
 }
 
+impl From<Local> for Place {
+    fn from(local: Local) -> Self {
+        Place {
+            local,
+            projection: vec![],
+        }
+    }
+}
+
 /// These are values that can appear inside an rvalue. They are intentionally limited to prevent
 /// rvalues from being nested in one another.
 #[derive(Debug)]
@@ -111,13 +122,13 @@ pub enum Operand {
     Constant(Constant),
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub enum Constant {
     Bool(bool),
     Int(u128),
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
 pub enum BinOp {
     Add,
     Sub,
@@ -132,7 +143,7 @@ pub enum BinOp {
 pub type Heap<'lr> = Vec<(Location, Ty<'lr>)>;
 
 /// A location into a block of memory in the heap.
-#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
+#[derive(Eq, PartialEq, Hash, Copy, Clone)]
 pub struct Location(pub Symbol);
 
 /// An environment maps locals to owned references.
@@ -140,7 +151,7 @@ pub type Env = Vec<(Local, OwnRef)>;
 
 /// A Local is an identifier to some local variable introduced with a let
 /// statement.
-#[derive(Debug, Eq, PartialEq, Hash, Copy, Clone)]
+#[derive(Eq, PartialEq, Hash, Copy, Clone)]
 pub struct Local(pub Symbol);
 
 /// An owned reference to a location. This is used for arguments and return types.
@@ -149,7 +160,7 @@ pub struct OwnRef(pub Location);
 
 pub type Ty<'lr> = &'lr TyS<'lr>;
 
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Eq, PartialEq, Hash)]
 pub enum TyS<'lr> {
     /// A function type
     Fn {
@@ -157,7 +168,7 @@ pub enum TyS<'lr> {
         in_heap: Heap<'lr>,
         /// Formal arguments of the function. These are always owned references so we
         /// represent them directly as locations in the input heap.
-        args: Vec<OwnRef>,
+        params: Vec<OwnRef>,
         /// The output heap. This is right now only used to add a refinement for the returned
         /// reference but it should be extended to capture the state of the output heap.
         out_heap: Heap<'lr>,
@@ -167,13 +178,9 @@ pub enum TyS<'lr> {
     /// An owned reference
     OwnRef(Location),
     /// A refinement type { bind: ty | pred }.
-    Refine {
-        bind: Var,
-        ty: BasicType,
-        pred: Pred<'lr>,
-    },
+    Refine { ty: BasicType, pred: Pred<'lr> },
     /// A dependent tuple.
-    Tuple(Vec<(Var, &'lr TyS<'lr>)>),
+    Tuple(Vec<(Field, &'lr TyS<'lr>)>),
     /// Unitialized
     Uninit(u32),
 }
@@ -193,8 +200,15 @@ pub enum BasicType {
     Int,
 }
 
-#[derive(Debug, Copy, Clone, Eq, PartialEq, Hash)]
-pub struct Var(pub Symbol);
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
+pub struct Field(pub Symbol);
+
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
+pub enum Var {
+    Nu,
+    Location(Location),
+    Field(Field),
+}
 
 pub type Pred<'lr> = &'lr PredS<'lr>;
 
@@ -205,7 +219,7 @@ pub struct Cont<'a, 'lr> {
 }
 
 /// A refinement type predicate
-#[derive(Debug, Eq, PartialEq, Hash)]
+#[derive(Eq, PartialEq, Hash)]
 pub enum PredS<'lr> {
     Constant(Constant),
     Place { var: Var, projection: Vec<u32> },
@@ -217,8 +231,9 @@ impl<'lr> TyS<'lr> {
         matches!(self, TyS::Refine { ty: BasicType::Int, .. })
     }
 
-    pub fn project(&self, proj: &[u32]) -> Ty<'lr> {
+    pub fn project(&'lr self, proj: &[u32]) -> Ty<'lr> {
         match (self, proj) {
+            (_, []) => self,
             (TyS::Tuple(fields), [n, ..]) => fields[*n as usize].1.project(&proj[1..]),
             _ => bug!("Wrong projection: `{:?}.{:?}`", self, proj),
         }
@@ -240,23 +255,25 @@ impl<'lr> TyS<'lr> {
     }
 }
 
-impl Var {
+impl Field {
     pub fn intern(string: &str) -> Self {
-        Var(Symbol::intern(string))
+        Self(Symbol::intern(string))
     }
 
-    pub fn nu() -> Self {
-        Self::intern("_v")
-    }
-
-    pub fn field(n: u32) -> Self {
-        Self::intern(&format!("_{}", n))
+    pub fn nth(n: u32) -> Self {
+        Self::intern(&format!("{}", n))
     }
 }
 
 impl From<Location> for Var {
-    fn from(l: Location) -> Self {
-        Var(l.0)
+    fn from(v: Location) -> Self {
+        Var::Location(v)
+    }
+}
+
+impl From<Field> for Var {
+    fn from(v: Field) -> Self {
+        Var::Field(v)
     }
 }
 
@@ -265,6 +282,97 @@ impl Constant {
         match self {
             Constant::Bool(_) => BasicType::Bool,
             Constant::Int(_) => BasicType::Int,
+        }
+    }
+}
+
+impl<'a> Into<TyS<'a>> for OwnRef {
+    fn into(self) -> TyS<'a> {
+        TyS::OwnRef(self.0)
+    }
+}
+
+// -------------------------------------------------------------------------------------------------
+// DEBUG
+// -------------------------------------------------------------------------------------------------
+
+impl Debug for Local {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Debug::fmt(&self.0, f)
+    }
+}
+
+impl Debug for Location {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        Debug::fmt(&self.0, f)
+    }
+}
+
+impl Debug for Constant {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Constant::Bool(b) => write!(f, "{}", b),
+            Constant::Int(i) => write!(f, "{}", i),
+        }
+    }
+}
+
+impl Debug for BinOp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            BinOp::Add => write!(f, "+"),
+            BinOp::Sub => write!(f, "-"),
+            BinOp::Lt => write!(f, "<"),
+            BinOp::Le => write!(f, "<="),
+            BinOp::Eq => write!(f, "="),
+            BinOp::Ge => write!(f, ">="),
+            BinOp::Gt => write!(f, ">"),
+        }
+    }
+}
+
+impl Debug for PredS<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PredS::Constant(c) => Debug::fmt(&c, f)?,
+            PredS::Place { var, projection } => {
+                write!(f, "{:?}", var)?;
+                for p in projection {
+                    write!(f, ".{}", p)?
+                }
+            }
+            PredS::BinaryOp(op, lhs, rhs) => {
+                write!(f, "({:?} {:?} {:?})", lhs, op, rhs)?;
+            }
+        }
+        Ok(())
+    }
+}
+
+impl Debug for TyS<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            TyS::Fn { .. } => write!(f, "function"),
+            TyS::OwnRef(l) => write!(f, "OwnRef({:?})", l),
+            TyS::Refine { ty, pred } => write!(f, "{{ {:?} | {:?} }}", ty, pred),
+            TyS::Tuple(fields) => write!(f, "{:?}", fields),
+            TyS::Uninit(size) => write!(f, "Uninit({})", size),
+        }
+    }
+}
+
+impl Debug for Field {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "@{}", self.0)
+    }
+}
+
+impl Debug for Var {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            Var::Nu => write!(f, "_v"),
+            Var::Location(s) => write!(f, "{}", s.0),
+            Var::Field(s) => write!(f, "{:?}", s),
         }
     }
 }
