@@ -124,6 +124,10 @@ impl<'lr> LiquidRustCtxt<'lr> {
         self.mk_pred(PredS::BinaryOp(op, lhs, rhs))
     }
 
+    pub fn mk_unop(&'lr self, op: UnOp, operand: Pred<'lr>) -> Pred<'lr> {
+        self.mk_pred(PredS::UnaryOp(op, operand))
+    }
+
     pub fn mk_const(&'lr self, c: Constant) -> Pred<'lr> {
         self.mk_pred(PredS::Constant(c))
     }

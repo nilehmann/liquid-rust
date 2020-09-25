@@ -94,6 +94,7 @@ pub enum Rvalue {
     Use(Operand),
     BinaryOp(BinOp, Operand, Operand),
     CheckedBinaryOp(BinOp, Operand, Operand),
+    UnaryOp(UnOp, Operand),
 }
 
 /// A path to a value
@@ -137,6 +138,11 @@ pub enum BinOp {
     Eq,
     Ge,
     Gt,
+}
+
+#[derive(Copy, Clone, Eq, PartialEq, Hash)]
+pub enum UnOp {
+    Not,
 }
 
 /// The heap is a mapping between location and types.
@@ -224,6 +230,7 @@ pub enum PredS<'lr> {
     Constant(Constant),
     Place { var: Var, projection: Vec<u32> },
     BinaryOp(BinOp, &'lr PredS<'lr>, &'lr PredS<'lr>),
+    UnaryOp(UnOp, &'lr PredS<'lr>),
 }
 
 impl<'lr> TyS<'lr> {
@@ -344,6 +351,9 @@ impl Debug for PredS<'_> {
             PredS::BinaryOp(op, lhs, rhs) => {
                 write!(f, "({:?} {:?} {:?})", lhs, op, rhs)?;
             }
+            PredS::UnaryOp(op, operand) => {
+                write!(f, "{:?}({:?})", op, operand)?;
+            }
         }
         Ok(())
     }
@@ -373,6 +383,14 @@ impl Debug for Var {
             Var::Nu => write!(f, "_v"),
             Var::Location(s) => write!(f, "{}", s.0),
             Var::Field(s) => write!(f, "{:?}", s),
+        }
+    }
+}
+
+impl Debug for UnOp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            UnOp::Not => write!(f, "¬"),
         }
     }
 }

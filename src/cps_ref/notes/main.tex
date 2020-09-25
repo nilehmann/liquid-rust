@@ -303,10 +303,11 @@
   \extract{\cenv,\ell:\tau} &=& \extract{\cenv} \wedge \extract{\tau}_{\ell} \\
 \end{metafun}
 
-\begin{metafun}{\extract{\tau}_p = r}
-  \extract{\r{y: \beta | r}}_p      &=& r[p/y]                           \\
-  \extract{\Pi(\bar{x_i:\tau_i})}_p &=& \bigwedge_i \extract{\tau}_{p.i} \\
-  \extract{\tau}_p                  &=& \<true>                          \\
+\begin{metafun}{\extract{\tau}_{\ell.q} = r}
+  \extract{\r{y: \beta | r}}_{\ell.q}      &=& r[\ell.q/y]                                       \\
+  \extract{\Pi(\bar{x_i:\tau_i})}_{\ell.q} &=& \theta (\bigwedge_i \extract{\tau_i}_{\ell.q.i}) \\
+  \where{\theta = [\bar{\ell.q.i}/\bar{x_i}]}
+  \extract{\tau}_{\ell.q}                  &=& \<true>                                           \\
 \end{metafun}
 
 \newpage

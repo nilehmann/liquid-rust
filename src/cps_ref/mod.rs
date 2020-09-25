@@ -1,11 +1,12 @@
 pub mod ast;
 pub mod context;
 pub mod parser;
+pub mod smt;
 pub mod typeck;
 
 #[cfg(test)]
 mod tests {
-    use super::{ast::FnDef, parser::FnParser};
+    use super::{ast::FnDef, parser::FnParser, smt::ConstraintChecker, typeck::Constraint};
     use super::{
         context::{Arena, LiquidRustCtxt},
         typeck::TypeCk,
@@ -26,49 +27,53 @@ mod tests {
         }
 
         fn parse(&self, string: &str) -> Option<FnDef<'lr>> {
-            FnParser::new().parse(self.cx, string).ok()
+            dbg!(FnParser::new().parse(self.cx, string)).ok()
         }
 
         fn check_parse(&self, string: &str) {
             assert!(self.parse(string).is_some());
         }
 
-        fn check(&self, string: &str) {
-            let _ = TypeCk::check(self.cx, &self.parse(string).unwrap());
+        fn check(&self, string: &str) -> Constraint<'lr> {
+            TypeCk::cgen(self.cx, &self.parse(string).unwrap())
         }
     }
 
     #[test]
     fn abs() {
         Session::run(|sess| {
-            sess.check(
+            let c = sess.check(
                 r####"
 fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
   let b = new(1);
-  b := *n < 0;
-  if *n then
+  b := *n <= 0;
+  if *b then
     n := 0 - *n;
     jump k(n)
   else
     jump k(n)
 "####,
             );
+            println!("{:#?}", c);
+            let mut checker = ConstraintChecker::new();
+            let a = checker.check(&c);
+            println!("{:?}", a);
         });
     }
 
     #[test]
     fn sum() {
         Session::run(|sess| {
-            sess.check(
+            let c = sess.check(
                 r####"
     fn sum(n0: {int | _v >= 0}; n: own(n0)) ret k(r: {int | _v >= n0}; own(r)) =
-      letcont loop( n1: {int | _v >= 0}, i1: {int | _v >= 0}, r1: {int | _v >= i1}
+      letcont loop( n1: {int | _v == n0}, i1: {int | _v >= 0}, r1: {int | _v >= i1}
                   ; i: own(i1), r: own(r1), n: own(n1);) =
         let t0 = new(1);
         t0 := *i <= *n;
         if *t0 then
-          r := *r + *i;
           i := *i + 1;
+          r := *r + *i;
           jump loop()
         else
           jump k(r)
@@ -80,6 +85,9 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump loop()
     "####,
             );
+            println!("{:#?}", c);
+            let a = ConstraintChecker::new().check(&c);
+            println!("{:?}", a);
         })
     }
 
