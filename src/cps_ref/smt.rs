@@ -32,17 +32,13 @@ impl ConstraintChecker {
                     self.smt.pop(1)?;
                 }
             }
-            Constraint::Binding {
-                bind,
-                typ,
-                consequent,
-            } => {
+            Constraint::Binding { bind, typ, body } => {
                 self.embed(*bind, typ)?;
-                self.check(consequent)?;
+                self.check(body)?;
             }
-            Constraint::Guard(antecedent, consequent) => {
-                self.smt.assert_with(antecedent, None)?;
-                self.check(consequent)?;
+            Constraint::Guard(p, c) => {
+                self.smt.assert_with(p, None)?;
+                self.check(c)?;
             }
         }
         Ok(())

@@ -210,7 +210,7 @@ impl<'lr> TyCtxt<'lr> {
                 Constraint::Binding {
                     bind: fresh,
                     typ: typ1,
-                    consequent: box Constraint::Pred(subst.apply(self.cx, pred2)),
+                    body: box Constraint::Pred(subst.apply(self.cx, pred2)),
                 }
             }
             (TyS::Tuple(fields1), TyS::Tuple(fields2)) => {
@@ -224,7 +224,7 @@ impl<'lr> TyCtxt<'lr> {
                         c = Constraint::Binding {
                             bind: (*x1).into(),
                             typ: t1,
-                            consequent: box c,
+                            body: box c,
                         };
                         c = Constraint::Conj(vec![
                             self.subtype(locations, t1, subst.apply(self.cx, t2)),
@@ -470,26 +470,25 @@ pub enum Constraint<'lr> {
     Binding {
         bind: Var,
         typ: Ty<'lr>,
-        consequent: Box<Constraint<'lr>>,
+        body: Box<Constraint<'lr>>,
     },
     Guard(Pred<'lr>, Box<Constraint<'lr>>),
 }
 
 impl<'lr> Constraint<'lr> {
-    fn from_bindings<'a, I>(bindings: I, consequent: Constraint<'lr>) -> Constraint<'lr>
+    fn from_bindings<'a, I>(bindings: I, mut body: Constraint<'lr>) -> Constraint<'lr>
     where
         I: DoubleEndedIterator<Item = &'a (Location, Ty<'lr>)>,
         'lr: 'a,
     {
-        let mut c = consequent;
         for (bind, typ) in bindings.rev() {
-            c = Constraint::Binding {
+            body = Constraint::Binding {
                 bind: (*bind).into(),
                 typ,
-                consequent: box c,
+                body: box body,
             }
         }
-        c
+        body
     }
 }
 
