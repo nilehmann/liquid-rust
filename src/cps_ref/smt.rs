@@ -32,7 +32,7 @@ impl ConstraintChecker {
                     self.smt.pop(1)?;
                 }
             }
-            Constraint::Forall {
+            Constraint::Binding {
                 bind,
                 typ,
                 consequent,

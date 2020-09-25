@@ -154,14 +154,7 @@ impl<'lr> TyCtxt<'lr> {
         }
         self.insert_local(fresh, out_ty);
 
-        let mut c2 = self.check_jump(cont, &[fresh]);
-        for (location, typ) in out_heap {
-            c2 = Constraint::Forall {
-                bind: (*location).into(),
-                typ,
-                consequent: box c2,
-            };
-        }
+        let c2 = Constraint::from_bindings(out_heap.iter(), self.check_jump(cont, &[fresh]));
         Constraint::Conj(vec![c1, c2])
     }
 
@@ -214,7 +207,7 @@ impl<'lr> TyCtxt<'lr> {
                 }
                 let fresh = self.fresh_location().into();
                 let subst = Subst::from(vec![(Var::Nu, fresh)]);
-                Constraint::Forall {
+                Constraint::Binding {
                     bind: fresh,
                     typ: typ1,
                     consequent: box Constraint::Pred(subst.apply(self.cx, pred2)),
@@ -228,7 +221,7 @@ impl<'lr> TyCtxt<'lr> {
                 if let Some(((_, t1), (_, t2))) = iter.next() {
                     let mut c = self.subtype(locations, t1, t2);
                     for ((x1, t1), (_, t2)) in iter {
-                        c = Constraint::Forall {
+                        c = Constraint::Binding {
                             bind: (*x1).into(),
                             typ: t1,
                             consequent: box c,
@@ -474,7 +467,7 @@ fn selfify<'lr>(cx: &'lr LiquidRustCtxt<'lr>, pred: Pred<'lr>, typ: Ty<'lr>) -> 
 pub enum Constraint<'lr> {
     Pred(Pred<'lr>),
     Conj(Vec<Constraint<'lr>>),
-    Forall {
+    Binding {
         bind: Var,
         typ: Ty<'lr>,
         consequent: Box<Constraint<'lr>>,
@@ -490,7 +483,7 @@ impl<'lr> Constraint<'lr> {
     {
         let mut c = consequent;
         for (bind, typ) in bindings.rev() {
-            c = Constraint::Forall {
+            c = Constraint::Binding {
                 bind: (*bind).into(),
                 typ,
                 consequent: box c,
