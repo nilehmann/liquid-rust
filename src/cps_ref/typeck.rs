@@ -2,12 +2,12 @@ use std::{collections::HashMap, fmt::Debug};
 
 use super::{ast::*, context::LiquidRustCtxt};
 
-type LocalsCtxt = HashMap<Local, OwnRef>;
-type LocationsCtxt<'lr> = HashMap<Location, Ty<'lr>>;
+type LocalsMap = HashMap<Local, OwnRef>;
+type LocationsMap<'lr> = HashMap<Location, Ty<'lr>>;
 
 struct TyCtxt<'lr> {
-    frames: Vec<CtxtFrame<'lr>>,
     cx: &'lr LiquidRustCtxt<'lr>,
+    frames: Vec<CtxtFrame<'lr>>,
     curr_location: u32,
 }
 
@@ -25,15 +25,15 @@ impl Debug for TyCtxt<'_> {
 
 #[derive(Default)]
 struct CtxtFrame<'lr> {
-    locations: LocationsCtxt<'lr>,
-    locals: LocalsCtxt,
+    locations: LocationsMap<'lr>,
+    locals: LocalsMap,
 }
 
 impl<'lr> TyCtxt<'lr> {
     pub fn new(
         cx: &'lr LiquidRustCtxt<'lr>,
-        locations: LocationsCtxt<'lr>,
-        locals: LocalsCtxt,
+        locations: LocationsMap<'lr>,
+        locals: LocalsMap,
     ) -> Self {
         let frame = CtxtFrame { locations, locals };
         Self {
@@ -166,8 +166,8 @@ impl<'lr> TyCtxt<'lr> {
     }
 
     pub fn check_jump(&mut self, cont: &Cont<'_, 'lr>, args: &[Local]) -> Constraint<'lr> {
-        let locations = cont.locations_ctxt();
-        let locals = cont.locals_ctxt(args).unwrap();
+        let locations = cont.locations_map();
+        let locals = cont.locals_map(args).unwrap();
         let subst = self.infer_subst_ctxt(&locations, &locals);
         self.env_incl(
             &subst.apply(self.cx, locations),
@@ -175,7 +175,7 @@ impl<'lr> TyCtxt<'lr> {
         )
     }
 
-    fn env_incl(&mut self, locations: &LocationsCtxt<'lr>, locals: &LocalsCtxt) -> Constraint<'lr> {
+    fn env_incl(&mut self, locations: &LocationsMap<'lr>, locals: &LocalsMap) -> Constraint<'lr> {
         let mut cs = vec![];
         for (_local, OwnRef(location)) in locals {
             cs.push(self.subtype(
@@ -189,7 +189,7 @@ impl<'lr> TyCtxt<'lr> {
 
     fn subtype(
         &mut self,
-        locations: &LocationsCtxt<'lr>,
+        locations: &LocationsMap<'lr>,
         typ1: Ty<'lr>,
         typ2: Ty<'lr>,
     ) -> Constraint<'lr> {
@@ -248,7 +248,7 @@ impl<'lr> TyCtxt<'lr> {
         }
     }
 
-    fn infer_subst_ctxt(&self, locations: &LocationsCtxt, locals: &LocalsCtxt) -> Subst {
+    fn infer_subst_ctxt(&self, locations: &LocationsMap, locals: &LocalsMap) -> Subst {
         let mut h = Subst::new();
         for (local, OwnRef(location2)) in locals {
             let OwnRef(location1) = self.lookup_local(*local);
@@ -261,7 +261,7 @@ impl<'lr> TyCtxt<'lr> {
         h
     }
 
-    fn infer_subst_typ(&self, locations: &LocationsCtxt, typ1: Ty, typ2: Ty) -> Subst {
+    fn infer_subst_typ(&self, locations: &LocationsMap, typ1: Ty, typ2: Ty) -> Subst {
         match (typ1, typ2) {
             (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
                 let mut subst =
@@ -277,7 +277,6 @@ impl<'lr> TyCtxt<'lr> {
 pub struct TypeCk<'a, 'b, 'lr> {
     tcx: TyCtxt<'lr>,
     kenv: &'a mut HashMap<Symbol, Cont<'b, 'lr>>,
-    cont_constraints: Vec<Constraint<'lr>>,
     cx: &'lr LiquidRustCtxt<'lr>,
 }
 
@@ -296,20 +295,9 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         let mut checker = TypeCk {
             tcx: TyCtxt::from_fn_def(cx, fn_def),
             kenv: &mut kenv,
-            cont_constraints: vec![],
             cx,
         };
-        let c = checker.wt_fn_body(&fn_def.body);
-        checker.cont_constraints.push(c);
-        let mut c = Constraint::Conj(checker.cont_constraints);
-        for (location, typ) in fn_def.heap.iter().rev() {
-            c = Constraint::Forall {
-                bind: (*location).into(),
-                typ,
-                consequent: box c,
-            }
-        }
-        c
+        Constraint::from_bindings(fn_def.heap.iter(), checker.wt_fn_body(&fn_def.body))
     }
 
     fn wt_operand(&mut self, operand: &Operand) -> (Pred<'lr>, Ty<'lr>) {
@@ -409,7 +397,7 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                 };
                 let tcx = TyCtxt::new(
                     self.cx,
-                    cont.locations_ctxt(),
+                    cont.locations_map(),
                     env.iter().copied().chain(params.iter().copied()).collect(),
                 );
                 self.kenv.insert(*name, cont);
@@ -417,26 +405,16 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                     tcx,
                     kenv: self.kenv,
                     cx: self.cx,
-                    cont_constraints: vec![],
                 };
-                let mut c = checker.wt_fn_body(body);
-                for (local, typ) in heap.iter().rev() {
-                    c = Constraint::Forall {
-                        bind: (*local).into(),
-                        typ,
-                        consequent: box c,
-                    };
-                }
-                self.cont_constraints.push(c);
-                self.cont_constraints.extend(checker.cont_constraints);
-                self.wt_fn_body(rest)
+                let c1 = checker.wt_fn_body(body);
+                let c2 = self.wt_fn_body(rest);
+                Constraint::from_bindings(heap.iter(), Constraint::Conj(vec![c1, c2]))
             }
             FnBody::Ite {
                 discr,
                 then_branch,
                 else_branch,
             } => {
-                // TODO: use the discriminant
                 let (p, typ) = self.tcx.lookup(discr);
                 match typ {
                     TyS::Refine {
@@ -448,8 +426,8 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                         self.tcx.pop_frame();
                         let c2 = self.wt_fn_body(else_branch);
                         Constraint::Conj(vec![
-                            Constraint::Implies(p, box c1),
-                            Constraint::Implies(self.cx.mk_unop(UnOp::Not, p), box c2),
+                            Constraint::Guard(p, box c1),
+                            Constraint::Guard(self.cx.mk_unop(UnOp::Not, p), box c2),
                         ])
                     }
                     _ => todo!("not a boolean"),
@@ -476,7 +454,7 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
             FnBody::Seq(statement, rest) => {
                 let bindings = self.wt_statement(statement);
                 let c = self.wt_fn_body(rest);
-                Constraint::from_bindings(bindings, c)
+                Constraint::from_bindings(bindings.iter(), c)
             }
             FnBody::Abort => Constraint::Pred(self.cx.preds.tt),
         }
@@ -501,18 +479,19 @@ pub enum Constraint<'lr> {
         typ: Ty<'lr>,
         consequent: Box<Constraint<'lr>>,
     },
-    Implies(Pred<'lr>, Box<Constraint<'lr>>),
+    Guard(Pred<'lr>, Box<Constraint<'lr>>),
 }
 
 impl<'lr> Constraint<'lr> {
-    fn from_bindings(
-        bindings: Vec<(Location, Ty<'lr>)>,
-        consequent: Constraint<'lr>,
-    ) -> Constraint<'lr> {
+    fn from_bindings<'a, I>(bindings: I, consequent: Constraint<'lr>) -> Constraint<'lr>
+    where
+        I: DoubleEndedIterator<Item = &'a (Location, Ty<'lr>)>,
+        'lr: 'a,
+    {
         let mut c = consequent;
-        for (bind, typ) in bindings {
+        for (bind, typ) in bindings.rev() {
             c = Constraint::Forall {
-                bind: bind.into(),
+                bind: (*bind).into(),
                 typ,
                 consequent: box c,
             }
@@ -531,8 +510,8 @@ impl BinOp {
 }
 
 impl<'lr> Cont<'_, 'lr> {
-    fn locals_ctxt(&self, args: &[Local]) -> Option<LocalsCtxt> {
-        let mut ctxt: LocalsCtxt = self.env.iter().copied().collect();
+    fn locals_map(&self, args: &[Local]) -> Option<LocalsMap> {
+        let mut ctxt: LocalsMap = self.env.iter().copied().collect();
         for (local, ownref) in args.iter().zip(&self.params) {
             if ctxt.contains_key(local) {
                 return None;
@@ -541,10 +520,8 @@ impl<'lr> Cont<'_, 'lr> {
         }
         Some(ctxt)
     }
-}
 
-impl<'lr> Cont<'_, 'lr> {
-    fn locations_ctxt(&self) -> LocationsCtxt<'lr> {
+    fn locations_map(&self) -> LocationsMap<'lr> {
         self.heap.iter().copied().collect()
     }
 }

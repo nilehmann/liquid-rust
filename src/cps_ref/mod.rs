@@ -27,7 +27,7 @@ mod tests {
         }
 
         fn parse(&self, string: &str) -> Option<FnDef<'lr>> {
-            dbg!(FnParser::new().parse(self.cx, string)).ok()
+            FnParser::new().parse(self.cx, string).ok()
         }
 
         fn check_parse(&self, string: &str) {

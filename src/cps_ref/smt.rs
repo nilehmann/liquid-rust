@@ -40,7 +40,7 @@ impl ConstraintChecker {
                 self.embed(*bind, typ)?;
                 self.check(consequent)?;
             }
-            Constraint::Implies(antecedent, consequent) => {
+            Constraint::Guard(antecedent, consequent) => {
                 self.smt.assert_with(antecedent, None)?;
                 self.check(consequent)?;
             }
