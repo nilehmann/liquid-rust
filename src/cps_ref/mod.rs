@@ -1,12 +1,17 @@
 pub mod ast;
+pub mod constraint;
 pub mod context;
 pub mod parser;
 pub mod smt;
+pub mod subst;
 pub mod typeck;
 
 #[cfg(test)]
 mod tests {
-    use super::{ast::FnDef, parser::FnParser, smt::ConstraintChecker, typeck::Constraint};
+    use super::{
+        ast::FnDef, constraint::Constraint, constraint::ConstraintP, parser::FnParser,
+        smt::ConstraintChecker,
+    };
     use super::{
         context::{Arena, LiquidRustCtxt},
         typeck::TypeCk,
@@ -54,10 +59,10 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
     jump k(n)
 "####,
             );
-            println!("{:#?}", c);
-            let mut checker = ConstraintChecker::new();
-            let a = checker.check(&c);
-            println!("{:?}", a);
+            // println!("{:#?}", c);
+            // let mut checker = ConstraintChecker::new();
+            // let a = checker.check(&c);
+            println!("{:#?}", ConstraintP::from(c));
         });
     }
 
@@ -86,8 +91,6 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
     "####,
             );
             println!("{:#?}", c);
-            let a = ConstraintChecker::new().check(&c);
-            println!("{:?}", a);
         })
     }
 
