@@ -1,82 +1,21 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt::Debug};
 
 use super::{ast::*, subst::ApplySubst, subst::DeferredSubst, subst::Subst};
-#[derive(Debug)]
-pub enum Constraint<'lr> {
-    Subtype(
-        BasicType,
-        DeferredSubst<Pred<'lr>>,
-        DeferredSubst<Pred<'lr>>,
-    ),
-    Conj(Vec<Constraint<'lr>>),
-    Binding {
-        bind: Var,
-        typ: DeferredSubst<Ty<'lr>>,
-        body: Box<Constraint<'lr>>,
-    },
-    Guard(Pred<'lr>, Box<Constraint<'lr>>),
-    True,
-}
-
-impl<'lr> Constraint<'lr> {
-    pub fn from_bindings<'a, I>(bindings: I, mut body: Constraint<'lr>) -> Constraint<'lr>
-    where
-        I: DoubleEndedIterator<Item = &'a (Location, Ty<'lr>)>,
-        'lr: 'a,
-    {
-        for (bind, typ) in bindings.rev() {
-            body = Constraint::Binding {
-                bind: (*bind).into(),
-                typ: DeferredSubst::empty(*typ),
-                body: box body,
-            }
-        }
-        body
-    }
-}
 
 #[derive(Debug)]
-pub enum ConstraintP {
+pub enum Constraint {
     Pred(PredC),
-    Conj(Vec<ConstraintP>),
+    Conj(Vec<Constraint>),
     Forall {
         bind: Symbol,
         ty: BasicType,
         hyp: PredC,
-        body: Box<ConstraintP>,
+        body: Box<Constraint>,
     },
-    Guard(PredC, Box<ConstraintP>),
+    Guard(PredC, Box<Constraint>),
     True,
 }
 
-impl<'a> From<Constraint<'a>> for ConstraintP {
-    fn from(c: Constraint<'a>) -> Self {
-        match c {
-            Constraint::Subtype(ty, lhs, rhs) => ConstraintP::Forall {
-                bind: Symbol::intern("_v"),
-                ty,
-                hyp: lhs.apply(),
-                body: box ConstraintP::Pred(rhs.apply()),
-            },
-            Constraint::Conj(cs) => ConstraintP::Conj(cs.into_iter().map(|c| c.into()).collect()),
-            Constraint::Binding { bind, typ, body } => {
-                Embedder::embed(bind, typ).into_iter().rev().fold(
-                    ConstraintP::from(*body),
-                    |body, (bind, ty, hyp)| ConstraintP::Forall {
-                        bind,
-                        ty,
-                        hyp,
-                        body: box body,
-                    },
-                )
-            }
-            Constraint::Guard(pred, body) => ConstraintP::Guard(pred.into(), box (*body).into()),
-            Constraint::True => ConstraintP::True,
-        }
-    }
-}
-
-#[derive(Debug)]
 pub enum PredC {
     Var(Symbol),
     Constant(Constant),
@@ -84,11 +23,60 @@ pub enum PredC {
     UnaryOp(UnOp, Box<PredC>),
 }
 
+impl Constraint {
+    pub fn from_bindings<'a, I, V, T>(bindings: I, mut body: Constraint) -> Self
+    where
+        I: DoubleEndedIterator<Item = (V, T)>,
+        V: Into<Var>,
+        T: Into<DeferredSubst<Ty<'a>>>,
+    {
+        for (x, typ) in bindings.rev() {
+            for (y, ty, hyp) in Embedder::embed(x.into(), typ.into()).into_iter().rev() {
+                body = Constraint::Forall {
+                    bind: y,
+                    ty,
+                    hyp,
+                    body: box body,
+                }
+            }
+        }
+        body
+    }
+
+    pub fn from_binding<'a, V, T>(bind: V, typ: T, body: Constraint) -> Self
+    where
+        V: Into<Var>,
+        T: Into<DeferredSubst<Ty<'a>>>,
+    {
+        Self::from_bindings(vec![(bind, typ)].into_iter(), body)
+    }
+
+    pub fn from_subtype<'a>(
+        ty: BasicType,
+        pred1: DeferredSubst<Pred<'a>>,
+        pred2: DeferredSubst<Pred<'a>>,
+    ) -> Self {
+        Constraint::Forall {
+            bind: Symbol::intern(&format!("{:?}", Var::Nu)),
+            ty,
+            hyp: pred1.apply(),
+            body: box Constraint::Pred(pred2.apply()),
+        }
+    }
+
+    pub fn guard<'a>(pred: impl Into<DeferredSubst<Pred<'a>>>, body: Constraint) -> Self {
+        let p: DeferredSubst<Pred> = pred.into();
+        Constraint::Guard(p.apply(), box body)
+    }
+}
+
 impl<'a> ApplySubst<PredC> for Pred<'a> {
     fn apply(&self, subst: &Subst) -> PredC {
         match self {
             PredS::Constant(c) => PredC::Constant(*c),
-            PredS::Place { var, projection } => PredC::Var(place_to_symbol(*var, projection)),
+            PredS::Place { var, projection } => {
+                PredC::Var(place_to_symbol(subst.get(*var).unwrap_or(*var), projection))
+            }
             PredS::BinaryOp(op, lhs, rhs) => {
                 PredC::BinaryOp(*op, box lhs.apply(subst), box rhs.apply(subst))
             }
@@ -123,12 +111,12 @@ impl<'a> Embedder<'a> {
     }
 
     fn run(mut self) -> Vec<(Symbol, BasicType, PredC)> {
-        self.collect_field_map(&vec![]);
-        self.embed_(&mut vec![])
+        self.collect_field_map(self.typ, &vec![]);
+        self.embed_(self.typ, &mut vec![])
     }
 
-    fn embed_(&self, projection: &mut Vec<u32>) -> Vec<(Symbol, BasicType, PredC)> {
-        match self.typ {
+    fn embed_(&self, typ: Ty<'a>, projection: &mut Vec<u32>) -> Vec<(Symbol, BasicType, PredC)> {
+        match typ {
             TyS::Refine { pred, ty } => vec![(
                 place_to_symbol(self.var, projection.iter()),
                 *ty,
@@ -138,7 +126,7 @@ impl<'a> Embedder<'a> {
                 let mut v = vec![];
                 for i in 0..fields.len() {
                     projection.push(i as u32);
-                    v.extend(self.embed_(projection));
+                    v.extend(self.embed_(fields[i].1, projection));
                     projection.pop();
                 }
                 v
@@ -147,13 +135,13 @@ impl<'a> Embedder<'a> {
         }
     }
 
-    fn collect_field_map(&mut self, projection: &Vec<u32>) {
-        match self.typ {
+    fn collect_field_map(&mut self, typ: Ty<'a>, projection: &Vec<u32>) {
+        match typ {
             TyS::Tuple(fields) => {
-                for (i, (f, _)) in fields.iter().enumerate() {
+                for (i, (f, t)) in fields.iter().enumerate() {
                     let mut clone = projection.clone();
                     clone.push(i as u32);
-                    self.collect_field_map(&clone);
+                    self.collect_field_map(t, &clone);
                     self.field_map.insert(*f, clone);
                 }
             }
@@ -161,7 +149,7 @@ impl<'a> Embedder<'a> {
         }
     }
 
-    fn build_pred(&self, pred: Pred, projection: &[u32]) -> PredC {
+    fn build_pred(&self, pred: Pred, curr_proj: &[u32]) -> PredC {
         match pred {
             PredS::Constant(c) => PredC::Constant(*c),
             PredS::Place { var, projection } => {
@@ -171,7 +159,7 @@ impl<'a> Embedder<'a> {
                 }
 
                 let v = match x {
-                    Var::Nu => place_to_symbol(self.var, projection),
+                    Var::Nu => place_to_symbol(self.var, curr_proj.iter().chain(projection)),
                     Var::Location(l) => place_to_symbol(l.into(), projection),
                     Var::Field(f) => {
                         place_to_symbol(self.var, self.field_map[&f].iter().chain(projection))
@@ -181,10 +169,10 @@ impl<'a> Embedder<'a> {
             }
             PredS::BinaryOp(op, lhs, rhs) => PredC::BinaryOp(
                 *op,
-                box self.build_pred(lhs, projection),
-                box self.build_pred(rhs, projection),
+                box self.build_pred(lhs, curr_proj),
+                box self.build_pred(rhs, curr_proj),
             ),
-            PredS::UnaryOp(op, p) => PredC::UnaryOp(*op, box self.build_pred(p, projection)),
+            PredS::UnaryOp(op, p) => PredC::UnaryOp(*op, box self.build_pred(p, curr_proj)),
         }
     }
 }
@@ -198,4 +186,22 @@ where
         s.push_str(&format!(".{}", p));
     }
     Symbol::intern(&s)
+}
+
+impl Debug for PredC {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            PredC::Constant(c) => Debug::fmt(&c, f)?,
+            PredC::Var(s) => {
+                write!(f, "{}", &*s.as_str())?;
+            }
+            PredC::BinaryOp(op, lhs, rhs) => {
+                write!(f, "({:?} {:?} {:?})", lhs, op, rhs)?;
+            }
+            PredC::UnaryOp(op, operand) => {
+                write!(f, "{:?}({:?})", op, operand)?;
+            }
+        }
+        Ok(())
+    }
 }

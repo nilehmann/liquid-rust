@@ -101,7 +101,7 @@ impl<'lr> TyCtxt<'lr> {
         self.update(place, self.cx.mk_uninit(t.size()));
     }
 
-    pub fn update(&mut self, place: &Place, typ: Ty<'lr>) -> Location {
+    pub fn update(&mut self, place: &Place, typ: Ty<'lr>) -> (Location, Ty<'lr>) {
         let OwnRef(l) = self.lookup_local(place.local);
         let updated = self
             .lookup_location(l)
@@ -109,7 +109,7 @@ impl<'lr> TyCtxt<'lr> {
         let fresh = self.fresh_location();
         self.insert_location(fresh, updated);
         self.insert_local(place.local, OwnRef(fresh));
-        fresh
+        (fresh, updated)
     }
 
     pub fn alloc(&mut self, x: Local, layout: &TypeLayout) {
@@ -132,7 +132,7 @@ impl<'lr> TyCtxt<'lr> {
         out_ty: OwnRef,
         args: &[Local],
         cont: &Cont<'_, 'lr>,
-    ) -> Constraint<'lr> {
+    ) -> Constraint {
         // Check against function arguments
         let locations_f = in_heap.iter().copied().collect();
         let locals_f = args.iter().copied().zip(params.iter().copied()).collect();
@@ -149,23 +149,25 @@ impl<'lr> TyCtxt<'lr> {
         }
         self.insert_local(fresh, out_ty);
 
-        let c2 = Constraint::from_bindings(out_heap.iter(), self.check_jump(cont, &[fresh]));
+        let c2 =
+            Constraint::from_bindings(out_heap.iter().copied(), self.check_jump(cont, &[fresh]));
         Constraint::Conj(vec![c1, c2])
     }
 
-    pub fn check_jump(&mut self, cont: &Cont<'_, 'lr>, args: &[Local]) -> Constraint<'lr> {
+    pub fn check_jump(&mut self, cont: &Cont<'_, 'lr>, args: &[Local]) -> Constraint {
         let locations = cont.locations_map();
         let locals = cont.locals_map(args).unwrap();
         self.env_incl(locations, &locals)
     }
 
-    fn env_incl(&mut self, locations: LocationsMap<'lr>, locals: &LocalsMap) -> Constraint<'lr> {
+    fn env_incl(&mut self, locations: LocationsMap<'lr>, locals: &LocalsMap) -> Constraint {
         let mut cs = vec![];
         let subst = self.infer_subst_ctxt(&locations, locals);
         let locations = DeferredSubst::new(subst, locations);
         for (local, OwnRef(location2)) in locals {
             let OwnRef(location1) = self.lookup_local(*local);
-            let typ1 = self.lookup_location(location1);
+            let p = self.cx.mk_place(location1.into(), &[]);
+            let typ1 = selfify(self.cx, p, self.lookup_location(location1));
             let typ2 = locations.get(location2);
             cs.push(self.subtype(&locations, DeferredSubst::empty(typ1), typ2));
         }
@@ -177,14 +179,14 @@ impl<'lr> TyCtxt<'lr> {
         locations: &DeferredSubst<LocationsMap<'lr>>,
         typ1: DeferredSubst<Ty<'lr>>,
         typ2: DeferredSubst<Ty<'lr>>,
-    ) -> Constraint<'lr> {
+    ) -> Constraint {
         let (subst1, typ1) = typ1.split();
         let (subst2, typ2) = typ2.split();
         match (typ1, typ2) {
             (TyS::Fn { .. }, TyS::Fn { .. }) => todo!(),
             (TyS::OwnRef(location1), TyS::OwnRef(location2)) => {
-                let pred = self.cx.mk_place((*location1).into(), &[]);
-                let typ1 = selfify(self.cx, pred, self.lookup_location(*location1));
+                let p = self.cx.mk_place((*location1).into(), &[]);
+                let typ1 = selfify(self.cx, p, self.lookup_location(*location1));
                 let typ2 = locations.get(location2);
                 self.subtype(locations, DeferredSubst::empty(typ1), typ2)
             }
@@ -201,7 +203,7 @@ impl<'lr> TyCtxt<'lr> {
                 if ty1 != ty2 {
                     todo!("incompatible base types `{:?}` and `{:?}`", ty1, ty2);
                 }
-                Constraint::Subtype(
+                Constraint::from_subtype(
                     *ty1,
                     DeferredSubst::new(subst1, pred1),
                     DeferredSubst::new(subst2, pred2),
@@ -209,7 +211,7 @@ impl<'lr> TyCtxt<'lr> {
             }
             (TyS::Tuple(fields1), TyS::Tuple(fields2)) => {
                 let subst2 =
-                    subst2.extend2(fields1.iter().map(|f| f.0), fields2.iter().map(|f| f.0));
+                    subst2.extend2(fields2.iter().map(|f| f.0), fields1.iter().map(|f| f.0));
 
                 let mut iter = fields1.iter().zip(fields2).rev();
                 if let Some(((_, t1), (_, t2))) = iter.next() {
@@ -219,18 +221,17 @@ impl<'lr> TyCtxt<'lr> {
                         DeferredSubst::new(subst2.clone(), t2),
                     );
                     for ((x1, t1), (_, t2)) in iter {
-                        c = Constraint::Binding {
-                            bind: (*x1).into(),
-                            typ: DeferredSubst::new(subst1.clone(), t1),
-                            body: box c,
-                        };
                         c = Constraint::Conj(vec![
                             self.subtype(
                                 locations,
                                 DeferredSubst::new(subst1.clone(), t1),
                                 DeferredSubst::new(subst2.clone(), t2),
                             ),
-                            c,
+                            Constraint::from_binding(
+                                *x1,
+                                DeferredSubst::new(subst1.clone(), *t1),
+                                c,
+                            ),
                         ]);
                     }
                     c
@@ -255,6 +256,7 @@ impl<'lr> TyCtxt<'lr> {
         }
         Subst::new(m)
     }
+
     fn infer_subst_typ(&self, locations: &LocationsMap, typ1: Ty, typ2: Ty) -> HashMap<Var, Var> {
         match (typ1, typ2) {
             (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
@@ -275,7 +277,7 @@ pub struct TypeCk<'a, 'b, 'lr> {
 }
 
 impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
-    pub fn cgen(cx: &'lr LiquidRustCtxt<'lr>, fn_def: &FnDef<'lr>) -> Constraint<'lr> {
+    pub fn cgen(cx: &'lr LiquidRustCtxt<'lr>, fn_def: &FnDef<'lr>) -> Constraint {
         let mut kenv = HashMap::default();
         let env = vec![];
         kenv.insert(
@@ -291,7 +293,10 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
             kenv: &mut kenv,
             cx,
         };
-        Constraint::from_bindings(fn_def.heap.iter(), checker.wt_fn_body(&fn_def.body))
+        Constraint::from_bindings(
+            fn_def.heap.iter().copied(),
+            checker.wt_fn_body(&fn_def.body),
+        )
     }
 
     fn wt_operand(&mut self, operand: &Operand) -> (Pred<'lr>, Ty<'lr>) {
@@ -331,8 +336,8 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
     fn wt_rvalue(&mut self, val: &Rvalue) -> Ty<'lr> {
         match val {
             Rvalue::Use(operand) => {
-                let (pred, typ) = self.wt_operand(operand);
-                selfify(self.cx, pred, &typ)
+                let (p, typ) = self.wt_operand(operand);
+                selfify(self.cx, p, &typ)
             }
             Rvalue::BinaryOp(op, lhs, rhs) => self.wt_binop(*op, rhs, lhs),
             Rvalue::CheckedBinaryOp(op, lhs, rhs) => {
@@ -360,7 +365,6 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
     }
 
     fn wt_statement(&mut self, statement: &Statement) -> Vec<(Location, Ty<'lr>)> {
-        // FIXME return the bindings introduced by alloc and wt_rvalue
         match statement {
             Statement::Let(x, layout) => {
                 self.tcx.alloc(*x, layout);
@@ -372,13 +376,12 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                 if t1.size() != t2.size() {
                     todo!();
                 }
-                let location = self.tcx.update(place, t2);
-                vec![(location, t2)]
+                vec![self.tcx.update(place, t2)]
             }
         }
     }
 
-    fn wt_fn_body(&mut self, fn_body: &'b FnBody<'lr>) -> Constraint<'lr> {
+    fn wt_fn_body(&mut self, fn_body: &'b FnBody<'lr>) -> Constraint {
         match fn_body {
             FnBody::LetCont {
                 name,
@@ -404,9 +407,9 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                     kenv: self.kenv,
                     cx: self.cx,
                 };
-                let c1 = checker.wt_fn_body(body);
+                let c1 = Constraint::from_bindings(heap.iter().copied(), checker.wt_fn_body(body));
                 let c2 = self.wt_fn_body(rest);
-                Constraint::from_bindings(heap.iter(), Constraint::Conj(vec![c1, c2]))
+                Constraint::Conj(vec![c1, c2])
             }
             FnBody::Ite {
                 discr,
@@ -424,8 +427,8 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                         self.tcx.pop_frame();
                         let c2 = self.wt_fn_body(else_branch);
                         Constraint::Conj(vec![
-                            Constraint::Guard(p, box c1),
-                            Constraint::Guard(self.cx.mk_unop(UnOp::Not, p), box c2),
+                            Constraint::guard(p, c1),
+                            Constraint::guard(self.cx.mk_unop(UnOp::Not, p), c2),
                         ])
                     }
                     _ => todo!("not a boolean"),
@@ -452,7 +455,7 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
             FnBody::Seq(statement, rest) => {
                 let bindings = self.wt_statement(statement);
                 let c = self.wt_fn_body(rest);
-                Constraint::from_bindings(bindings.iter(), c)
+                Constraint::from_bindings(bindings.iter().copied(), c)
             }
             FnBody::Abort => Constraint::True,
         }
@@ -465,15 +468,6 @@ fn selfify<'lr>(cx: &'lr LiquidRustCtxt<'lr>, pred: Pred<'lr>, typ: Ty<'lr>) -> 
             cx.mk_refine(*ty, r)
         }
         _ => typ,
-    }
-}
-
-impl BinOp {
-    pub fn ty(&self) -> BasicType {
-        match self {
-            BinOp::Add | BinOp::Sub => BasicType::Int,
-            BinOp::Lt | BinOp::Le | BinOp::Eq | BinOp::Ge | BinOp::Gt => BasicType::Bool,
-        }
     }
 }
 

@@ -382,7 +382,7 @@ impl Debug for Var {
         match self {
             Var::Nu => write!(f, "_v"),
             Var::Location(s) => write!(f, "l${}", s.0),
-            Var::Field(s) => write!(f, "f${:?}", s.0),
+            Var::Field(s) => write!(f, "f${}", s.0),
         }
     }
 }

@@ -8,10 +8,7 @@ pub mod typeck;
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        ast::FnDef, constraint::Constraint, constraint::ConstraintP, parser::FnParser,
-        smt::ConstraintChecker,
-    };
+    use super::{ast::FnDef, constraint::Constraint, parser::FnParser, smt::ConstraintChecker};
     use super::{
         context::{Arena, LiquidRustCtxt},
         typeck::TypeCk,
@@ -35,11 +32,7 @@ mod tests {
             FnParser::new().parse(self.cx, string).ok()
         }
 
-        fn check_parse(&self, string: &str) {
-            assert!(self.parse(string).is_some());
-        }
-
-        fn check(&self, string: &str) -> Constraint<'lr> {
+        fn check(&self, string: &str) -> Constraint {
             TypeCk::cgen(self.cx, &self.parse(string).unwrap())
         }
     }
@@ -59,10 +52,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
     jump k(n)
 "####,
             );
-            // println!("{:#?}", c);
-            // let mut checker = ConstraintChecker::new();
-            // let a = checker.check(&c);
-            println!("{:#?}", ConstraintP::from(c));
+            assert!(ConstraintChecker::new().check(&c).is_ok());
         });
     }
 
@@ -90,14 +80,14 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump loop()
     "####,
             );
-            println!("{:#?}", c);
+            assert!(ConstraintChecker::new().check(&c).is_ok());
         })
     }
 
     #[test]
     fn count_zeros() {
         Session::run(|sess| {
-            sess.check(
+            let p = sess.parse(
                 r####"
     fn count_zeros(n0: {int | _v >= 0}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r))=
       letcont b0( n1: {int | _v >= 0}, i1: {int | _v >= 0}, c1: {int | _v >= 0}
@@ -128,13 +118,14 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump b0()
     "####,
             );
+            assert!(p.is_some());
         });
     }
 
     #[test]
     fn alloc_pair() {
         Session::run(|sess| {
-            sess.check(
+            let c = sess.check(
                 r####"
     fn alloc_pair(;) ret k(r: {int | true}; own(r))=
       let p = new((1, 1));
@@ -145,13 +136,14 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump k(r)
     "####,
             );
+            assert!(ConstraintChecker::new().check(&c).is_ok());
         });
     }
 
     #[test]
     fn length() {
         Session::run(|sess| {
-            sess.check(
+            let c = sess.check(
             r####"
     fn length(p0: (@x: {int | true}, @y: {int | _v >= @x}); p: own(p0)) ret k(r: {int | _v >= 0}; own(r))=
       let t = new(1);
@@ -159,6 +151,23 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump k(t)
     "####,
         );
+            assert!(ConstraintChecker::new().check(&c).is_ok());
+        });
+    }
+
+    #[test]
+    fn pair_subtyping() {
+        Session::run(|sess| {
+            let c = sess.check(
+                r####"
+    fn foo(;) ret k(r0: (@x: {int | true}, @y: {int | _v >= @x}); own(r0))=
+      let p = new((1, 1));
+      p.0 := 0;
+      p.1 := 1;
+      jump k(p)
+    "####,
+            );
+            assert!(ConstraintChecker::new().check(&c).is_ok());
         });
     }
 }

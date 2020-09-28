@@ -3,52 +3,19 @@ use std::{collections::HashMap, hash::Hash, rc::Rc};
 use super::ast::Var;
 
 #[derive(Debug, Clone)]
-pub struct Subst(Rc<SubstKind>);
-
-#[derive(Debug, Clone)]
-enum SubstKind {
-    Extend(HashMap<Var, Var>, Rc<SubstKind>),
-    Empty,
-}
-
-impl SubstKind {
-    fn iter<'a>(&'a self) -> SubstIter<'a> {
-        SubstIter(self)
-    }
-}
-
-struct SubstIter<'a>(&'a SubstKind);
-
-impl<'a> Iterator for SubstIter<'a> {
-    type Item = &'a HashMap<Var, Var>;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        match self.0 {
-            SubstKind::Extend(map, next) => {
-                self.0 = next;
-                Some(map)
-            }
-            SubstKind::Empty => None,
-        }
-    }
-}
+pub struct Subst(Rc<HashMap<Var, Var>>);
 
 impl Subst {
     pub fn new(m: HashMap<Var, Var>) -> Self {
-        Self::empty().extend(m)
+        Self(Rc::new(m))
     }
 
     pub fn empty() -> Self {
-        Subst(Rc::new(SubstKind::Empty))
+        Self(Rc::new(HashMap::new()))
     }
 
     pub fn get(&self, x: Var) -> Option<Var> {
-        for map in self.0.iter() {
-            if let Some(y) = map.get(&x) {
-                return Some(*y);
-            }
-        }
-        None
+        self.0.get(&x).copied()
     }
 
     fn extend<I, T>(&self, iter: I) -> Self
@@ -56,12 +23,18 @@ impl Subst {
         I: IntoIterator<Item = (T, T)>,
         T: Into<Var>,
     {
-        Self(Rc::new(SubstKind::Extend(
-            iter.into_iter()
-                .map(|(x, y)| (x.into(), y.into()))
-                .collect(),
-            self.0.clone(),
-        )))
+        let mut m: HashMap<Var, Var> = iter
+            .into_iter()
+            .map(|(x, y)| (x.into(), y.into()))
+            .collect();
+        for (x, y) in self.0.iter() {
+            if let Some(z) = m.get(&y).copied() {
+                m.insert(*x, z);
+            } else {
+                m.insert(*x, *y);
+            }
+        }
+        Self(Rc::new(m))
     }
 
     pub fn extend2<I1, I2, T>(&self, iter1: I1, iter2: I2) -> Self
@@ -108,6 +81,12 @@ impl<T> DeferredSubst<T> {
     {
         let (subst, x) = self.split();
         x.apply(&subst)
+    }
+}
+
+impl<T> From<T> for DeferredSubst<T> {
+    fn from(x: T) -> Self {
+        DeferredSubst::empty(x)
     }
 }
 
