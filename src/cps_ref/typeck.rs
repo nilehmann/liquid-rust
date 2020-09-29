@@ -6,6 +6,7 @@ use super::{
 
 type LocalsMap = HashMap<Local, OwnRef>;
 type LocationsMap<'lr> = HashMap<Location, Ty<'lr>>;
+type Bindings<'lr> = Vec<(Location, Ty<'lr>)>;
 
 struct TyCtxt<'lr> {
     cx: &'lr LiquidRustCtxt<'lr>,
@@ -290,27 +291,32 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         )
     }
 
-    fn wt_operand(&mut self, operand: &Operand) -> (Pred<'lr>, Ty<'lr>) {
+    fn wt_operand(&mut self, operand: &Operand) -> (Pred<'lr>, Ty<'lr>, Bindings<'lr>) {
         match operand {
             Operand::Deref(place) => {
+                let mut bindings = vec![];
                 let (pred, typ) = self.tcx.lookup(place);
                 if !typ.is_copy() {
-                    self.tcx.update(place, self.cx.mk_uninit(typ.size()));
+                    bindings.push(self.tcx.update(place, self.cx.mk_uninit(typ.size())));
                 }
-                (pred, typ)
+                (pred, typ, bindings)
             }
             Operand::Constant(c) => {
                 let pred = self
                     .cx
                     .mk_binop(BinOp::Eq, self.cx.preds.nu, self.cx.mk_const(*c));
-                (self.cx.mk_const(*c), self.cx.mk_refine(c.ty(), pred))
+                (
+                    self.cx.mk_const(*c),
+                    self.cx.mk_refine(c.ty(), pred),
+                    vec![],
+                )
             }
         }
     }
 
-    fn wt_binop(&mut self, op: BinOp, rhs: &Operand, lhs: &Operand) -> Ty<'lr> {
-        let (p1, t1) = self.wt_operand(lhs);
-        let (p2, t2) = self.wt_operand(rhs);
+    fn wt_binop(&mut self, op: BinOp, rhs: &Operand, lhs: &Operand) -> (Ty<'lr>, Bindings<'lr>) {
+        let (p1, t1, bindings1) = self.wt_operand(lhs);
+        let (p2, t2, bindings2) = self.wt_operand(rhs);
         if !t1.is_int() || !t2.is_int() {
             todo!("Cannot use operator `{:?}` with non integer types", op);
         }
@@ -321,24 +327,27 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         let pred = self
             .cx
             .mk_binop(BinOp::Eq, self.cx.preds.nu, self.cx.mk_binop(op, p1, p2));
-        self.cx.mk_refine(ty, pred)
+        bindings1.extend(bindings2);
+        (self.cx.mk_refine(ty, pred), bindings1)
     }
 
-    fn wt_rvalue(&mut self, val: &Rvalue) -> Ty<'lr> {
+    fn wt_rvalue(&mut self, val: &Rvalue) -> (Ty<'lr>, Bindings<'lr>) {
         match val {
             Rvalue::Use(operand) => {
-                let (p, typ) = self.wt_operand(operand);
-                selfify(self.cx, p, &typ)
+                let (p, typ, bindings) = self.wt_operand(operand);
+                (selfify(self.cx, p, &typ), bindings)
             }
             Rvalue::BinaryOp(op, lhs, rhs) => self.wt_binop(*op, rhs, lhs),
             Rvalue::CheckedBinaryOp(op, lhs, rhs) => {
-                let t1 = self.wt_binop(*op, lhs, rhs);
+                let (t1, bindings) = self.wt_binop(*op, lhs, rhs);
                 let t2 = self.cx.mk_refine(BasicType::Bool, self.cx.preds.tt);
-                self.cx
-                    .mk_tuple(&[(Field::nth(0), t1), (Field::nth(1), t2)])
+                let tuple = self
+                    .cx
+                    .mk_tuple(&[(Field::nth(0), t1), (Field::nth(1), t2)]);
+                (tuple, bindings)
             }
             Rvalue::UnaryOp(op, operand) => {
-                let (pred, typ) = self.wt_operand(operand);
+                let (pred, typ, bindings) = self.wt_operand(operand);
                 match (op, typ) {
                     (
                         UnOp::Not,
@@ -346,7 +355,7 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                             ty: BasicType::Bool,
                             ..
                         },
-                    ) => self
+                    ) => let t = self
                         .cx
                         .mk_refine(BasicType::Bool, self.cx.mk_unop(*op, pred)),
                     _ => todo!("not a boolean type"),
@@ -355,7 +364,7 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         }
     }
 
-    fn wt_statement(&mut self, statement: &Statement) -> Vec<(Location, Ty<'lr>)> {
+    fn wt_statement(&mut self, statement: &Statement) -> Bindings<'lr> {
         match statement {
             Statement::Let(x, layout) => {
                 self.tcx.alloc(*x, layout);
