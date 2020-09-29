@@ -47,7 +47,7 @@ impl Subst {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DeferredSubst<T>(Subst, T);
 
 impl<'a, K, V> DeferredSubst<HashMap<K, V>>

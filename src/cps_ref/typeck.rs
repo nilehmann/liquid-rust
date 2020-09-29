@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::Debug};
+use std::collections::HashMap;
 
 use super::{
     ast::*, constraint::Constraint, context::LiquidRustCtxt, subst::DeferredSubst, subst::Subst,
@@ -11,18 +11,6 @@ struct TyCtxt<'lr> {
     cx: &'lr LiquidRustCtxt<'lr>,
     frames: Vec<CtxtFrame<'lr>>,
     curr_location: u32,
-}
-
-impl Debug for TyCtxt<'_> {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        let mut locations: HashMap<&Location, _> = HashMap::new();
-        let mut locals: HashMap<&Local, _> = HashMap::new();
-        for frame in &self.frames {
-            locations.extend(frame.locations.iter());
-            locals.extend(frame.locals.iter());
-        }
-        write!(f, "{:?}; {:?}", locations, locals)
-    }
 }
 
 #[derive(Default)]
@@ -210,6 +198,9 @@ impl<'lr> TyCtxt<'lr> {
                 )
             }
             (TyS::Tuple(fields1), TyS::Tuple(fields2)) => {
+                if fields1.len() != fields2.len() {
+                    todo!("incompatible types {:?} {:?}", typ1, typ2);
+                }
                 let subst2 =
                     subst2.extend2(fields2.iter().map(|f| f.0), fields1.iter().map(|f| f.0));
 
@@ -454,8 +445,7 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
             FnBody::Jump { target, args } => self.tcx.check_jump(&self.kenv[target], args),
             FnBody::Seq(statement, rest) => {
                 let bindings = self.wt_statement(statement);
-                let c = self.wt_fn_body(rest);
-                Constraint::from_bindings(bindings.iter().copied(), c)
+                Constraint::from_bindings(bindings.iter().copied(), self.wt_fn_body(rest))
             }
             FnBody::Abort => Constraint::True,
         }
