@@ -279,8 +279,8 @@ impl From<Location> for Var {
 }
 
 impl From<Field> for Var {
-    fn from(v: Field) -> Self {
-        Var::Field(v)
+    fn from(f: Field) -> Self {
+        Var::Field(f)
     }
 }
 

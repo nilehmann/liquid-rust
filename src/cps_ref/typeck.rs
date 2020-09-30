@@ -57,32 +57,32 @@ impl<'lr> TyCtxt<'lr> {
         (pred, typ.project(&place.projection))
     }
 
-    fn lookup_local(&self, local: Local) -> OwnRef {
+    fn lookup_local(&self, x: Local) -> OwnRef {
         for frame in self.frames.iter().rev() {
-            if let Some(ownref) = frame.locals.get(&local) {
+            if let Some(ownref) = frame.locals.get(&x) {
                 return *ownref;
             }
         }
-        bug!("Cannot find local `{:?}`", local);
+        bug!("Cannot find local `{:?}`", x);
     }
 
-    fn lookup_location(&self, location: Location) -> Ty<'lr> {
+    fn lookup_location(&self, l: Location) -> Ty<'lr> {
         for frame in self.frames.iter().rev() {
-            if let Some(typ) = frame.locations.get(&location) {
+            if let Some(typ) = frame.locations.get(&l) {
                 return typ;
             }
         }
-        bug!("Cannot find location `{:?}`", location);
+        bug!("Cannot find location `{:?}`", l);
     }
 
-    fn insert_location(&mut self, location: Location, typ: Ty<'lr>) {
+    fn insert_location(&mut self, l: Location, typ: Ty<'lr>) {
         let frame = self.frames.last_mut().unwrap();
-        frame.locations.insert(location, typ);
+        frame.locations.insert(l, typ);
     }
 
-    fn insert_local(&mut self, local: Local, ownref: OwnRef) {
+    fn insert_local(&mut self, x: Local, ownref: OwnRef) {
         let frame = self.frames.last_mut().unwrap();
-        frame.locals.insert(local, ownref);
+        frame.locals.insert(x, ownref);
     }
 
     pub fn uninit(&mut self, place: &Place) {
@@ -92,19 +92,19 @@ impl<'lr> TyCtxt<'lr> {
 
     pub fn update(&mut self, place: &Place, typ: Ty<'lr>) -> (Location, Ty<'lr>) {
         let OwnRef(l) = self.lookup_local(place.local);
-        let updated = self
+        let updated_typ = self
             .lookup_location(l)
             .update_at(self.cx, &place.projection, typ);
-        let fresh = self.fresh_location();
-        self.insert_location(fresh, updated);
-        self.insert_local(place.local, OwnRef(fresh));
-        (fresh, updated)
+        let fresh_l = self.fresh_location();
+        self.insert_location(fresh_l, updated_typ);
+        self.insert_local(place.local, OwnRef(fresh_l));
+        (fresh_l, updated_typ)
     }
 
     pub fn alloc(&mut self, x: Local, layout: &TypeLayout) {
-        let fresh = self.fresh_location();
-        self.insert_location(fresh, self.cx.mk_ty_for_layout(layout));
-        self.insert_local(x, OwnRef(fresh));
+        let fresh_l = self.fresh_location();
+        self.insert_location(fresh_l, self.cx.mk_ty_for_layout(layout));
+        self.insert_local(x, OwnRef(fresh_l));
     }
 
     fn fresh_location(&mut self) -> Location {
@@ -121,46 +121,54 @@ impl<'lr> TyCtxt<'lr> {
         out_ty: OwnRef,
         args: &[Local],
         cont: &Cont<'_, 'lr>,
-    ) -> Constraint {
+    ) -> Result<Constraint, SubtypingError<'lr>> {
         // Check against function arguments
         let locations_f = in_heap.iter().copied().collect();
         let locals_f = args.iter().copied().zip(params.iter().copied()).collect();
-        let c1 = self.env_incl(locations_f, &locals_f);
+        let c1 = self.env_incl(locations_f, &locals_f)?;
 
         // Update context after function call
-        let fresh = Local(Symbol::intern("$")); // FIXME
+        let fresh_x = Local(Symbol::intern("$")); // FIXME
         for arg in args {
             self.uninit(&Place::from(*arg))
         }
         // FIXME: we are assuming all locations are fresh
-        for (location, typ) in out_heap {
-            self.insert_location(*location, typ);
+        for (l, typ) in out_heap {
+            self.insert_location(*l, typ);
         }
-        self.insert_local(fresh, out_ty);
+        self.insert_local(fresh_x, out_ty);
 
         let c2 =
-            Constraint::from_bindings(out_heap.iter().copied(), self.check_jump(cont, &[fresh]));
-        Constraint::Conj(vec![c1, c2])
+            Constraint::from_bindings(out_heap.iter().copied(), self.check_jump(cont, &[fresh_x])?);
+        Ok(Constraint::Conj(vec![c1, c2]))
     }
 
-    pub fn check_jump(&mut self, cont: &Cont<'_, 'lr>, args: &[Local]) -> Constraint {
+    pub fn check_jump(
+        &mut self,
+        cont: &Cont<'_, 'lr>,
+        args: &[Local],
+    ) -> Result<Constraint, SubtypingError<'lr>> {
         let locations = cont.locations_map();
         let locals = cont.locals_map(args).unwrap();
         self.env_incl(locations, &locals)
     }
 
-    fn env_incl(&mut self, locations: LocationsMap<'lr>, locals: &LocalsMap) -> Constraint {
-        let mut cs = vec![];
+    fn env_incl(
+        &mut self,
+        locations: LocationsMap<'lr>,
+        locals: &LocalsMap,
+    ) -> Result<Constraint, SubtypingError<'lr>> {
         let subst = self.infer_subst_ctxt(&locations, locals);
         let locations = DeferredSubst::new(subst, locations);
-        for (local, OwnRef(location2)) in locals {
-            let OwnRef(location1) = self.lookup_local(*local);
-            let p = self.cx.mk_place(location1.into(), &[]);
-            let typ1 = selfify(self.cx, p, self.lookup_location(location1));
-            let typ2 = locations.get(location2);
-            cs.push(self.subtype(&locations, DeferredSubst::empty(typ1), typ2));
+        let mut vec = vec![];
+        for (x, OwnRef(l2)) in locals {
+            let OwnRef(l1) = self.lookup_local(*x);
+            let p = self.cx.mk_place(l1.into(), &[]);
+            let typ1 = selfify(self.cx, p, self.lookup_location(l1)).into();
+            let typ2 = locations.get(l2);
+            vec.push(self.subtype(&locations, typ1, typ2)?);
         }
-        Constraint::Conj(cs)
+        Ok(Constraint::Conj(vec))
     }
 
     fn subtype(
@@ -168,16 +176,17 @@ impl<'lr> TyCtxt<'lr> {
         locations: &DeferredSubst<LocationsMap<'lr>>,
         typ1: DeferredSubst<Ty<'lr>>,
         typ2: DeferredSubst<Ty<'lr>>,
-    ) -> Constraint {
+    ) -> Result<Constraint, SubtypingError<'lr>> {
         let (subst1, typ1) = typ1.split();
         let (subst2, typ2) = typ2.split();
-        match (typ1, typ2) {
-            (TyS::Fn { .. }, TyS::Fn { .. }) => todo!(),
-            (TyS::OwnRef(location1), TyS::OwnRef(location2)) => {
-                let p = self.cx.mk_place((*location1).into(), &[]);
-                let typ1 = selfify(self.cx, p, self.lookup_location(*location1));
-                let typ2 = locations.get(location2);
-                self.subtype(locations, DeferredSubst::empty(typ1), typ2)
+        let c = match (typ1, typ2) {
+            (TyS::Fn { .. }, TyS::Fn { .. }) => todo!("implement function subtyping"),
+            (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
+                assert!(Some(Var::Location(*l1)) == subst2.get(Var::Location(*l2)));
+                let p = self.cx.mk_place((*l1).into(), &[]);
+                let typ1 = selfify(self.cx, p, self.lookup_location(*l1)).into();
+                let typ2 = locations.get(l2);
+                self.subtype(locations, typ1, typ2)?
             }
             (
                 TyS::Refine {
@@ -190,7 +199,7 @@ impl<'lr> TyCtxt<'lr> {
                 },
             ) => {
                 if ty1 != ty2 {
-                    todo!("incompatible base types `{:?}` and `{:?}`", ty1, ty2);
+                    return Err(SubtypingError(typ1, typ2));
                 }
                 Constraint::from_subtype(
                     *ty1,
@@ -200,30 +209,21 @@ impl<'lr> TyCtxt<'lr> {
             }
             (TyS::Tuple(fields1), TyS::Tuple(fields2)) => {
                 if fields1.len() != fields2.len() {
-                    todo!("incompatible types {:?} {:?}", typ1, typ2);
+                    return Err(SubtypingError(typ1, typ2));
                 }
                 let subst2 =
                     subst2.extend2(fields2.iter().map(|f| f.0), fields1.iter().map(|f| f.0));
-
                 let mut iter = fields1.iter().zip(fields2).rev();
                 if let Some(((_, t1), (_, t2))) = iter.next() {
-                    let mut c = self.subtype(
-                        locations,
-                        DeferredSubst::new(subst1.clone(), t1),
-                        DeferredSubst::new(subst2.clone(), t2),
-                    );
+                    let t1 = DeferredSubst::new(subst1.clone(), *t1);
+                    let t2 = DeferredSubst::new(subst2.clone(), *t2);
+                    let mut c = self.subtype(locations, t1, t2)?;
                     for ((x1, t1), (_, t2)) in iter {
+                        let t1 = DeferredSubst::new(subst1.clone(), *t1);
+                        let t2 = DeferredSubst::new(subst2.clone(), *t2);
                         c = Constraint::Conj(vec![
-                            self.subtype(
-                                locations,
-                                DeferredSubst::new(subst1.clone(), t1),
-                                DeferredSubst::new(subst2.clone(), t2),
-                            ),
-                            Constraint::from_binding(
-                                *x1,
-                                DeferredSubst::new(subst1.clone(), *t1),
-                                c,
-                            ),
+                            self.subtype(locations, t1.clone(), t2)?,
+                            Constraint::from_binding(*x1, t1, c),
                         ]);
                     }
                     c
@@ -232,18 +232,19 @@ impl<'lr> TyCtxt<'lr> {
                 }
             }
             (_, TyS::Uninit(_)) => Constraint::True,
-            _ => todo!("incompatible types `{:?}` and `{:?}`", typ1, typ2),
-        }
+            _ => return Err(SubtypingError(typ1, typ2)),
+        };
+        Ok(c)
     }
 
     fn infer_subst_ctxt(&self, locations: &LocationsMap, locals: &LocalsMap) -> Subst {
         let mut m = HashMap::new();
-        for (local, OwnRef(location2)) in locals {
-            let OwnRef(location1) = self.lookup_local(*local);
+        for (x, OwnRef(l2)) in locals {
+            let OwnRef(l1) = self.lookup_local(*x);
             m.extend(self.infer_subst_typ(
                 locations,
-                self.cx.mk_own_ref(location1),
-                self.cx.mk_own_ref(*location2),
+                self.cx.mk_own_ref(l1),
+                self.cx.mk_own_ref(*l2),
             ));
         }
         Subst::new(m)
@@ -315,10 +316,10 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
     }
 
     fn wt_binop(&mut self, op: BinOp, rhs: &Operand, lhs: &Operand) -> (Ty<'lr>, Bindings<'lr>) {
-        let (p1, t1, bindings1) = self.wt_operand(lhs);
+        let (p1, t1, mut bindings1) = self.wt_operand(lhs);
         let (p2, t2, bindings2) = self.wt_operand(rhs);
         if !t1.is_int() || !t2.is_int() {
-            todo!("Cannot use operator `{:?}` with non integer types", op);
+            todo!();
         }
         let ty = match op {
             BinOp::Add | BinOp::Sub => BasicType::Int,
@@ -355,10 +356,15 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                             ty: BasicType::Bool,
                             ..
                         },
-                    ) => let t = self
-                        .cx
-                        .mk_refine(BasicType::Bool, self.cx.mk_unop(*op, pred)),
-                    _ => todo!("not a boolean type"),
+                    ) => {
+                        let t = self
+                            .cx
+                            .mk_refine(BasicType::Bool, self.cx.mk_unop(UnOp::Not, pred));
+                        (t, bindings)
+                    }
+                    _ => {
+                        todo!();
+                    }
                 }
             }
         }
@@ -372,11 +378,12 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
             }
             Statement::Assign(place, rval) => {
                 let (_, t1) = self.tcx.lookup(place);
-                let t2 = self.wt_rvalue(rval);
+                let (t2, mut bindings) = self.wt_rvalue(rval);
                 if t1.size() != t2.size() {
-                    todo!();
+                    todo!()
                 }
-                vec![self.tcx.update(place, t2)]
+                bindings.push(self.tcx.update(place, t2));
+                bindings
             }
         }
     }
@@ -443,15 +450,18 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                         params,
                         out_heap,
                         ret: out_ty,
-                    } => self
-                        .tcx
-                        .check_call(in_heap, params, out_heap, *out_ty, args, cont),
+                    } => {
+                        let c = self
+                            .tcx
+                            .check_call(in_heap, params, out_heap, *out_ty, args, cont);
+                        c.unwrap()
+                    }
                     _ => {
                         todo!("not a function type");
                     }
                 }
             }
-            FnBody::Jump { target, args } => self.tcx.check_jump(&self.kenv[target], args),
+            FnBody::Jump { target, args } => self.tcx.check_jump(&self.kenv[target], args).unwrap(),
             FnBody::Seq(statement, rest) => {
                 let bindings = self.wt_statement(statement);
                 Constraint::from_bindings(bindings.iter().copied(), self.wt_fn_body(rest))
@@ -486,3 +496,6 @@ impl<'lr> Cont<'_, 'lr> {
         self.heap.iter().copied().collect()
     }
 }
+
+#[derive(Debug)]
+struct SubtypingError<'lr>(Ty<'lr>, Ty<'lr>);

@@ -1,4 +1,4 @@
-use std::{collections::HashMap, hash::Hash, rc::Rc};
+use std::{collections::HashMap, hash::Hash, ops::Index, rc::Rc};
 
 use super::ast::Var;
 

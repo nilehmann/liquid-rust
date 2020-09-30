@@ -167,7 +167,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump k(p)
     "####,
             );
-            assert!(ConstraintChecker::new().check(&c).is_ok());
+            assert!(dbg!(ConstraintChecker::new().check(&c)).is_ok());
         });
     }
 }

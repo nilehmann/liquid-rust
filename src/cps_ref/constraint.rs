@@ -2,7 +2,6 @@ use std::{collections::HashMap, fmt::Debug};
 
 use super::{ast::*, subst::ApplySubst, subst::DeferredSubst, subst::Subst};
 
-pub type Bindings<'lr> = Vec<(Location, Ty<'lr>)>;
 #[derive(Debug)]
 pub enum Constraint {
     Pred(PredC),
