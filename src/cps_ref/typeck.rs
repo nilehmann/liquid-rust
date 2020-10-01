@@ -405,10 +405,9 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         match fn_body {
             FnBody::LetCont { def, rest } => {
                 let cont = Cont::from(def);
-                let tcx = TyCtxt::from_cont_def(self.cx, def);
                 self.kenv.insert(def.name, cont);
                 let mut checker = TypeCk {
-                    tcx,
+                    tcx: TyCtxt::from_cont_def(self.cx, def),
                     kenv: self.kenv,
                     cx: self.cx,
                 };
