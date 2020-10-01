@@ -22,21 +22,27 @@ pub struct FnDef<'lr> {
     pub body: Box<FnBody<'lr>>,
 }
 
+#[derive(Debug)]
+pub struct ContDef<'lr> {
+    /// Name of the continuation.
+    pub name: Symbol,
+    /// Heap required to call the continuation.
+    pub heap: Heap<'lr>,
+    /// Environment required to call the continuation.
+    pub env: Env,
+    /// Additional parameters for the continuation.
+    pub params: Vec<(Local, OwnRef)>,
+    /// The body of the continuation.
+    pub body: Box<FnBody<'lr>>,
+}
+
 /// Function body in cps.
 #[derive(Debug)]
 pub enum FnBody<'lr> {
     /// A continuation definition.
     LetCont {
-        /// Name of the continuation.
-        name: Symbol,
-        /// Heap required to call the continuation.
-        heap: Heap<'lr>,
-        /// Environment required to call the continuation.
-        env: Env,
-        /// Additional parameters for the continuation.
-        params: Vec<(Local, OwnRef)>,
-        /// The body of the continuation.
-        body: Box<FnBody<'lr>>,
+        /// Continuation definition.
+        def: ContDef<'lr>,
         /// The rest of the function body.
         rest: Box<FnBody<'lr>>,
     },
@@ -46,9 +52,9 @@ pub enum FnBody<'lr> {
         /// The discriminant value being tested.
         discr: Place,
         /// The branch to execute if the discriminant is true.
-        then_branch: Box<FnBody<'lr>>,
+        then: Box<FnBody<'lr>>,
         /// The branch to execute if the discriminant is false.
-        else_branch: Box<FnBody<'lr>>,
+        else_: Box<FnBody<'lr>>,
     },
 
     /// Function call
@@ -222,6 +228,16 @@ pub struct Cont<'a, 'lr> {
     pub heap: &'a Heap<'lr>,
     pub env: &'a Env,
     pub params: Vec<OwnRef>,
+}
+
+impl<'a, 'lr> From<&'a ContDef<'lr>> for Cont<'a, 'lr> {
+    fn from(def: &'a ContDef<'lr>) -> Self {
+        Self {
+            heap: &def.heap,
+            env: &def.env,
+            params: def.params.iter().map(|p| p.1).collect(),
+        }
+    }
 }
 
 /// A refinement type predicate

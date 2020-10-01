@@ -34,6 +34,19 @@ impl<'lr> TyCtxt<'lr> {
         }
     }
 
+    pub fn from_cont_def(cx: &'lr LiquidRustCtxt<'lr>, cont_def: &ContDef<'lr>) -> Self {
+        Self::new(
+            cx,
+            cont_def.heap.iter().copied().collect(),
+            cont_def
+                .env
+                .iter()
+                .copied()
+                .chain(cont_def.params.iter().copied())
+                .collect(),
+        )
+    }
+
     pub fn from_fn_def(cx: &'lr LiquidRustCtxt<'lr>, fn_def: &FnDef<'lr>) -> Self {
         Self::new(
             cx,
@@ -390,39 +403,23 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
 
     fn wt_fn_body(&mut self, fn_body: &'b FnBody<'lr>) -> Constraint {
         match fn_body {
-            FnBody::LetCont {
-                name,
-                heap,
-                env,
-                params,
-                body,
-                rest,
-            } => {
-                let cont = Cont {
-                    heap,
-                    env,
-                    params: params.iter().map(|p| p.1).collect(),
-                };
-                let tcx = TyCtxt::new(
-                    self.cx,
-                    cont.locations_map(),
-                    env.iter().copied().chain(params.iter().copied()).collect(),
-                );
-                self.kenv.insert(*name, cont);
+            FnBody::LetCont { def, rest } => {
+                let cont = Cont::from(def);
+                let tcx = TyCtxt::from_cont_def(self.cx, def);
+                self.kenv.insert(def.name, cont);
                 let mut checker = TypeCk {
                     tcx,
                     kenv: self.kenv,
                     cx: self.cx,
                 };
-                let c1 = Constraint::from_bindings(heap.iter().copied(), checker.wt_fn_body(body));
+                let c1 = Constraint::from_bindings(
+                    def.heap.iter().copied(),
+                    checker.wt_fn_body(&def.body),
+                );
                 let c2 = self.wt_fn_body(rest);
                 Constraint::Conj(vec![c1, c2])
             }
-            FnBody::Ite {
-                discr,
-                then_branch,
-                else_branch,
-            } => {
+            FnBody::Ite { discr, then, else_ } => {
                 let (p, typ) = self.tcx.lookup(discr);
                 match typ {
                     TyS::Refine {
@@ -430,9 +427,9 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                         ..
                     } => {
                         self.tcx.push_frame();
-                        let c1 = self.wt_fn_body(then_branch);
+                        let c1 = self.wt_fn_body(then);
                         self.tcx.pop_frame();
-                        let c2 = self.wt_fn_body(else_branch);
+                        let c2 = self.wt_fn_body(else_);
                         Constraint::Conj(vec![
                             Constraint::guard(p, c1),
                             Constraint::guard(self.cx.mk_unop(UnOp::Not, p), c2),

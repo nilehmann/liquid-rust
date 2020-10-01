@@ -12,11 +12,10 @@ pub Fn: FnDef<'lr> =
  "=" <body: FnBody> => FnDef { <> };
 
 FnBody: Box<FnBody<'lr>> = {
-  "letcont" <name: Symbol> "(" <heap: Heap> ";" <env: Env> ";" <params: Args> ")"
-    "=" <body: FnBody> "in" <rest: FnBody>
+  "letcont" <def: ContDef> "in" <rest: FnBody>
       => Box::new(FnBody::LetCont{ <> }),
 
-  "if" "*" <discr: Place> "then" <then_branch: FnBody> "else" <else_branch: FnBody>
+  "if" "*" <discr: Place> "then" <then: FnBody> "else" <else_: FnBody>
     => Box::new(FnBody::Ite{ <> }),
 
   "call" <func: Place> "(" <args: Comma<Local>> ")" "ret" <ret: Symbol>
@@ -27,6 +26,11 @@ FnBody: Box<FnBody<'lr>> = {
   <Statement> ";" <FnBody> => Box::new(FnBody::Seq(<>)),
 
   "abort" => Box::new(FnBody::Abort)
+}
+
+ContDef: ContDef<'lr> = {
+  <name: Symbol> "(" <heap: Heap> ";" <env: Env> ";" <params: Args> ")" "=" <body: FnBody> =>
+    ContDef { <> }
 }
 
 Statement: Statement = {
