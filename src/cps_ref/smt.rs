@@ -49,6 +49,7 @@ impl ConstraintChecker {
                 self.check(c)?;
             }
             Constraint::True => {}
+            Constraint::Err => bug!(),
         }
         Ok(())
     }

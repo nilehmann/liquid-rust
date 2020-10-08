@@ -240,6 +240,17 @@ impl<'a, 'lr> From<&'a ContDef<'lr>> for Cont<'a, 'lr> {
     }
 }
 
+const EMPTY_ENV: &'static Env = &vec![];
+impl<'a, 'lr> From<&'a FnDef<'lr>> for Cont<'a, 'lr> {
+    fn from(fn_def: &'a FnDef<'lr>) -> Self {
+        Self {
+            heap: &fn_def.out_heap,
+            env: EMPTY_ENV,
+            params: vec![fn_def.out_ty],
+        }
+    }
+}
+
 /// A refinement type predicate
 #[derive(Eq, PartialEq, Hash)]
 pub enum PredS<'lr> {

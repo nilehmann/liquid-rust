@@ -33,7 +33,7 @@ mod tests {
         }
 
         fn check(&self, string: &str) -> Constraint {
-            TypeCk::cgen(self.cx, &self.parse(string).unwrap())
+            TypeCk::cgen(self.cx, &self.parse(string).unwrap()).unwrap()
         }
     }
 

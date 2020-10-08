@@ -14,6 +14,7 @@ pub enum Constraint {
     },
     Guard(PredC, Box<Constraint>),
     True,
+    Err,
 }
 
 pub enum PredC {
