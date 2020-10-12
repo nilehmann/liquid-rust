@@ -1,6 +1,7 @@
 pub mod ast;
 pub mod constraint;
 pub mod context;
+pub mod liquid;
 pub mod parser;
 pub mod smt;
 pub mod subst;
@@ -8,7 +9,10 @@ pub mod typeck;
 
 #[cfg(test)]
 mod tests {
-    use super::{ast::FnDef, constraint::Constraint, parser::FnParser, smt::ConstraintChecker};
+    use super::{
+        ast::FnDef, constraint::Constraint, liquid::LiquidSolver, parser::FnParser,
+        smt::ConstraintChecker,
+    };
     use super::{
         context::{Arena, LiquidRustCtxt},
         typeck::TypeCk,
@@ -52,7 +56,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
     jump k(n)
 "####,
             );
-            assert!(ConstraintChecker::new().check(&c).is_ok());
+            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
         });
     }
 

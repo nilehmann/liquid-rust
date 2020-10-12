@@ -22,6 +22,7 @@ pub enum PredC {
     Constant(Constant),
     BinaryOp(BinOp, Box<PredC>, Box<PredC>),
     UnaryOp(UnOp, Box<PredC>),
+    Iff(Box<PredC>, Box<PredC>),
 }
 
 impl Constraint {
@@ -82,6 +83,7 @@ impl<'a> ApplySubst<PredC> for Pred<'a> {
                 PredC::BinaryOp(*op, box lhs.apply(subst), box rhs.apply(subst))
             }
             PredS::UnaryOp(op, p) => PredC::UnaryOp(*op, box p.apply(subst)),
+            PredS::Iff(lhs, rhs) => PredC::Iff(box lhs.apply(subst), box rhs.apply(subst)),
         }
     }
 }
@@ -174,6 +176,10 @@ impl<'a> Embedder<'a> {
                 box self.build_pred(rhs, curr_proj),
             ),
             PredS::UnaryOp(op, p) => PredC::UnaryOp(*op, box self.build_pred(p, curr_proj)),
+            PredS::Iff(lhs, rhs) => PredC::Iff(
+                box self.build_pred(lhs, curr_proj),
+                box self.build_pred(rhs, curr_proj),
+            ),
         }
     }
 }
@@ -201,6 +207,9 @@ impl Debug for PredC {
             }
             PredC::UnaryOp(op, operand) => {
                 write!(f, "{:?}({:?})", op, operand)?;
+            }
+            PredC::Iff(lhs, rhs) => {
+                write!(f, "({:?} <=> {:?})", lhs, rhs)?;
             }
         }
         Ok(())

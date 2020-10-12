@@ -240,7 +240,7 @@ impl<'a, 'lr> From<&'a ContDef<'lr>> for Cont<'a, 'lr> {
     }
 }
 
-const EMPTY_ENV: &'static Env = &vec![];
+const EMPTY_ENV: &Env = &vec![];
 impl<'a, 'lr> From<&'a FnDef<'lr>> for Cont<'a, 'lr> {
     fn from(fn_def: &'a FnDef<'lr>) -> Self {
         Self {
@@ -258,6 +258,7 @@ pub enum PredS<'lr> {
     Place { var: Var, projection: Vec<u32> },
     BinaryOp(BinOp, &'lr PredS<'lr>, &'lr PredS<'lr>),
     UnaryOp(UnOp, &'lr PredS<'lr>),
+    Iff(&'lr PredS<'lr>, &'lr PredS<'lr>),
 }
 
 impl<'lr> TyS<'lr> {
@@ -380,6 +381,9 @@ impl Debug for PredS<'_> {
             }
             PredS::UnaryOp(op, operand) => {
                 write!(f, "{:?}({:?})", op, operand)?;
+            }
+            PredS::Iff(rhs, lhs) => {
+                write!(f, "({:?} <=> {:?})", rhs, lhs)?;
             }
         }
         Ok(())

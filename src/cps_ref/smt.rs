@@ -88,6 +88,13 @@ impl Expr2Smt<()> for PredC {
                 operand.expr_to_smt2(w, ())?;
                 write!(w, ")")?;
             }
+            PredC::Iff(lhs, rhs) => {
+                write!(w, "(iff ")?;
+                lhs.expr_to_smt2(w, ())?;
+                write!(w, " ")?;
+                rhs.expr_to_smt2(w, ())?;
+                write!(w, ")")?;
+            }
         }
         Ok(())
     }

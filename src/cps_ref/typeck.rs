@@ -350,17 +350,22 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
     ) -> Result<(Ty<'lr>, Bindings<'lr>), TypeError<'lr>> {
         let (p1, t1, mut bindings1) = self.wt_operand(lhs);
         let (p2, t2, bindings2) = self.wt_operand(rhs);
+        bindings1.extend(bindings2);
         if !t1.is_int() || !t2.is_int() {
             return Err(TypeError::BinOpMismatch(op, t1, t2));
         }
-        let ty = match op {
-            BinOp::Add | BinOp::Sub => BasicType::Int,
-            BinOp::Lt | BinOp::Le | BinOp::Eq | BinOp::Ge | BinOp::Gt => BasicType::Bool,
+        let (ty, pred) = match op {
+            BinOp::Add | BinOp::Sub => (
+                BasicType::Int,
+                self.cx
+                    .mk_binop(BinOp::Eq, self.cx.preds.nu, self.cx.mk_binop(op, p1, p2)),
+            ),
+            BinOp::Lt | BinOp::Le | BinOp::Eq | BinOp::Ge | BinOp::Gt => (
+                BasicType::Bool,
+                self.cx
+                    .mk_iff(self.cx.preds.nu, self.cx.mk_binop(op, p1, p2)),
+            ),
         };
-        let pred = self
-            .cx
-            .mk_binop(BinOp::Eq, self.cx.preds.nu, self.cx.mk_binop(op, p1, p2));
-        bindings1.extend(bindings2);
         Ok((self.cx.mk_refine(ty, pred), bindings1))
     }
 

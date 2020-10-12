@@ -120,6 +120,10 @@ impl<'lr> LiquidRustCtxt<'lr> {
         })
     }
 
+    pub fn mk_iff(&'lr self, lhs: Pred<'lr>, rhs: Pred<'lr>) -> Pred<'lr> {
+        self.mk_pred(PredS::Iff(lhs, rhs))
+    }
+
     pub fn mk_binop(&'lr self, op: BinOp, lhs: Pred<'lr>, rhs: Pred<'lr>) -> Pred<'lr> {
         self.mk_pred(PredS::BinaryOp(op, lhs, rhs))
     }
