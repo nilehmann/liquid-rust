@@ -204,7 +204,6 @@ impl<'lr> TyCtxt<'lr> {
         let c = match (typ1, typ2) {
             (TyS::Fn { .. }, TyS::Fn { .. }) => todo!("implement function subtyping"),
             (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
-                debug_assert!(Some(Var::Location(*l1)) == subst2.get(Var::Location(*l2)));
                 let p = self.cx.mk_place((*l1).into(), &[]);
                 let typ1 = selfify(self.cx, p, self.lookup_location(*l1).unwrap()).into();
                 let typ2 = locations.get(l2);
@@ -260,30 +259,37 @@ impl<'lr> TyCtxt<'lr> {
     }
 
     fn infer_subst_ctxt(&self, locations: &LocationsMap, locals: &LocalsMap) -> Subst {
-        let mut m = HashMap::new();
+        let mut v = Vec::new();
         for (x, OwnRef(l2)) in locals {
             let OwnRef(l1) = self.lookup_local(*x).unwrap();
-            m.extend(self.infer_subst_typ(
+            self.infer_subst_typ(
                 locations,
                 self.cx.mk_own_ref(l1),
                 self.cx.mk_own_ref(*l2),
-            ));
+                &mut v,
+            );
         }
-        Subst::new(m)
+        Subst::from(v)
     }
 
-    fn infer_subst_typ(&self, locations: &LocationsMap, typ1: Ty, typ2: Ty) -> HashMap<Var, Var> {
+    fn infer_subst_typ(
+        &self,
+        locations: &LocationsMap,
+        typ1: Ty,
+        typ2: Ty,
+        v: &mut Vec<(Var, Var)>,
+    ) {
         match (typ1, typ2) {
             (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
-                let mut m = self.infer_subst_typ(
+                self.infer_subst_typ(
                     locations,
                     self.lookup_location(*l1).unwrap(),
                     locations[l2],
+                    v,
                 );
-                m.insert(Var::Location(*l2), Var::Location(*l1));
-                m
+                v.push((Var::Location(*l2), Var::Location(*l1)));
             }
-            _ => HashMap::new(),
+            _ => {}
         }
     }
 }

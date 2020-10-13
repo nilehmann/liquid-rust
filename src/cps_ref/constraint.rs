@@ -1,4 +1,4 @@
-use std::{collections::HashMap, fmt::Debug};
+use std::fmt;
 
 use super::{ast::*, subst::ApplySubst, subst::DeferredSubst, subst::Subst};
 
@@ -33,7 +33,7 @@ impl Constraint {
         T: Into<DeferredSubst<Ty<'a>>>,
     {
         for (x, typ) in bindings.rev() {
-            for (y, ty, hyp) in Embedder::embed(x.into(), typ.into()).into_iter().rev() {
+            for (y, ty, hyp) in embed(x.into(), typ.into()).into_iter().rev() {
                 body = Constraint::Forall {
                     bind: y,
                     ty,
@@ -76,8 +76,12 @@ impl<'a> ApplySubst<PredC> for Pred<'a> {
     fn apply(&self, subst: &Subst) -> PredC {
         match self {
             PredS::Constant(c) => PredC::Constant(*c),
-            PredS::Place { var, projection } => {
-                PredC::Var(place_to_symbol(subst.get(*var).unwrap_or(*var), projection))
+            PredS::Place {
+                var: x,
+                projection: outter,
+            } => {
+                let (y, inner) = subst.get(*x).unwrap_or((*x, vec![]));
+                PredC::Var(place_to_symbol(y, inner.iter().chain(outter)))
             }
             PredS::BinaryOp(op, lhs, rhs) => {
                 PredC::BinaryOp(*op, box lhs.apply(subst), box rhs.apply(subst))
@@ -94,93 +98,44 @@ impl<'a> From<Pred<'a>> for PredC {
     }
 }
 
-struct Embedder<'a> {
-    typ: Ty<'a>,
-    subst: Subst,
-    var: Var,
-    field_map: HashMap<Field, Vec<u32>>,
+fn embed(x: Var, typ: DeferredSubst<Ty>) -> Vec<(Symbol, BasicType, PredC)> {
+    let (subst, typ) = typ.split();
+    let mut v = Vec::new();
+    collect_field_map(x, &vec![], typ, &mut v);
+    let subst = subst.extend(v);
+    embed_(x, &mut vec![], typ, &subst)
 }
 
-impl<'a> Embedder<'a> {
-    fn embed(var: Var, typ: DeferredSubst<Ty<'a>>) -> Vec<(Symbol, BasicType, PredC)> {
-        let (subst, typ) = typ.split();
-        Self {
-            typ,
-            subst,
-            var,
-            field_map: HashMap::new(),
-        }
-        .run()
-    }
-
-    fn run(mut self) -> Vec<(Symbol, BasicType, PredC)> {
-        self.collect_field_map(self.typ, &vec![]);
-        self.embed_(self.typ, &mut vec![])
-    }
-
-    fn embed_(&self, typ: Ty<'a>, projection: &mut Vec<u32>) -> Vec<(Symbol, BasicType, PredC)> {
-        match typ {
-            TyS::Refine { pred, ty } => vec![(
-                place_to_symbol(self.var, projection.iter()),
-                *ty,
-                self.build_pred(pred, &projection),
-            )],
-            TyS::Tuple(fields) => {
-                let mut v = vec![];
-                for i in 0..fields.len() {
-                    projection.push(i as u32);
-                    v.extend(self.embed_(fields[i].1, projection));
-                    projection.pop();
-                }
-                v
+fn collect_field_map(x: Var, proj: &Vec<u32>, typ: Ty, v: &mut Vec<(Var, (Var, Vec<u32>))>) {
+    match typ {
+        TyS::Tuple(fields) => {
+            for (i, (f, t)) in fields.iter().enumerate() {
+                let mut clone = proj.clone();
+                clone.push(i as u32);
+                collect_field_map(x, &clone, t, v);
+                v.push(((*f).into(), (x, clone)));
             }
-            _ => vec![],
         }
+        _ => {}
     }
+}
 
-    fn collect_field_map(&mut self, typ: Ty<'a>, projection: &Vec<u32>) {
-        match typ {
-            TyS::Tuple(fields) => {
-                for (i, (f, t)) in fields.iter().enumerate() {
-                    let mut clone = projection.clone();
-                    clone.push(i as u32);
-                    self.collect_field_map(t, &clone);
-                    self.field_map.insert(*f, clone);
-                }
-            }
-            _ => {}
+fn embed_(x: Var, proj: &mut Vec<u32>, typ: Ty, subst: &Subst) -> Vec<(Symbol, BasicType, PredC)> {
+    match typ {
+        TyS::Refine { pred, ty } => {
+            let subst = subst.extend(vec![(Var::Nu, (x, proj.clone()))]);
+            vec![(place_to_symbol(x, proj.iter()), *ty, pred.apply(&subst))]
         }
-    }
-
-    fn build_pred(&self, pred: Pred, curr_proj: &[u32]) -> PredC {
-        match pred {
-            PredS::Constant(c) => PredC::Constant(*c),
-            PredS::Place { var, projection } => {
-                let mut x = *var;
-                if let Some(y) = self.subst.get(x) {
-                    x = y;
-                }
-
-                let v = match x {
-                    Var::Nu => place_to_symbol(self.var, curr_proj.iter().chain(projection)),
-                    Var::Location(l) => place_to_symbol(l.into(), projection),
-                    Var::Field(f) => {
-                        place_to_symbol(self.var, self.field_map[&f].iter().chain(projection))
-                    }
-                };
-                PredC::Var(v)
+        TyS::Tuple(fields) => {
+            let mut v = vec![];
+            for i in 0..fields.len() {
+                proj.push(i as u32);
+                v.extend(embed_(x, proj, fields[i].1, subst));
+                proj.pop();
             }
-            PredS::BinaryOp(op, lhs, rhs) => PredC::BinaryOp(
-                *op,
-                box self.build_pred(lhs, curr_proj),
-                box self.build_pred(rhs, curr_proj),
-            ),
-            PredS::UnaryOp(op, p) => PredC::UnaryOp(*op, box self.build_pred(p, curr_proj)),
-            PredS::Iff(lhs, rhs) => PredC::Iff(
-                box self.build_pred(lhs, curr_proj),
-                box self.build_pred(rhs, curr_proj),
-            ),
+            v
         }
+        _ => vec![],
     }
 }
 
@@ -195,10 +150,10 @@ where
     Symbol::intern(&s)
 }
 
-impl Debug for PredC {
+impl fmt::Debug for PredC {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            PredC::Constant(c) => Debug::fmt(&c, f)?,
+            PredC::Constant(c) => write!(f, "{:?}", c)?,
             PredC::Var(s) => {
                 write!(f, "{}", &*s.as_str())?;
             }

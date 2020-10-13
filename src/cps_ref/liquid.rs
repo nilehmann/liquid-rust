@@ -1,15 +1,13 @@
-use std::{
-    fs::File,
-    io::{self, BufWriter, Write},
-    path::Path,
-    process::{Command, Stdio},
-};
-
-use ast::BasicType;
-
 use super::{
     ast,
     constraint::{Constraint, PredC},
+};
+use ast::BasicType;
+use std::{
+    fs::{File, OpenOptions},
+    io::{self, BufWriter, Write},
+    path::Path,
+    process::{Command, Stdio},
 };
 
 pub struct LiquidSolver {
@@ -18,7 +16,6 @@ pub struct LiquidSolver {
 
 impl LiquidSolver {
     pub fn new() -> io::Result<Self> {
-        use std::fs::OpenOptions;
         let path = Path::new("file.smt2");
         let file = OpenOptions::new()
             .create(true)
@@ -47,7 +44,7 @@ impl LiquidSolver {
         match c {
             Constraint::Pred(p) => {
                 write!(self.buf, "(")?;
-                self.write_pred(p)?;
+                self.write_pred(p, &[])?;
                 write!(self.buf, ")")?;
             }
             Constraint::Conj(cs) => match cs.len() {
@@ -74,14 +71,14 @@ impl LiquidSolver {
                     BasicType::Int => write!(self.buf, "int")?,
                 }
                 write!(self.buf, ") (")?;
-                self.write_pred(hyp)?;
+                self.write_pred(hyp, &[])?;
                 write!(self.buf, ")) ")?;
                 self.write_constraint(body)?;
                 write!(self.buf, ")")?;
             }
             Constraint::Guard(p, c) => {
                 write!(self.buf, "(forall ((_ int) (")?;
-                self.write_pred(p)?;
+                self.write_pred(p, &[])?;
                 write!(self.buf, ")) ")?;
                 self.write_constraint(c)?;
                 write!(self.buf, ")")?;
@@ -92,7 +89,7 @@ impl LiquidSolver {
         Ok(())
     }
 
-    fn write_pred(&mut self, p: &PredC) -> io::Result<()> {
+    fn write_pred(&mut self, p: &PredC, vars: &[ast::Symbol]) -> io::Result<()> {
         match p {
             PredC::Var(v) => {
                 write!(self.buf, "{}", &*v.as_str())?;
@@ -102,23 +99,23 @@ impl LiquidSolver {
             }
             PredC::BinaryOp(op, lhs, rhs) => {
                 write!(self.buf, "(")?;
-                self.write_pred(lhs)?;
+                self.write_pred(lhs, vars)?;
                 write!(self.buf, " {:?} ", op)?;
-                self.write_pred(rhs)?;
+                self.write_pred(rhs, vars)?;
                 write!(self.buf, ")")?;
             }
             PredC::UnaryOp(op, operand) => match op {
                 ast::UnOp::Not => {
                     write!(self.buf, "(not ")?;
-                    self.write_pred(operand)?;
+                    self.write_pred(operand, vars)?;
                     write!(self.buf, ")")?;
                 }
             },
             PredC::Iff(lhs, rhs) => {
                 write!(self.buf, "(")?;
-                self.write_pred(lhs)?;
+                self.write_pred(lhs, vars)?;
                 write!(self.buf, " <=> ")?;
-                self.write_pred(rhs)?;
+                self.write_pred(rhs, vars)?;
                 write!(self.buf, ")")?;
             }
         }

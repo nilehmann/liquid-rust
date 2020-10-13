@@ -1,12 +1,14 @@
 use std::{collections::HashMap, hash::Hash, rc::Rc};
 
-use super::ast::Var;
+use super::ast::{Field, Var};
+
+type Place = (Var, Vec<u32>);
 
 #[derive(Debug, Clone)]
-pub struct Subst(Rc<HashMap<Var, Var>>);
+pub struct Subst(Rc<HashMap<Var, Place>>);
 
 impl Subst {
-    pub fn new(m: HashMap<Var, Var>) -> Self {
+    pub fn new(m: HashMap<Var, Place>) -> Self {
         Self(Rc::new(m))
     }
 
@@ -14,36 +16,64 @@ impl Subst {
         Self(Rc::new(HashMap::new()))
     }
 
-    pub fn get(&self, x: Var) -> Option<Var> {
-        self.0.get(&x).copied()
+    pub fn get(&self, x: Var) -> Option<Place> {
+        self.0.get(&x).cloned()
     }
 
-    fn extend<I, T>(&self, iter: I) -> Self
+    pub fn extend<I, K, V>(&self, iter: I) -> Self
     where
-        I: IntoIterator<Item = (T, T)>,
-        T: Into<Var>,
+        I: IntoIterator<Item = (K, V)>,
+        K: Into<Var>,
+        V: Into<Place>,
     {
-        let mut m: HashMap<Var, Var> = iter
+        let mut m: HashMap<Var, Place> = iter
             .into_iter()
             .map(|(x, y)| (x.into(), y.into()))
             .collect();
-        for (x, y) in self.0.iter() {
-            if let Some(z) = m.get(&y).copied() {
-                m.insert(*x, z);
+        for (x, (y, p1)) in self.0.iter() {
+            if let Some((z, mut p2)) = m.get(y).cloned() {
+                p2.extend(p1);
+                m.insert(*x, (z, p2));
             } else {
-                m.insert(*x, *y);
+                m.insert(*x, (*y, p1.clone()));
             }
         }
         Self(Rc::new(m))
     }
 
-    pub fn extend2<I1, I2, T>(&self, iter1: I1, iter2: I2) -> Self
+    pub fn extend2<I1, I2, K, V>(&self, iter1: I1, iter2: I2) -> Self
     where
-        I1: IntoIterator<Item = T>,
-        I2: IntoIterator<Item = T>,
-        T: Into<Var>,
+        I1: IntoIterator<Item = K>,
+        I2: IntoIterator<Item = V>,
+        K: Into<Var>,
+        V: Into<Place>,
     {
         self.extend(iter1.into_iter().zip(iter2))
+    }
+}
+
+impl From<Var> for Place {
+    fn from(x: Var) -> Self {
+        (x.into(), vec![])
+    }
+}
+
+impl From<Field> for Place {
+    fn from(x: Field) -> Self {
+        (x.into(), vec![])
+    }
+}
+
+impl<I, A, B> From<I> for Subst
+where
+    I: IntoIterator<Item = (A, B)>,
+    A: Into<Var>,
+    B: Into<Place>,
+{
+    fn from(it: I) -> Self {
+        Self(Rc::new(
+            it.into_iter().map(|(x, y)| (x.into(), y.into())).collect(),
+        ))
     }
 }
 
