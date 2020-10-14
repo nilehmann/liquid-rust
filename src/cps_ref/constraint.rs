@@ -23,6 +23,7 @@ pub enum PredC {
     BinaryOp(BinOp, Box<PredC>, Box<PredC>),
     UnaryOp(UnOp, Box<PredC>),
     Iff(Box<PredC>, Box<PredC>),
+    Kvar(u32, Vec<Symbol>),
 }
 
 impl Constraint {
@@ -88,7 +89,18 @@ impl<'a> ApplySubst<PredC> for Pred<'a> {
             }
             PredS::UnaryOp(op, p) => PredC::UnaryOp(*op, box p.apply(subst)),
             PredS::Iff(lhs, rhs) => PredC::Iff(box lhs.apply(subst), box rhs.apply(subst)),
+            PredS::Kvar(n, vars) => {
+                let vars = vars.iter().map(|v| v.apply(subst)).collect();
+                PredC::Kvar(*n, vars)
+            }
         }
+    }
+}
+
+impl ApplySubst<Symbol> for Var {
+    fn apply(&self, subst: &Subst) -> Symbol {
+        let (x, proj) = subst.get(*self).unwrap_or((*self, vec![]));
+        place_to_symbol(x, &proj)
     }
 }
 
@@ -135,7 +147,8 @@ fn embed_(x: Var, proj: &mut Vec<u32>, typ: Ty, subst: &Subst) -> Vec<(Symbol, B
             }
             v
         }
-        _ => vec![],
+        TyS::Fn { .. } | TyS::OwnRef(_) | TyS::Uninit(_) => vec![],
+        TyS::RefineHole { .. } => bug!(""),
     }
 }
 
@@ -166,6 +179,7 @@ impl fmt::Debug for PredC {
             PredC::Iff(lhs, rhs) => {
                 write!(f, "({:?} <=> {:?})", lhs, rhs)?;
             }
+            PredC::Kvar(_, _) => todo!(),
         }
         Ok(())
     }

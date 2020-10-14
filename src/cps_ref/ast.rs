@@ -195,6 +195,8 @@ pub enum TyS<'lr> {
     Tuple(Vec<(Field, &'lr TyS<'lr>)>),
     /// Unitialized
     Uninit(u32),
+    /// A refinment that need to be inferred
+    RefineHole { ty: BasicType, n: u32 },
 }
 
 /// A type layout is used to describe the recursive structure of a type.
@@ -224,33 +226,6 @@ pub enum Var {
 
 pub type Pred<'lr> = &'lr PredS<'lr>;
 
-pub struct Cont<'a, 'lr> {
-    pub heap: &'a Heap<'lr>,
-    pub env: &'a Env,
-    pub params: Vec<OwnRef>,
-}
-
-impl<'a, 'lr> From<&'a ContDef<'lr>> for Cont<'a, 'lr> {
-    fn from(def: &'a ContDef<'lr>) -> Self {
-        Self {
-            heap: &def.heap,
-            env: &def.env,
-            params: def.params.iter().map(|p| p.1).collect(),
-        }
-    }
-}
-
-const EMPTY_ENV: &Env = &vec![];
-impl<'a, 'lr> From<&'a FnDef<'lr>> for Cont<'a, 'lr> {
-    fn from(fn_def: &'a FnDef<'lr>) -> Self {
-        Self {
-            heap: &fn_def.out_heap,
-            env: EMPTY_ENV,
-            params: vec![fn_def.out_ty],
-        }
-    }
-}
-
 /// A refinement type predicate
 #[derive(Eq, PartialEq, Hash)]
 pub enum PredS<'lr> {
@@ -259,6 +234,7 @@ pub enum PredS<'lr> {
     BinaryOp(BinOp, &'lr PredS<'lr>, &'lr PredS<'lr>),
     UnaryOp(UnOp, &'lr PredS<'lr>),
     Iff(&'lr PredS<'lr>, &'lr PredS<'lr>),
+    Kvar(u32, Vec<Var>),
 }
 
 impl<'lr> TyS<'lr> {
@@ -283,7 +259,7 @@ impl<'lr> TyS<'lr> {
         match self {
             TyS::Fn { .. } => 1,
             TyS::OwnRef(_) => 1,
-            TyS::Refine { .. } => 1,
+            TyS::Refine { .. } | TyS::RefineHole { .. } => 1,
             TyS::Tuple(fields) => fields.iter().map(|f| f.1.size()).sum(),
             TyS::Uninit(size) => *size,
         }
@@ -385,6 +361,9 @@ impl Debug for PredS<'_> {
             PredS::Iff(rhs, lhs) => {
                 write!(f, "({:?} <=> {:?})", rhs, lhs)?;
             }
+            PredS::Kvar(n, vars) => {
+                write!(f, "$k{}{:?}", n, vars)?;
+            }
         }
         Ok(())
     }
@@ -398,6 +377,7 @@ impl Debug for TyS<'_> {
             TyS::Refine { ty, pred } => write!(f, "{{ {:?} | {:?} }}", ty, pred),
             TyS::Tuple(fields) => write!(f, "{:?}", fields),
             TyS::Uninit(size) => write!(f, "Uninit({})", size),
+            TyS::RefineHole { ty, .. } => write!(f, "{{ {:?} | _ }}", ty),
         }
     }
 }

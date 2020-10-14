@@ -3,7 +3,7 @@ use crate::cps_ref::ast::*;
 use rustc_span::Symbol;
 use crate::cps_ref::context::LiquidRustCtxt;
 
-grammar<'lr>(cx: &'lr LiquidRustCtxt<'lr>);
+grammar<'lr>(cx: &'lr LiquidRustCtxt<'lr>, holes: &mut u32);
 
 pub Fn: FnDef<'lr> =
  "fn" <name: Symbol>
@@ -71,6 +71,10 @@ Projection: u32 = "." <r"[0-9]+"> => u32::from_str(<>).unwrap();
 Ty: Ty<'lr> = {
   "own" "(" <Location> ")"                       => cx.mk_ty(TyS::OwnRef(<>)),
   "{" <ty: BasicType> "|" <pred: PredLevel1> "}" => cx.mk_ty(TyS::Refine { <> }),
+  "{" <ty: BasicType> "|" "_" "}"                => {
+    *holes += 1;
+    cx.mk_ty(TyS::RefineHole {ty, n: *holes})
+  },
   "(" <Comma<Binding<Field, Ty>>> ")"            => cx.mk_ty(TyS::Tuple(<>))
 }
 
@@ -88,14 +92,14 @@ PredLevel3: Pred<'lr> = {
 Var: Var = {
   Location => Var::Location(<>),
   Field    => Var::Field(<>),
-  r"_v"    => Var::Nu
+  "V"      => Var::Nu
 }
 
 Args = Comma<Binding<Local, OwnRef>>;
 Env  = Comma<Binding<Local, OwnRef>>;
 Heap = Comma<Binding<Location, Ty>>;
 
-Symbol: Symbol = r"[a-zA-Z][a-zA-Z0-9_]*" => Symbol::intern(<>);
+Symbol: Symbol = r"[a-z][a-zA-Z0-9_]*" => Symbol::intern(<>);
 Local: Local = Symbol => Local(<>);
 Location: Location = Symbol => Location(<>);
 Field: Field = r"@[a-zA-Z][a-zA-Z0-9_]*" => Field::intern(&<>[1..]);

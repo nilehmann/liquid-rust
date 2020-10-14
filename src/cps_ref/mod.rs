@@ -3,16 +3,13 @@ pub mod constraint;
 pub mod context;
 pub mod liquid;
 pub mod parser;
-pub mod smt;
 pub mod subst;
 pub mod typeck;
+pub mod utils;
 
 #[cfg(test)]
 mod tests {
-    use super::{
-        ast::FnDef, constraint::Constraint, liquid::LiquidSolver, parser::FnParser,
-        smt::ConstraintChecker,
-    };
+    use super::{ast::FnDef, constraint::Constraint, liquid::LiquidSolver, parser::FnParser};
     use super::{
         context::{Arena, LiquidRustCtxt},
         typeck::TypeCk,
@@ -33,7 +30,7 @@ mod tests {
         }
 
         fn parse(&self, string: &str) -> Option<FnDef<'lr>> {
-            FnParser::new().parse(self.cx, string).ok()
+            FnParser::new().parse(self.cx, &mut 0, string).ok()
         }
 
         fn check(&self, string: &str) -> Constraint {
@@ -46,7 +43,7 @@ mod tests {
         Session::run(|sess| {
             let c = sess.check(
                 r####"
-fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
+fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
   let b = new(1);
   b := *n <= 0;
   if *b then
@@ -65,8 +62,8 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
         Session::run(|sess| {
             let c = sess.check(
                 r####"
-    fn sum(n0: {int | _v >= 0}; n: own(n0)) ret k(r: {int | _v >= n0}; own(r)) =
-      letcont loop( n1: {int | _v == n0}, i1: {int | _v >= 0}, r1: {int | _v >= i1}
+    fn sum(n0: {int | V >= 0}; n: own(n0)) ret k(r: {int | V >= n0}; own(r)) =
+      letcont loop( n1: {int | V == n0}, i1: {int | _}, r1: {int | V >= i1}
                   ; i: own(i1), r: own(r1), n: own(n1);) =
         let t0 = new(1);
         t0 := *i <= *n;
@@ -84,7 +81,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump loop()
     "####,
             );
-            assert!(ConstraintChecker::new().check(&c).is_ok());
+            assert!(LiquidSolver::new().unwrap().check(&c).is_ok());
         })
     }
 
@@ -93,13 +90,13 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
         Session::run(|sess| {
             let p = sess.parse(
                 r####"
-    fn count_zeros(n0: {int | _v >= 0}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r))=
-      letcont b0( n1: {int | _v >= 0}, i1: {int | _v >= 0}, c1: {int | _v >= 0}
+    fn count_zeros(n0: {int | V >= 0}; n: own(n0)) ret k(r: {int | V >= 0}; own(r))=
+      letcont b0( n1: {int | V >= 0}, i1: {int | V >= 0}, c1: {int | V >= 0}
                 ; i: own(i1), c: own(c1), n: own(n1); ) =
         let t0 = new(1);
         t0 := *i < *n;
         if *t0 then
-          letcont b1( n2: {int | _v >= 0}, i2: {int | _v >= 0}, c2: {int | _v >= 0}, x0: {int | true}
+          letcont b1( n2: {int | V >= 0}, i2: {int | V >= 0}, c2: {int | V >= 0}, x0: {int | true}
                     ; i: own(i2), c: own(c2), n: own(n2)
                     ; x: own(x0)
                     ) =
@@ -140,7 +137,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
       jump k(r)
     "####,
             );
-            assert!(ConstraintChecker::new().check(&c).is_ok());
+            assert!(LiquidSolver::new().unwrap().check(&c).is_ok());
         });
     }
 
@@ -148,14 +145,14 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
     fn length() {
         Session::run(|sess| {
             let c = sess.check(
-            r####"
-    fn length(p0: (@x: {int | true}, @y: {int | _v >= @x}); p: own(p0)) ret k(r: {int | _v >= 0}; own(r))=
+                r####"
+    fn length(p0: (@x: {int | true}, @y: {int | _}); p: own(p0)) ret k(r: {int | V >= 0}; own(r))=
       let t = new(1);
       t := *p.1 - *p.0;
       jump k(t)
     "####,
-        );
-            assert!(ConstraintChecker::new().check(&c).is_ok());
+            );
+            assert!(LiquidSolver::new().unwrap().check(&c).is_ok());
         });
     }
 
@@ -164,14 +161,14 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | _v >= 0}; own(r)) =
         Session::run(|sess| {
             let c = sess.check(
                 r####"
-    fn foo(;) ret k(r0: (@x: {int | true}, @y: {int | _v >= @x}); own(r0))=
+    fn foo(;) ret k(r0: (@x: {int | true}, @y: {int | V >= @x}); own(r0))=
       let p = new((1, 1));
       p.0 := 0;
       p.1 := 1;
       jump k(p)
     "####,
             );
-            assert!(ConstraintChecker::new().check(&c).is_ok());
+            assert!(LiquidSolver::new().unwrap().check(&c).is_ok());
         });
     }
 }

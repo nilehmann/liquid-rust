@@ -16,17 +16,18 @@ struct TyCtxt<'lr> {
 
 #[derive(Default)]
 struct CtxtFrame<'lr> {
+    vars_in_scope: Vec<Var>,
     locations: LocationsMap<'lr>,
     locals: LocalsMap,
 }
 
 impl<'lr> TyCtxt<'lr> {
-    pub fn new(
-        cx: &'lr LiquidRustCtxt<'lr>,
-        locations: LocationsMap<'lr>,
-        locals: LocalsMap,
-    ) -> Self {
-        let frame = CtxtFrame { locations, locals };
+    pub fn new(cx: &'lr LiquidRustCtxt<'lr>, fn_def: &FnDef<'lr>) -> Self {
+        let frame = CtxtFrame {
+            vars_in_scope: fn_def.heap.iter().map(|(l, _)| Var::from(*l)).collect(),
+            locations: insert_kvars(cx, &fn_def.heap, vec![]).into_iter().collect(),
+            locals: fn_def.args.iter().copied().collect(),
+        };
         Self {
             frames: vec![frame],
             cx,
@@ -34,33 +35,47 @@ impl<'lr> TyCtxt<'lr> {
         }
     }
 
-    pub fn from_cont_def(cx: &'lr LiquidRustCtxt<'lr>, cont_def: &ContDef<'lr>) -> Self {
-        Self::new(
-            cx,
-            cont_def.heap.iter().copied().collect(),
-            cont_def
+    pub fn vars_in_scope(&self) -> Vec<Var> {
+        self.frames
+            .iter()
+            .flat_map(|f| &f.vars_in_scope)
+            .copied()
+            .collect()
+    }
+
+    pub fn enter_cont_def<T>(
+        &mut self,
+        cont_def: &ContDef<'lr>,
+        mut act: impl for<'a> FnMut(&'a mut Self) -> T,
+    ) -> T {
+        let frame = CtxtFrame {
+            vars_in_scope: cont_def.heap.iter().map(|(l, _)| Var::from(*l)).collect(),
+            locals: cont_def
                 .env
                 .iter()
+                .chain(cont_def.params.iter())
                 .copied()
-                .chain(cont_def.params.iter().copied())
                 .collect(),
-        )
+            locations: insert_kvars(self.cx, &cont_def.heap, vec![])
+                .into_iter()
+                .collect(),
+        };
+        self.frames.push(frame);
+        let t = act(self);
+        self.frames.pop();
+        t
     }
 
-    pub fn from_fn_def(cx: &'lr LiquidRustCtxt<'lr>, fn_def: &FnDef<'lr>) -> Self {
-        Self::new(
-            cx,
-            fn_def.heap.iter().copied().collect(),
-            fn_def.args.iter().copied().collect(),
-        )
-    }
-
-    pub fn push_frame(&mut self) {
-        self.frames.push(CtxtFrame::default());
-    }
-
-    pub fn pop_frame(&mut self) {
-        self.frames.pop().unwrap();
+    pub fn enter_branch<T>(&mut self, mut act: impl for<'a> FnMut(&'a mut Self) -> T) -> T {
+        let frame = CtxtFrame {
+            vars_in_scope: vec![],
+            locals: self.frames.last().unwrap().locals.clone(),
+            locations: LocationsMap::new(),
+        };
+        self.frames.push(frame);
+        let r = act(self);
+        self.frames.pop();
+        r
     }
 
     pub fn lookup(&self, place: &Place) -> (Pred<'lr>, Ty<'lr>) {
@@ -71,12 +86,7 @@ impl<'lr> TyCtxt<'lr> {
     }
 
     fn lookup_local(&self, x: Local) -> Option<OwnRef> {
-        for frame in self.frames.iter().rev() {
-            if let Some(ownref) = frame.locals.get(&x) {
-                return Some(*ownref);
-            }
-        }
-        None
+        self.frames.last().and_then(|f| f.locals.get(&x).copied())
     }
 
     fn lookup_location(&self, l: Location) -> Option<Ty<'lr>> {
@@ -142,9 +152,12 @@ impl<'lr> TyCtxt<'lr> {
             return Err(TypeError::ArgCount);
         }
         // Check against function arguments
-        let locations_f = in_heap.iter().copied().collect();
+        // TODO: pass vars in scope
+        let locations_f = insert_kvars(self.cx, &in_heap, vec![])
+            .into_iter()
+            .collect();
         let locals_f = args.iter().copied().zip(params.iter().copied()).collect();
-        let c1 = self.env_incl(locations_f, &locals_f)?;
+        let c1 = self.env_incl(&locations_f, &locals_f)?;
 
         // Update context after function call
         let fresh_x = Local(Symbol::intern("$")); // FIXME
@@ -170,14 +183,14 @@ impl<'lr> TyCtxt<'lr> {
         if args.len() != cont.params.len() {
             return Err(TypeError::ArgCount);
         }
-        let locations = cont.locations_map();
+        let locations: LocationsMap = cont.heap.iter().copied().collect();
         let locals = cont.locals_map(args)?;
-        self.env_incl(locations, &locals)
+        self.env_incl(&locations, &locals)
     }
 
     fn env_incl(
         &mut self,
-        locations: LocationsMap<'lr>,
+        locations: &LocationsMap<'lr>,
         locals: &LocalsMap,
     ) -> Result<Constraint, TypeError<'lr>> {
         let subst = self.infer_subst_ctxt(&locations, locals);
@@ -195,7 +208,7 @@ impl<'lr> TyCtxt<'lr> {
 
     fn subtype(
         &mut self,
-        locations: &DeferredSubst<LocationsMap<'lr>>,
+        locations: &DeferredSubst<&LocationsMap<'lr>>,
         typ1: DeferredSubst<Ty<'lr>>,
         typ2: DeferredSubst<Ty<'lr>>,
     ) -> Result<Constraint, TypeError<'lr>> {
@@ -296,7 +309,6 @@ impl<'lr> TyCtxt<'lr> {
 
 pub struct TypeCk<'a, 'b, 'lr> {
     cx: &'lr LiquidRustCtxt<'lr>,
-    tcx: TyCtxt<'lr>,
     kenv: &'a mut HashMap<Symbol, Cont<'b, 'lr>>,
     errors: Vec<TypeError<'lr>>,
 }
@@ -307,16 +319,15 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         fn_def: &FnDef<'lr>,
     ) -> Result<Constraint, Vec<TypeError<'lr>>> {
         let mut kenv = HashMap::default();
-        kenv.insert(fn_def.ret, Cont::from(fn_def));
+        kenv.insert(fn_def.ret, Cont::from_fn_def(cx, fn_def));
         let mut checker = TypeCk {
             cx,
-            tcx: TyCtxt::from_fn_def(cx, fn_def),
             kenv: &mut kenv,
             errors: vec![],
         };
         let c = Constraint::from_bindings(
             fn_def.heap.iter().copied(),
-            checker.wt_fn_body(&fn_def.body),
+            checker.wt_fn_body(&mut TyCtxt::new(cx, fn_def), &fn_def.body),
         );
         if checker.errors.is_empty() {
             Ok(c)
@@ -325,13 +336,17 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         }
     }
 
-    fn wt_operand(&mut self, operand: &Operand) -> (Pred<'lr>, Ty<'lr>, Bindings<'lr>) {
+    fn wt_operand(
+        &mut self,
+        tcx: &mut TyCtxt<'lr>,
+        operand: &Operand,
+    ) -> (Pred<'lr>, Ty<'lr>, Bindings<'lr>) {
         match operand {
             Operand::Deref(place) => {
                 let mut bindings = vec![];
-                let (pred, typ) = self.tcx.lookup(place);
+                let (pred, typ) = tcx.lookup(place);
                 if !typ.is_copy() {
-                    bindings.push(self.tcx.update(place, self.cx.mk_uninit(typ.size())));
+                    bindings.push(tcx.update(place, self.cx.mk_uninit(typ.size())));
                 }
                 (pred, typ, bindings)
             }
@@ -350,12 +365,13 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
 
     fn wt_binop(
         &mut self,
+        tcx: &mut TyCtxt<'lr>,
         op: BinOp,
         rhs: &Operand,
         lhs: &Operand,
     ) -> Result<(Ty<'lr>, Bindings<'lr>), TypeError<'lr>> {
-        let (p1, t1, mut bindings1) = self.wt_operand(lhs);
-        let (p2, t2, bindings2) = self.wt_operand(rhs);
+        let (p1, t1, mut bindings1) = self.wt_operand(tcx, lhs);
+        let (p2, t2, bindings2) = self.wt_operand(tcx, rhs);
         bindings1.extend(bindings2);
         if !t1.is_int() || !t2.is_int() {
             return Err(TypeError::BinOpMismatch(op, t1, t2));
@@ -375,15 +391,19 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         Ok((self.cx.mk_refine(ty, pred), bindings1))
     }
 
-    fn wt_rvalue(&mut self, val: &Rvalue) -> Result<(Ty<'lr>, Bindings<'lr>), TypeError<'lr>> {
+    fn wt_rvalue(
+        &mut self,
+        tcx: &mut TyCtxt<'lr>,
+        val: &Rvalue,
+    ) -> Result<(Ty<'lr>, Bindings<'lr>), TypeError<'lr>> {
         let r = match val {
             Rvalue::Use(operand) => {
-                let (p, typ, bindings) = self.wt_operand(operand);
+                let (p, typ, bindings) = self.wt_operand(tcx, operand);
                 (selfify(self.cx, p, &typ), bindings)
             }
-            Rvalue::BinaryOp(op, lhs, rhs) => self.wt_binop(*op, rhs, lhs)?,
+            Rvalue::BinaryOp(op, lhs, rhs) => self.wt_binop(tcx, *op, rhs, lhs)?,
             Rvalue::CheckedBinaryOp(op, lhs, rhs) => {
-                let (t1, bindings) = self.wt_binop(*op, lhs, rhs)?;
+                let (t1, bindings) = self.wt_binop(tcx, *op, lhs, rhs)?;
                 let t2 = self.cx.mk_refine(BasicType::Bool, self.cx.preds.tt);
                 let tuple = self
                     .cx
@@ -391,7 +411,7 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                 (tuple, bindings)
             }
             Rvalue::UnaryOp(op, operand) => {
-                let (pred, typ, bindings) = self.wt_operand(operand);
+                let (pred, typ, bindings) = self.wt_operand(tcx, operand);
                 match (op, typ) {
                     (
                         UnOp::Not,
@@ -414,54 +434,47 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
         Ok(r)
     }
 
-    fn wt_statement(&mut self, statement: &Statement) -> Result<Bindings<'lr>, TypeError<'lr>> {
+    fn wt_statement(
+        &mut self,
+        tcx: &mut TyCtxt<'lr>,
+        statement: &Statement,
+    ) -> Result<Bindings<'lr>, TypeError<'lr>> {
         match statement {
             Statement::Let(x, layout) => {
-                self.tcx.alloc(*x, layout);
+                tcx.alloc(*x, layout);
                 Ok(vec![])
             }
             Statement::Assign(place, rval) => {
-                let (_, t1) = self.tcx.lookup(place);
-                let (t2, mut bindings) = self.wt_rvalue(rval)?;
+                let (_, t1) = tcx.lookup(place);
+                let (t2, mut bindings) = self.wt_rvalue(tcx, rval)?;
                 if t1.size() != t2.size() {
                     return Err(TypeError::SizeMismatch(t1, t2));
                 }
-                bindings.push(self.tcx.update(place, t2));
+                bindings.push(tcx.update(place, t2));
                 Ok(bindings)
             }
         }
     }
 
-    fn wt_fn_body(&mut self, fn_body: &'b FnBody<'lr>) -> Constraint {
+    fn wt_fn_body(&mut self, tcx: &mut TyCtxt<'lr>, fn_body: &'b FnBody<'lr>) -> Constraint {
         match fn_body {
             FnBody::LetCont { def, rest } => {
-                let cont = Cont::from(def);
+                let cont = Cont::from_cont_def(self.cx, def, tcx.vars_in_scope());
                 self.kenv.insert(def.name, cont);
-                let mut checker = TypeCk {
-                    tcx: TyCtxt::from_cont_def(self.cx, def),
-                    kenv: self.kenv,
-                    cx: self.cx,
-                    errors: vec![],
-                };
-                let c1 = Constraint::from_bindings(
-                    def.heap.iter().copied(),
-                    checker.wt_fn_body(&def.body),
-                );
-                self.errors.extend(checker.errors);
-                let c2 = self.wt_fn_body(rest);
+                let c1 = tcx.enter_cont_def(def, |tcx| self.wt_fn_body(tcx, &def.body));
+                let c1 = Constraint::from_bindings(self.kenv[&def.name].heap.iter().copied(), c1);
+                let c2 = self.wt_fn_body(tcx, rest);
                 Constraint::Conj(vec![c1, c2])
             }
             FnBody::Ite { discr, then, else_ } => {
-                let (p, typ) = self.tcx.lookup(discr);
+                let (p, typ) = tcx.lookup(discr);
                 match typ {
                     TyS::Refine {
                         ty: BasicType::Bool,
                         ..
                     } => {
-                        self.tcx.push_frame();
-                        let c1 = self.wt_fn_body(then);
-                        self.tcx.pop_frame();
-                        let c2 = self.wt_fn_body(else_);
+                        let c1 = tcx.enter_branch(|tcx| self.wt_fn_body(tcx, then));
+                        let c2 = self.wt_fn_body(tcx, else_);
                         Constraint::Conj(vec![
                             Constraint::guard(p, c1),
                             Constraint::guard(self.cx.mk_unop(UnOp::Not, p), c2),
@@ -475,35 +488,30 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
             }
             FnBody::Call { func, ret, args } => {
                 let cont = &self.kenv[ret];
-                let (_, typ) = self.tcx.lookup(func);
+                let (_, typ) = tcx.lookup(func);
                 match typ {
                     TyS::Fn {
                         in_heap,
                         params,
                         out_heap,
                         ret: out_ty,
-                    } => {
-                        match self
-                            .tcx
-                            .check_call(in_heap, params, out_heap, *out_ty, args, cont)
-                        {
-                            Ok(c) => c,
-                            Err(err) => {
-                                self.errors.push(err);
-                                Constraint::Err
-                            }
+                    } => match tcx.check_call(in_heap, params, out_heap, *out_ty, args, cont) {
+                        Ok(c) => c,
+                        Err(err) => {
+                            self.errors.push(err);
+                            Constraint::Err
                         }
-                    }
+                    },
                     _ => {
                         self.errors.push(TypeError::NotFun(typ));
                         Constraint::Err
                     }
                 }
             }
-            FnBody::Jump { target, args } => self.tcx.check_jump(&self.kenv[target], args).unwrap(),
-            FnBody::Seq(statement, rest) => match self.wt_statement(statement) {
+            FnBody::Jump { target, args } => tcx.check_jump(&self.kenv[target], args).unwrap(),
+            FnBody::Seq(statement, rest) => match self.wt_statement(tcx, statement) {
                 Ok(bindings) => {
-                    Constraint::from_bindings(bindings.iter().copied(), self.wt_fn_body(rest))
+                    Constraint::from_bindings(bindings.iter().copied(), self.wt_fn_body(tcx, rest))
                 }
                 Err(err) => {
                     self.errors.push(err);
@@ -536,9 +544,79 @@ impl<'lr> Cont<'_, 'lr> {
         }
         Ok(ctxt)
     }
+}
 
-    fn locations_map(&self) -> LocationsMap<'lr> {
-        self.heap.iter().copied().collect()
+fn insert_kvars<'lr, 'a>(
+    cx: &'lr LiquidRustCtxt<'lr>,
+    heap: &Heap<'lr>,
+    mut vars_in_scope: Vec<Var>,
+) -> Vec<(Location, Ty<'lr>)> {
+    heap.iter()
+        .map(|&(l, t)| {
+            println!(">{:?}", t);
+            let t = t.insert_kvars(cx, &mut vars_in_scope);
+            println!("<{:?}", t);
+            vars_in_scope.push(l.into());
+            (l, t)
+        })
+        .collect()
+}
+
+impl<'lr> TyS<'lr> {
+    fn insert_kvars(
+        &'lr self,
+        cx: &'lr LiquidRustCtxt<'lr>,
+        vars_in_scope: &mut Vec<Var>,
+    ) -> Ty<'lr> {
+        match self {
+            TyS::Fn { .. } => todo!(),
+            TyS::Tuple(fields) => {
+                let fields: Vec<(Field, Ty)> = fields
+                    .iter()
+                    .map(|&(f, t)| {
+                        let t = t.insert_kvars(cx, vars_in_scope);
+                        vars_in_scope.push(Var::from(f));
+                        (f, t)
+                    })
+                    .collect();
+                vars_in_scope.truncate(vars_in_scope.len() - fields.len());
+                cx.mk_tuple(&fields)
+            }
+            &TyS::RefineHole { ty, n } => {
+                let mut vars: Vec<Var> = vars_in_scope.clone();
+                vars.push(Var::Nu);
+                cx.mk_refine(ty, cx.mk_pred(PredS::Kvar(n, vars)))
+            }
+            _ => self,
+        }
+    }
+}
+struct Cont<'a, 'lr> {
+    pub heap: Vec<(Location, Ty<'lr>)>,
+    pub env: &'a Env,
+    pub params: Vec<OwnRef>,
+}
+
+const EMPTY_ENV: &Env = &vec![];
+impl<'a, 'lr> Cont<'a, 'lr> {
+    fn from_cont_def(
+        cx: &'lr LiquidRustCtxt<'lr>,
+        def: &'a ContDef<'lr>,
+        vars_in_scope: Vec<Var>,
+    ) -> Self {
+        Self {
+            heap: insert_kvars(cx, &def.heap, vars_in_scope),
+            env: &def.env,
+            params: def.params.iter().map(|p| p.1).collect(),
+        }
+    }
+
+    fn from_fn_def(cx: &'lr LiquidRustCtxt<'lr>, def: &'a FnDef<'lr>) -> Self {
+        Self {
+            heap: insert_kvars(cx, &def.out_heap, vec![]),
+            env: EMPTY_ENV,
+            params: vec![def.out_ty],
+        }
     }
 }
 

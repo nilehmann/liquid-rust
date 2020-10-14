@@ -80,7 +80,7 @@ where
 #[derive(Debug, Clone)]
 pub struct DeferredSubst<T>(Subst, T);
 
-impl<'a, K, V> DeferredSubst<HashMap<K, V>>
+impl<'a, K, V> DeferredSubst<&HashMap<K, V>>
 where
     K: Eq + Hash,
     V: Copy,
