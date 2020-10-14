@@ -54,7 +54,7 @@ impl<'lr> TyCtxt<'lr> {
                 .chain(cont_def.params.iter())
                 .copied()
                 .collect(),
-            locations: insert_kvars(self.cx, &cont_def.heap, vec![]),
+            locations: insert_kvars(self.cx, &cont_def.heap, self.vars_in_scope()),
         };
         self.frames.push(frame);
         let t = act(self);
