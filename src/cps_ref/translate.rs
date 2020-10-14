@@ -14,6 +14,11 @@ use std::collections::HashMap;
 // Once we do this, we can convert the SSA form into
 // CPS form.
 
+// TODO: for TypeLayouts
+// Get the Rust type for ints, bools, tuples (of ints, bools, tuples)
+// Do case analysis, generate typelayout based on that.
+// Give up if not supported type
+
 /// Translates an mir::Place to a CPS IR Place.
 fn translate_place(from: &mir::Place) -> Place {
     let local = Local(Symbol::intern(format!("_{}", from.local.as_u32()).as_str()));
@@ -200,8 +205,8 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
                                 asgn,
                                 Box::new(FnBody::Ite {
                                     discr: pl,
-                                    then_branch: Box::new(then),
-                                    else_branch: Box::new(ite),
+                                    then: Box::new(then),
+                                    else_: Box::new(ite),
                                 }),
                             )),
                         );
@@ -315,12 +320,28 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
 
             // We update our body here
             // TODO: Fill this out with proper things
-            nb = FnBody::LetCont {
+
+            // Assume no uninitialized types - annotate everything w/ refinement
+            // In environment, put all locals used (owned refs to heap things)
+            // In heap: annotate ints and bools with RefineHoles
+            // (For now), every hole needs a unique identifying integer
+            // -> every hole gets its own kvar
+            // For tuples in heap: create tuple of same structure, except with
+            // holes at the leaves of the tuple structure
+            //
+            // Every tuple field needs a name (use Field::nth)
+            //
+            // Every bb takes every local as an arg
+            let lc = ContDef {
                 name: Symbol::intern(format!("bb{}", bb.as_u32()).as_str()),
                 heap: todo!(),
                 env: todo!(),
                 params: todo!(),
                 body: Box::new(bbod),
+            };
+            
+            nb = FnBody::LetCont {
+                def: lc,
                 rest: Box::new(nb),
             };
         }
