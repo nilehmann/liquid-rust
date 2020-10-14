@@ -95,7 +95,7 @@ pub enum Rvalue {
 }
 
 /// A path to a value
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct Place {
     pub local: Local,
     pub projection: Vec<u32>,
