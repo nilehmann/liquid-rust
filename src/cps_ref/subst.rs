@@ -1,4 +1,4 @@
-use std::{collections::HashMap, hash::Hash, rc::Rc};
+use std::{collections::HashMap, rc::Rc};
 
 use super::ast::{Field, Var};
 
@@ -80,12 +80,12 @@ where
 #[derive(Debug, Clone)]
 pub struct DeferredSubst<T>(Subst, T);
 
-impl<'a, K, V> DeferredSubst<&HashMap<K, V>>
-where
-    K: Eq + Hash,
-    V: Copy,
-{
-    pub fn get(&self, k: &K) -> DeferredSubst<V> {
+impl<T> DeferredSubst<&T> {
+    pub fn get<K, V>(&self, k: K) -> DeferredSubst<V>
+    where
+        T: std::ops::Index<K, Output = V>,
+        V: Copy,
+    {
         DeferredSubst(self.0.clone(), self.1[k])
     }
 }

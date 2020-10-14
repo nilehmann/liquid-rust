@@ -63,7 +63,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
             let c = sess.check(
                 r####"
     fn sum(n0: {int | V >= 0}; n: own(n0)) ret k(r: {int | V >= n0}; own(r)) =
-      letcont loop( n1: {int | V == n0}, i1: {int | _}, r1: {int | V >= i1}
+      letcont loop( n1: {int | V == n0}, i1: {int | V >= 0}, r1: {int | V >= i1}
                   ; i: own(i1), r: own(r1), n: own(n1);) =
         let t0 = new(1);
         t0 := *i <= *n;
@@ -146,7 +146,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
         Session::run(|sess| {
             let c = sess.check(
                 r####"
-    fn length(p0: (@x: {int | true}, @y: {int | _}); p: own(p0)) ret k(r: {int | V >= 0}; own(r))=
+    fn length(p0: (@x: {int | true}, @y: {int | V >= @x}); p: own(p0)) ret k(r: {int | V >= 0}; own(r))=
       let t = new(1);
       t := *p.1 - *p.0;
       jump k(t)

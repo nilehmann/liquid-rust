@@ -2,10 +2,11 @@ use std::collections::HashMap;
 
 use super::{
     ast::*, constraint::Constraint, context::LiquidRustCtxt, subst::DeferredSubst, subst::Subst,
+    utils::OrderedHashMap,
 };
 
 type LocalsMap = HashMap<Local, OwnRef>;
-type LocationsMap<'lr> = HashMap<Location, Ty<'lr>>;
+type LocationsMap<'lr> = OrderedHashMap<Location, Ty<'lr>>;
 type Bindings<'lr> = Vec<(Location, Ty<'lr>)>;
 
 struct TyCtxt<'lr> {
@@ -14,20 +15,18 @@ struct TyCtxt<'lr> {
     curr_location: u32,
 }
 
-#[derive(Default)]
 struct CtxtFrame<'lr> {
-    vars_in_scope: Vec<Var>,
     locations: LocationsMap<'lr>,
     locals: LocalsMap,
 }
 
 impl<'lr> TyCtxt<'lr> {
-    pub fn new(cx: &'lr LiquidRustCtxt<'lr>, fn_def: &FnDef<'lr>) -> Self {
-        let frame = CtxtFrame {
-            vars_in_scope: fn_def.heap.iter().map(|(l, _)| Var::from(*l)).collect(),
-            locations: insert_kvars(cx, &fn_def.heap, vec![]).into_iter().collect(),
-            locals: fn_def.args.iter().copied().collect(),
-        };
+    pub fn new(
+        cx: &'lr LiquidRustCtxt<'lr>,
+        locations: LocationsMap<'lr>,
+        locals: LocalsMap,
+    ) -> Self {
+        let frame = CtxtFrame { locations, locals };
         Self {
             frames: vec![frame],
             cx,
@@ -38,8 +37,8 @@ impl<'lr> TyCtxt<'lr> {
     pub fn vars_in_scope(&self) -> Vec<Var> {
         self.frames
             .iter()
-            .flat_map(|f| &f.vars_in_scope)
-            .copied()
+            .flat_map(|f| f.locations.keys())
+            .map(|l| l.into())
             .collect()
     }
 
@@ -49,16 +48,13 @@ impl<'lr> TyCtxt<'lr> {
         mut act: impl for<'a> FnMut(&'a mut Self) -> T,
     ) -> T {
         let frame = CtxtFrame {
-            vars_in_scope: cont_def.heap.iter().map(|(l, _)| Var::from(*l)).collect(),
             locals: cont_def
                 .env
                 .iter()
                 .chain(cont_def.params.iter())
                 .copied()
                 .collect(),
-            locations: insert_kvars(self.cx, &cont_def.heap, vec![])
-                .into_iter()
-                .collect(),
+            locations: insert_kvars(self.cx, &cont_def.heap, vec![]),
         };
         self.frames.push(frame);
         let t = act(self);
@@ -68,7 +64,6 @@ impl<'lr> TyCtxt<'lr> {
 
     pub fn enter_branch<T>(&mut self, mut act: impl for<'a> FnMut(&'a mut Self) -> T) -> T {
         let frame = CtxtFrame {
-            vars_in_scope: vec![],
             locals: self.frames.last().unwrap().locals.clone(),
             locations: LocationsMap::new(),
         };
@@ -153,9 +148,7 @@ impl<'lr> TyCtxt<'lr> {
         }
         // Check against function arguments
         // TODO: pass vars in scope
-        let locations_f = insert_kvars(self.cx, &in_heap, vec![])
-            .into_iter()
-            .collect();
+        let locations_f = insert_kvars(self.cx, &in_heap, vec![]);
         let locals_f = args.iter().copied().zip(params.iter().copied()).collect();
         let c1 = self.env_incl(&locations_f, &locals_f)?;
 
@@ -183,9 +176,8 @@ impl<'lr> TyCtxt<'lr> {
         if args.len() != cont.params.len() {
             return Err(TypeError::ArgCount);
         }
-        let locations: LocationsMap = cont.heap.iter().copied().collect();
         let locals = cont.locals_map(args)?;
-        self.env_incl(&locations, &locals)
+        self.env_incl(&cont.heap, &locals)
     }
 
     fn env_incl(
@@ -325,9 +317,11 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
             kenv: &mut kenv,
             errors: vec![],
         };
+        let locations = insert_kvars(cx, &fn_def.heap, vec![]);
+        let locals = fn_def.args.iter().copied().collect();
         let c = Constraint::from_bindings(
-            fn_def.heap.iter().copied(),
-            checker.wt_fn_body(&mut TyCtxt::new(cx, fn_def), &fn_def.body),
+            locations.clone().iter().map(|(&l, &t)| (l, t)),
+            checker.wt_fn_body(&mut TyCtxt::new(cx, locations, locals), &fn_def.body),
         );
         if checker.errors.is_empty() {
             Ok(c)
@@ -462,7 +456,10 @@ impl<'b, 'lr> TypeCk<'_, 'b, 'lr> {
                 let cont = Cont::from_cont_def(self.cx, def, tcx.vars_in_scope());
                 self.kenv.insert(def.name, cont);
                 let c1 = tcx.enter_cont_def(def, |tcx| self.wt_fn_body(tcx, &def.body));
-                let c1 = Constraint::from_bindings(self.kenv[&def.name].heap.iter().copied(), c1);
+                let c1 = Constraint::from_bindings(
+                    self.kenv[&def.name].heap.iter().map(|(&l, &t)| (l, t)),
+                    c1,
+                );
                 let c2 = self.wt_fn_body(tcx, rest);
                 Constraint::Conj(vec![c1, c2])
             }
@@ -550,12 +547,10 @@ fn insert_kvars<'lr, 'a>(
     cx: &'lr LiquidRustCtxt<'lr>,
     heap: &Heap<'lr>,
     mut vars_in_scope: Vec<Var>,
-) -> Vec<(Location, Ty<'lr>)> {
+) -> LocationsMap<'lr> {
     heap.iter()
         .map(|&(l, t)| {
-            println!(">{:?}", t);
             let t = t.insert_kvars(cx, &mut vars_in_scope);
-            println!("<{:?}", t);
             vars_in_scope.push(l.into());
             (l, t)
         })
@@ -592,7 +587,7 @@ impl<'lr> TyS<'lr> {
     }
 }
 struct Cont<'a, 'lr> {
-    pub heap: Vec<(Location, Ty<'lr>)>,
+    pub heap: LocationsMap<'lr>,
     pub env: &'a Env,
     pub params: Vec<OwnRef>,
 }
