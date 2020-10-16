@@ -1,23 +1,20 @@
 //! Handles the translation from Rust MIR to the CPS IR.
 
 use super::ast::*;
+use super::context as cps_ctx;
 use crate::{context::LiquidRustCtxt, refinements::dom_tree::DominatorTree};
 use rustc_data_structures::graph::WithStartNode;
+use rustc_mir::transform::MirSource;
 use rustc_middle::{
     mir::{self, terminator::TerminatorKind, Body, StatementKind},
     ty,
 };
 use rustc_span::Symbol;
-use std::collections::HashMap;
+use std::{collections::HashMap, convert::TryInto, mem::size_of};
 
 // First, we have to convert the MIR code to an SSA form.
 // Once we do this, we can convert the SSA form into
 // CPS form.
-
-// TODO: for TypeLayouts
-// Get the Rust type for ints, bools, tuples (of ints, bools, tuples)
-// Do case analysis, generate typelayout based on that.
-// Give up if not supported type
 
 /// Translates an mir::Place to a CPS IR Place.
 fn translate_place(from: &mir::Place) -> Place {
@@ -71,20 +68,47 @@ impl From<mir::BinOp> for BinOp {
     }
 }
 
+fn get_basic_type<'tcx>(t: ty::Ty<'tcx>) -> BasicType {
+    match &t.kind {
+        ty::TyKind::Bool => BasicType::Bool,
+        ty::TyKind::Int(_) | ty::TyKind::Uint(_) => BasicType::Int,
+        _ => todo!(),
+    }
+}
+
+/// Creates a TypeLayout based on a Rust TyKind.
+fn get_layout<'tcx>(t: ty::Ty<'tcx>) -> TypeLayout {
+    // Get the Rust type for ints, bools, tuples (of ints, bools, tuples)
+    // Do case analysis, generate TypeLayout based on that.
+    // Give up if not supported type
+    match &t.kind {
+        ty::TyKind::Bool => TypeLayout::Block(size_of::<bool>().try_into().unwrap()),
+        ty::TyKind::Int(it) => TypeLayout::Block(it.bit_width().map(|x| x >> 3).unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32),
+        ty::TyKind::Uint(it) => TypeLayout::Block(it.bit_width().map(|x| x >> 3 as u32).unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32),
+        ty::TyKind::Tuple(_) => TypeLayout::Tuple(t.tuple_fields().map(|c| get_layout(c)).collect::<Vec<_>>()),
+        _ => todo!(),
+    }
+}
+
 // Transformer state struct should include a mapping from locals to refinements too
 
 pub struct Transformer<'a, 'lr, 'tcx> {
     cx: &'a LiquidRustCtxt<'lr, 'tcx>,
+    // TODO: What should the lifetime on this be?
+    cps_cx: &'lr cps_ctx::LiquidRustCtxt<'lr>,
     tcx: ty::TyCtxt<'tcx>,
     symbols: HashMap<Symbol, usize>,
+    holes: u32,
 }
 
 impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
-    pub fn new(cx: &'a LiquidRustCtxt<'lr, 'tcx>) -> Self {
+    pub fn new(cx: &'a LiquidRustCtxt<'lr, 'tcx>, cps_cx: &'lr cps_ctx::LiquidRustCtxt<'lr>) -> Self {
         Self {
             cx,
+            cps_cx,
             tcx: cx.tcx(),
             symbols: HashMap::new(),
+            holes: 0,
         }
     }
 
@@ -118,8 +142,30 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
         self.symbols.insert(sym, 1);
     }
 
+    fn fresh_hole(&mut self) -> u32 {
+        self.holes += 1;
+        return self.holes;
+    }
+
+    fn mk_refine_hole(&mut self, bty: BasicType) -> Ty<'lr> {
+        self.cps_cx.mk_refine_hole(bty, self.fresh_hole())
+    }
+
+    /// Based on the structure of the type, return either a RefineHole
+    /// or a tuple of holy types.
+    fn get_holy_type(&mut self, t: ty::Ty<'tcx>) -> Ty<'lr> {
+        match &t.kind {
+            ty::TyKind::Tuple(_) => self.cps_cx.mk_tuple(&t.tuple_fields().enumerate().map(|(i, f)| {
+                (Field::nth(i.try_into().unwrap()), self.get_holy_type(f))
+            }).collect::<Vec<_>>()),
+            _ => self.mk_refine_hole(get_basic_type(t)),
+        }
+    }
+
+    // TODO: In later compiler versions, the MirSource is contained as a field
+    // source within the Body
     /// Translates an MIR function body to a CPS IR FnDef.
-    pub fn translate_body(&mut self, body: &Body<'tcx>) -> FnDef<'lr> {
+    pub fn translate_body(&mut self, source: MirSource<'tcx>, body: &Body<'tcx>) -> FnDef<'lr> {
         let retk = self.fresh(Symbol::intern("_rk"));
 
         // The let-bound local representing the return value of the function
@@ -188,7 +234,7 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
                         let sym = Local(self.fresh(Symbol::intern(format!("_g").as_str())));
                         // Bools are guaranteed to be one byte, so assuming a one byte
                         // TypeLayout should be ok!
-                        let bind = Statement::Let(sym, TypeLayout::Block(1));
+                        let bind = Statement::Let(sym, TypeLayout::Block(size_of::<bool>().try_into().unwrap()));
 
                         let pl = Place {
                             local: sym,
@@ -287,8 +333,8 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
                         // assign it to the value of the arg.
 
                         let sym = Local(self.fresh(Symbol::intern(format!("_farg").as_str())));
-                        // TODO: TypeLayout
-                        let bind = Statement::Let(sym, TypeLayout::Block(1));
+                        let tys = arg.ty(body, self.tcx);
+                        let bind = Statement::Let(sym, get_layout(&tys));
 
                         let pl = Place {
                             local: sym,
@@ -321,22 +367,29 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
             // We update our body here
             // TODO: Fill this out with proper things
 
-            // Assume no uninitialized types - annotate everything w/ refinement
-            // In environment, put all locals used (owned refs to heap things)
-            // In heap: annotate ints and bools with RefineHoles
-            // (For now), every hole needs a unique identifying integer
-            // -> every hole gets its own kvar
-            // For tuples in heap: create tuple of same structure, except with
-            // holes at the leaves of the tuple structure
-            //
-            // Every tuple field needs a name (use Field::nth)
-            //
-            // Every bb takes every local as an arg
+            // For now, for our continuations, we use all of the locals
+            // as our env arguments, keeping the parameters empty.
+            // These env arguments point to heap locations, where the BasicType
+            // corresponds to the type of the local, and the refinement is a
+            // hole (we use RefineHole)
+
+            let mut env = vec![];
+            let mut heap = vec![];
+
+            for (lix, decl) in body.local_decls.iter_enumerated() {
+                let arg = Local(Symbol::intern(format!("_{}", lix.index()).as_str()));
+                let loc = Location(Symbol::intern(format!("loc_{}", lix.index()).as_str()));
+                let ty = self.get_holy_type(decl.ty);
+
+                env.push((arg, OwnRef(loc)));
+                heap.push((loc, ty));
+            }
+
             let lc = ContDef {
                 name: Symbol::intern(format!("bb{}", bb.as_u32()).as_str()),
-                heap: todo!(),
-                env: todo!(),
-                params: todo!(),
+                heap,
+                env,
+                params: vec![],
                 body: Box::new(bbod),
             };
             
@@ -351,21 +404,53 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
         // We do this because a FnBody::Sequence takes a statement and the rest
         // of the function body; we do this at the end so that we have a "rest of`
         // the function body"
-        for (ix, _decl) in body.local_decls.iter_enumerated().rev() {
+        for (ix, decl) in body.local_decls.iter_enumerated().rev() {
+            if (1..body.arg_count + 1).contains(&ix.index()) {
+                // Skip over argument locals, they're printed in the signature.
+                continue;
+            }
+
             let sym = Local(Symbol::intern(format!("_{}", ix.as_u32()).as_str()));
-            // TODO: Proper byte size for lets
-            let s = Statement::Let(sym, TypeLayout::Block(1));
+            let s = Statement::Let(sym, get_layout(decl.ty));
             nb = FnBody::Seq(s, Box::new(nb));
         }
 
+        // For our function definition, we need to record what arguments our
+        // function takes
+        // As with our continuation, our function args go in args; all of
+        // the args are owned references to vars in the heap. Each of these
+        // vars has a corresponding BasicType, refined with a RefineHole
+
+        let mut args = vec![];
+        let mut heap = vec![];
+
+        for lix in body.args_iter() {
+            let decl = &body.local_decls[lix];
+
+            let arg = Local(Symbol::intern(format!("_{}", lix.index()).as_str()));
+            let loc = Location(Symbol::intern(format!("loc_{}", lix.index()).as_str()));
+            let ty = self.get_holy_type(decl.ty);
+
+            args.push((arg, OwnRef(loc)));
+            heap.push((loc, ty));
+        }
+
+        // Our return type is local _0; we want to get a holy type here as
+        // our return type
+        let out_loc = Location(Symbol::intern(format!("loc_0").as_str()));
+        let out_tys = self.get_holy_type(body.local_decls[mir::Local::from_u32(0)].ty);
+        heap.push((out_loc, out_tys));
+        let out_ty = OwnRef(out_loc);
+
         // Return our translated body
+        // TODO: Different out_heap than input heap?
         FnDef {
-            name: todo!(),
-            heap: todo!(),
-            args: todo!(),
+            name: Symbol::intern(self.tcx.def_path_str(source.def_id()).as_str()),
+            heap: heap.clone(),
+            args,
             ret: retk,
-            out_heap: todo!(),
-            out_ty: todo!(),
+            out_heap: heap,
+            out_ty,
             body: Box::new(nb),
         }
     }

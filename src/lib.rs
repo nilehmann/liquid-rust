@@ -7,6 +7,7 @@
 
 extern crate rustc_arena;
 extern crate rustc_ast;
+extern crate rustc_mir;
 #[macro_use]
 extern crate rustc_middle;
 #[macro_use]
