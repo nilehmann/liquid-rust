@@ -1,9 +1,7 @@
 //! Handles the translation from Rust MIR to the CPS IR.
 
 use super::ast::*;
-use super::context as cps_ctx;
-use crate::{context::LiquidRustCtxt, refinements::dom_tree::DominatorTree};
-use rustc_data_structures::graph::WithStartNode;
+use super::context::LiquidRustCtxt;
 use rustc_mir::transform::MirSource;
 use rustc_middle::{
     mir::{self, terminator::TerminatorKind, Body, StatementKind},
@@ -92,21 +90,19 @@ fn get_layout<'tcx>(t: ty::Ty<'tcx>) -> TypeLayout {
 
 // Transformer state struct should include a mapping from locals to refinements too
 
-pub struct Transformer<'a, 'lr, 'tcx> {
-    cx: &'a LiquidRustCtxt<'lr, 'tcx>,
+pub struct Transformer<'lr, 'tcx> {
     // TODO: What should the lifetime on this be?
-    cps_cx: &'lr cps_ctx::LiquidRustCtxt<'lr>,
+    cps_cx: &'lr LiquidRustCtxt<'lr>,
     tcx: ty::TyCtxt<'tcx>,
     symbols: HashMap<Symbol, usize>,
     holes: u32,
 }
 
-impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
-    pub fn new(cx: &'a LiquidRustCtxt<'lr, 'tcx>, cps_cx: &'lr cps_ctx::LiquidRustCtxt<'lr>) -> Self {
+impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
+    pub fn new(tcx: ty::TyCtxt<'tcx>, cps_cx: &'lr LiquidRustCtxt<'lr>) -> Self {
         Self {
-            cx,
             cps_cx,
-            tcx: cx.tcx(),
+            tcx: tcx,
             symbols: HashMap::new(),
             holes: 0,
         }
@@ -178,17 +174,10 @@ impl<'a, 'lr, 'tcx> Transformer<'a, 'lr, 'tcx> {
             args: Vec::new(),
         };
 
-        // We then iterate through each basic block in reverse breadth-first dominator
-        // tree order
-        let dom_tree = DominatorTree::build(&self.cx, body);
-        let bbs = dom_tree
-            .bfs(body.start_node())
-            .map(|(_depth, _pred, bb)| bb)
-            .collect::<Vec<_>>();
-
-        for bb in bbs.iter().rev() {
-            let bbd = &body[*bb];
-
+        // We then iterate through our basic blocks
+        // We don't need to do this in dom tree order because our bbs
+        // should be mutually recursive
+        for (bb, bbd) in body.basic_blocks().iter_enumerated() {
             // For each basic block, we generate a statement for the terminator first,
             // then we go through the statements in reverse, building onto the
             // FnBody this way.
