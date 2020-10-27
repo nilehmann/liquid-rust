@@ -8,14 +8,40 @@ pub mod subst;
 pub mod typeck;
 pub mod utils;
 
+use rustc_middle::{hir::map::Map, ty::TyCtxt};
+use rustc_mir::transform::MirSource;
+
+use context::LiquidRustCtxt;
+use liquid::LiquidSolver;
+use rustc_hir::BodyId;
+use typeck::TypeCk;
+use translate::Transformer;
+
+// TODO: deal with errors w/o unwrapping and asserting
+/// Runs the typechecking pipeline on a function body, based on its body id.
+pub fn check_body<'lr>(cx: &'lr LiquidRustCtxt<'lr>, hir: Map<'_>, tcx: TyCtxt<'_>, body_id: BodyId) {
+    // We first have to translate the body to the CPS IR.
+    let def_id = hir.body_owner_def_id(body_id);
+    let body = tcx.optimized_mir(def_id);
+
+    let mut t = Transformer::new(tcx, cx);
+    let ir = t.translate_body(MirSource::item(def_id.to_def_id()), body);
+    
+    // Once we have our IR, we can generate our constraint
+    let c = TypeCk::cgen(cx, &ir).unwrap();
+    assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+}
+
 #[cfg(test)]
 mod tests {
-    use super::{ast::FnDef, constraint::Constraint, liquid::LiquidSolver, parser::FnParser};
+    use super::{ast::FnDef, constraint::Constraint, liquid::LiquidSolver, parser::FnParser, translate::Transformer};
     use super::{
         context::{Arena, LiquidRustCtxt},
         typeck::TypeCk,
     };
     use rustc_ast::attr::with_default_session_globals;
+    use rustc_middle::ty;
+    use rustc_mir::transform::MirSource;
 
     struct Session<'lr> {
         cx: &'lr LiquidRustCtxt<'lr>,

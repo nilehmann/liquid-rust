@@ -4,11 +4,13 @@ use super::ast::*;
 use super::context::LiquidRustCtxt;
 use rustc_mir::transform::MirSource;
 use rustc_middle::{
-    mir::{self, terminator::TerminatorKind, Body, StatementKind},
+    mir::{self, interpret::{ConstValue, Scalar}, terminator::TerminatorKind, Body, StatementKind},
     ty,
 };
 use rustc_span::Symbol;
 use std::{collections::HashMap, convert::TryInto, mem::size_of};
+
+// TODO: Mayhaps a Visitor pattern would be appropriate here
 
 // First, we have to convert the MIR code to an SSA form.
 // Once we do this, we can convert the SSA form into
@@ -34,7 +36,33 @@ fn translate_op(from: &mir::Operand) -> Operand {
     match from {
         mir::Operand::Copy(p) => Operand::Deref(translate_place(p)),
         mir::Operand::Move(p) => Operand::Deref(translate_place(p)),
-        mir::Operand::Constant(_bc) => unimplemented!(),
+        mir::Operand::Constant(bc) => translate_const(bc),
+    }
+}
+
+// Adapted from
+// https://github.com/rust-lang/rust/blob/master/compiler/rustc_middle/src/ty/print/pretty.rs
+fn translate_const(from: &mir::Constant) -> Operand {
+    match from.literal.val {
+        ty::ConstKind::Value(value) => {
+            match value {
+                ConstValue::Scalar(s) => {
+                    match (s, &from.literal.ty.kind) {
+                        // Bool
+                        (Scalar::Raw { data: 0, .. }, ty::Bool) => Operand::Constant(Constant::Bool(false)),
+                        (Scalar::Raw { data: 1, .. }, ty::Bool) => Operand::Constant(Constant::Bool(true)),
+                        // TODO: Floats, when support is added
+                        // Int
+                        (Scalar::Raw { data, .. }, ty::Uint(_ui)) => Operand::Constant(Constant::Int(data)),
+                        // TODO: Signed ints, when support is added
+                        // TODO: Chars, when support is added
+                        _ => todo!(),
+                    }
+                },
+                _ => todo!()
+            }
+        },
+        _ => todo!()
     }
 }
 
@@ -183,6 +211,11 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
             // FnBody this way.
             let mut bbod = match &bbd.terminator().kind {
                 TerminatorKind::Goto { target } => FnBody::Jump {
+                    target: Symbol::intern(format!("bb{}", target.as_u32()).as_str()),
+                    args: Vec::new(),
+                },
+                // TODO: Actually do the asserting
+                TerminatorKind::Assert { target, .. } => FnBody::Jump {
                     target: Symbol::intern(format!("bb{}", target.as_u32()).as_str()),
                     args: Vec::new(),
                 },
