@@ -15,7 +15,7 @@ FnBody: Box<FnBody<'lr>> = {
   "letcont" <def: ContDef> "in" <rest: FnBody>
       => Box::new(FnBody::LetCont{ <> }),
 
-  "if" "*" <discr: Place> "then" <then: FnBody> "else" <else_: FnBody>
+  "if" <discr: Place> "then" <then: FnBody> "else" <else_: FnBody>
     => Box::new(FnBody::Ite{ <> }),
 
   "call" <func: Place> "(" <args: Comma<Local>> ")" "ret" <ret: Symbol>

@@ -194,7 +194,7 @@ impl Region {
 
     pub fn contains(&self, rhs: &Region) -> bool {
         for p in &rhs.0 {
-            if self.0.iter().find(|x| p == *x).is_none() {
+            if self.0.iter().find(|&x| p == x).is_none() {
                 return false;
             }
         }

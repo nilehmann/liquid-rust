@@ -1,8 +1,11 @@
-use std::{collections::HashMap, fmt};
+use std::collections::HashMap;
 
 use super::{
-    ast::*, constraint::Constraint, constraint::Kvar, constraint::Sort, context::LiquidRustCtxt,
-    subst::DeferredSubst, subst::Subst, utils::Dict, utils::OrderedHashMap, utils::Scoped,
+    ast::*,
+    constraint::{Constraint, Kvar, Sort},
+    context::LiquidRustCtxt,
+    subst::{DeferredSubst, Subst},
+    utils::{Dict, OrderedHashMap, Scoped},
 };
 
 type LocalsMap = HashMap<Local, OwnRef>;
@@ -168,11 +171,11 @@ impl<'lr> TyCtxt<'lr> {
                     Ok(Constraint::True)
                 } else {
                     let mut cs = vec![];
-                    let t_join = self.foo(t, &mut self.bindings().collect());
-                    cs.push(self.inner_subtype(t, t_join)?);
+                    let t_join = self.replace_refine_with_kvars(t, &mut self.bindings().collect());
+                    cs.push(inner_subtype(self.cx, &self.locations, t, t_join)?);
                     for p in r {
                         let (_, t2) = self.lookup(p);
-                        cs.push(self.inner_subtype(t2, t_join)?);
+                        cs.push(inner_subtype(self.cx, &self.locations, t2, t_join)?);
                         bindings.extend(self.update(p, t_join));
                     }
                     Ok(Constraint::Conj(cs))
@@ -186,7 +189,7 @@ impl<'lr> TyCtxt<'lr> {
         }
     }
 
-    fn foo(&mut self, typ: Ty<'lr>, bindings: &mut Bindings<'lr>) -> Ty<'lr> {
+    fn replace_refine_with_kvars(&mut self, typ: Ty<'lr>, bindings: &mut Bindings<'lr>) -> Ty<'lr> {
         match typ {
             TyS::Refine { ty, .. } => {
                 let mut vars: Vec<Var> = vec![Var::Nu];
@@ -199,7 +202,7 @@ impl<'lr> TyCtxt<'lr> {
                 let fields: Vec<_> = fields
                     .iter()
                     .map(|&(f, t)| {
-                        let t = self.foo(t, bindings);
+                        let t = self.replace_refine_with_kvars(t, bindings);
                         bindings.push((Var::from(f), t));
                         (f, t)
                     })
@@ -411,10 +414,10 @@ impl<'lr> TypeCk<'lr> {
     ) -> (Pred<'lr>, Ty<'lr>, Bindings<'lr>) {
         match operand {
             Operand::Deref(place) => {
-                // TODO: check ownership safety
                 let mut bindings = vec![];
                 let (pred, typ) = tcx.lookup(place);
                 if !typ.is_copy() {
+                    // TODO: check ownership safety
                     bindings.extend(tcx.update(place, self.cx.mk_uninit(typ.size())));
                 }
                 (pred, typ, bindings)
@@ -681,6 +684,15 @@ fn subtype<'lr>(
             let typ2 = locations2.get(l2);
             subtype(cx, locations1, typ1, locations2, typ2)?
         }
+        (TyS::MutRef(r1, l1), TyS::MutRef(r2, l2)) => {
+            if !r2.contains(r1) {
+                todo!("")
+            }
+            let p = cx.mk_place((*l1).into(), &[]);
+            let typ1 = selfify(cx, p, locations1[*l1]).into();
+            let typ2 = locations2.get(l2);
+            subtype(cx, locations1, typ1, locations2, typ2)?
+        }
         (
             TyS::Refine {
                 ty: ty1,
@@ -716,6 +728,72 @@ fn subtype<'lr>(
                     c = Constraint::Conj(vec![
                         subtype(cx, locations1, t1.clone(), locations2, t2)?,
                         Constraint::from_binding(*x1, t1, c),
+                    ]);
+                }
+                c
+            } else {
+                Constraint::True
+            }
+        }
+        (_, TyS::Uninit(_)) => Constraint::True,
+        _ => return Err(TypeError::SubtypingError(typ1, typ2)),
+    };
+    Ok(c)
+}
+
+fn inner_subtype<'lr>(
+    cx: &'lr LiquidRustCtxt<'lr>,
+    locations: &Scoped<LocationsMap<'lr>>,
+    typ1: Ty<'lr>,
+    typ2: Ty<'lr>,
+) -> Result<Constraint, TypeError<'lr>> {
+    let c = match (typ1, typ2) {
+        (TyS::Fn { .. }, TyS::Fn { .. }) => todo!("implement function subtyping"),
+        (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
+            let p = cx.mk_place((*l1).into(), &[]);
+            let typ1 = selfify(cx, p, locations[*l1]);
+            let typ2 = locations[*l2];
+            inner_subtype(cx, locations, typ1, typ2)?
+        }
+        (TyS::MutRef(r1, l1), TyS::MutRef(r2, l2)) => {
+            if !r2.contains(r1) {
+                todo!("")
+            }
+            let p = cx.mk_place((*l1).into(), &[]);
+            let typ1 = selfify(cx, p, locations[*l1]);
+            let typ2 = locations[*l2];
+            inner_subtype(cx, locations, typ1, typ2)?
+        }
+        (
+            TyS::Refine {
+                ty: ty1,
+                pred: pred1,
+            },
+            TyS::Refine {
+                ty: ty2,
+                pred: pred2,
+            },
+        ) => {
+            if ty1 != ty2 {
+                return Err(TypeError::SubtypingError(typ1, typ2));
+            }
+            Constraint::from_subtype(
+                *ty1,
+                DeferredSubst::empty(pred1),
+                DeferredSubst::empty(pred2),
+            )
+        }
+        (TyS::Tuple(fields1), TyS::Tuple(fields2)) => {
+            if fields1.len() != fields2.len() {
+                return Err(TypeError::SubtypingError(typ1, typ2));
+            }
+            let mut iter = fields1.iter().zip(fields2).rev();
+            if let Some((&(_, t1), &(_, t2))) = iter.next() {
+                let mut c = inner_subtype(cx, locations, t1, t2)?;
+                for (&(x1, t1), &(_, t2)) in iter {
+                    c = Constraint::Conj(vec![
+                        inner_subtype(cx, locations, t1, t2)?,
+                        Constraint::from_binding(x1, t1, c),
                     ]);
                 }
                 c

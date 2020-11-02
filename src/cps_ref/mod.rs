@@ -50,9 +50,9 @@ mod tests {
                 r####"
 fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
   let b = new(1);
-  b := *n <= 0;
-  if *b then
-    n := 0 - *n;
+  b := n <= 0;
+  if b then
+    n := 0 - n;
     jump k(n)
   else
     jump k(n)
@@ -71,10 +71,10 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
       letcont loop( n1: {int | _ }, i1: {int | _ }, r1: {int | _ }
                   ; i: own(i1), r: own(r1), n: own(n1);) =
         let t0 = new(1);
-        t0 := *i <= *n;
-        if *t0 then
-          i := *i + 1;
-          r := *r + *i;
+        t0 := i <= n;
+        if t0 then
+          i := i + 1;
+          r := r + i;
           jump loop()
         else
           jump k(r)
@@ -99,16 +99,16 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
       letcont b0( n1: {int | V >= 0}, i1: {int | V >= 0}, c1: {int | V >= 0}
                 ; i: own(i1), c: own(c1), n: own(n1); ) =
         let t0 = new(1);
-        t0 := *i < *n;
+        t0 := i < n;
         if *t0 then
           letcont b1( n2: {int | V >= 0}, i2: {int | V >= 0}, c2: {int | V >= 0}, x0: {int | true}
                     ; i: own(i2), c: own(c2), n: own(n2)
                     ; x: own(x0)
                     ) =
             let t1 = new(1);
-            t1 := *x == 0;
-            if *t1 then
-              c := *c + 1;
+            t1 := x == 0;
+            if t1 then
+              c := c + 1;
               jump b0()
             else
               jump b0()
@@ -138,7 +138,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
       p.0 := 1;
       p.1 := 2;
       let r = new(1);
-      r := *p.0;
+      r := p.0;
       jump k(r)
     "####,
             );
@@ -153,7 +153,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
                 r####"
     fn length(p0: (@x: {int | true}, @y: {int | V >= @x}); p: own(p0)) ret k(r: {int | V >= 0}; own(r))=
       let t = new(1);
-      t := *p.1 - *p.0;
+      t := p.1 - p.0;
       jump k(t)
     "####,
             );
@@ -187,7 +187,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
         jump k(y)
       in
       let y = new(1);
-      y := *x.1;
+      y := x.1;
       jump k(y)
     "####,
             );
@@ -198,7 +198,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
     #[test]
     fn mut_ref_strong_update() {
         Session::run(|sess| {
-            let c = sess.check(
+            let (c, kvars) = sess.check(
                 r####"
     fn foo(;) ret k(r0: {int | V > 0}; own(r0))=
       let n = new(1);
@@ -210,14 +210,14 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
       jump k(n)
     "####,
             );
-            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+            assert!(LiquidSolver::new().unwrap().check(&c, &kvars).unwrap());
         });
     }
 
     #[test]
     fn mut_ref_strong_update_pair() {
         Session::run(|sess| {
-            let c = sess.check(
+            let (c, kvars) = sess.check(
                 r####"
     fn foo(x0: {int | true}, y0: {int | true}; x: own(x0), y: own(y0)) ret k(r0: {int | V == 1}; own(r0))=
       let p = new((1, 1));
@@ -227,18 +227,18 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
       *(p.1) := 2;
       drop(p);
       let r = new(1);
-      r := *y - *x;
+      r := y - x;
       jump k(r)
     "####,
             );
-            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+            assert!(LiquidSolver::new().unwrap().check(&c, &kvars).unwrap());
         });
     }
 
     #[test]
     fn mut_ref_join() {
         Session::run(|sess| {
-            let c = sess.check(
+            let (c, kvars) = sess.check(
                 r####"
     fn foo(b0: {bool | true}; b: own(b0)) ret k(r0: {int | V > 0}; own(r0))=
       letcont b0( x1: {int | _ }, y1: {int | _ }, l1: {int | _ }, l2: &mut({x, y}, l1)
@@ -255,7 +255,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
       let y = new(1);
       y := 2;
       let p = new(1);
-      if *b then
+      if b then
         p := &mut x;
         jump b0()
       else
@@ -263,19 +263,19 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
         jump b0()
     "####,
             );
-            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+            assert!(LiquidSolver::new().unwrap().check(&c, &kvars).unwrap());
         });
     }
 
     #[test]
     fn mut_ref_join_tuple() {
         Session::run(|sess| {
-            let c = sess.check(
+            let (c, kvars) = sess.check(
                 r####"
     fn foo(b0: {bool | true}; b: own(b0)) ret k(r0: {int | V > 0}; own(r0))=
-      letcont b0(  x1: (@x: {int | _ }, @y: {int | _ }),
-                   y1: (@x: {int | _ }, @y: {int | _ }),
-                   l1: (@x: {int | _ }, @y: {int | _ }),
+      letcont b0(  x1: (@a: {int | _ }, @b: {int | _ }),
+                   y1: (@a: {int | _ }, @b: {int | _ }),
+                   l1: (@a: {int | _ }, @b: {int | _ }),
                    l2: &mut({x, y}, l1)
                 ; x: own(x1), y: own(y1), p: own(l2)
                 ;
@@ -283,7 +283,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
         (*p).1 := (*p).1 + 1;
         drop(p);
         let r = new(1);
-        r := y.1 - y.0;
+        r := y.1 + y.0;
         jump k(r)
       in
       let x = new((1, 1));
@@ -293,7 +293,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
       y.0 := 2;
       y.1 := 2;
       let p = new(1);
-      if *b then
+      if b then
         p := &mut x;
         jump b0()
       else
@@ -301,8 +301,7 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
         jump b0()
     "####,
             );
-            // dbg!(c);
-            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+            assert!(LiquidSolver::new().unwrap().check(&c, &kvars).unwrap());
         });
     }
 }
