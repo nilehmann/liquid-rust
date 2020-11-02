@@ -194,4 +194,115 @@ fn abs(n0: {int | true}; n: own(n0)) ret k(r: {int | V >= 0}; own(r)) =
             assert!(LiquidSolver::new().unwrap().check(&c, &kvars).unwrap());
         });
     }
+
+    #[test]
+    fn mut_ref_strong_update() {
+        Session::run(|sess| {
+            let c = sess.check(
+                r####"
+    fn foo(;) ret k(r0: {int | V > 0}; own(r0))=
+      let n = new(1);
+      let p = new(1);
+      n    := 0;
+      p    := &mut n;
+      *(p) := 1;
+      drop(p);
+      jump k(n)
+    "####,
+            );
+            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+        });
+    }
+
+    #[test]
+    fn mut_ref_strong_update_pair() {
+        Session::run(|sess| {
+            let c = sess.check(
+                r####"
+    fn foo(x0: {int | true}, y0: {int | true}; x: own(x0), y: own(y0)) ret k(r0: {int | V == 1}; own(r0))=
+      let p = new((1, 1));
+      p.0 := &mut x;
+      p.1 := &mut y;
+      *(p.0) := 1;
+      *(p.1) := 2;
+      drop(p);
+      let r = new(1);
+      r := *y - *x;
+      jump k(r)
+    "####,
+            );
+            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+        });
+    }
+
+    #[test]
+    fn mut_ref_join() {
+        Session::run(|sess| {
+            let c = sess.check(
+                r####"
+    fn foo(b0: {bool | true}; b: own(b0)) ret k(r0: {int | V > 0}; own(r0))=
+      letcont b0( x1: {int | _ }, y1: {int | _ }, l1: {int | _ }, l2: &mut({x, y}, l1)
+                ; x: own(x1), y: own(y1), p: own(l2)
+                ;
+                ) =
+        *(p) := 5;
+        drop(p);
+        let r = new(1);
+        jump k(x)
+      in
+      let x = new(1);
+      x := 1;
+      let y = new(1);
+      y := 2;
+      let p = new(1);
+      if *b then
+        p := &mut x;
+        jump b0()
+      else
+        p := &mut y;
+        jump b0()
+    "####,
+            );
+            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+        });
+    }
+
+    #[test]
+    fn mut_ref_join_tuple() {
+        Session::run(|sess| {
+            let c = sess.check(
+                r####"
+    fn foo(b0: {bool | true}; b: own(b0)) ret k(r0: {int | V > 0}; own(r0))=
+      letcont b0(  x1: (@x: {int | _ }, @y: {int | _ }),
+                   y1: (@x: {int | _ }, @y: {int | _ }),
+                   l1: (@x: {int | _ }, @y: {int | _ }),
+                   l2: &mut({x, y}, l1)
+                ; x: own(x1), y: own(y1), p: own(l2)
+                ;
+                ) =
+        (*p).1 := (*p).1 + 1;
+        drop(p);
+        let r = new(1);
+        r := y.1 - y.0;
+        jump k(r)
+      in
+      let x = new((1, 1));
+      x.0 := 1;
+      x.1 := 2;
+      let y = new((1, 1));
+      y.0 := 2;
+      y.1 := 2;
+      let p = new(1);
+      if *b then
+        p := &mut x;
+        jump b0()
+      else
+        p := &mut y;
+        jump b0()
+    "####,
+            );
+            // dbg!(c);
+            assert!(LiquidSolver::new().unwrap().check(&c).unwrap());
+        });
+    }
 }

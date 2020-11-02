@@ -1,4 +1,4 @@
-use std::collections::HashMap;
+use std::{collections::HashMap, fmt};
 
 use super::{
     ast::*, constraint::Constraint, constraint::Kvar, constraint::Sort, context::LiquidRustCtxt,
@@ -100,10 +100,27 @@ impl<'lr> TyCtxt<'lr> {
     }
 
     pub fn lookup(&self, place: &Place) -> (Pred<'lr>, Ty<'lr>) {
-        let OwnRef(l) = self.lookup_local(place.local).unwrap();
-        let typ = self.lookup_location(l).unwrap();
-        let pred = self.cx.mk_place(l.into(), &place.projection);
-        (pred, typ.project(&place.projection))
+        let OwnRef(mut location) = self.lookup_local(place.local).unwrap();
+        let mut typ = self.lookup_location(location).unwrap();
+
+        let mut v = Vec::new();
+        for p in &place.projection {
+            match (typ, p) {
+                (TyS::Tuple(fields), &Projection::Field(n)) => {
+                    typ = fields[n as usize].1;
+                    v.push(n);
+                }
+                (TyS::MutRef(_, l), Projection::Deref) => {
+                    v.clear();
+                    location = *l;
+                    typ = self.lookup_location(location).unwrap();
+                }
+                _ => bug!("{:?} {:?} {:?}", typ, place, p),
+            }
+        }
+        let pred = self.cx.mk_place(location.into(), &v);
+
+        (pred, typ)
     }
 
     fn lookup_local(&self, x: Local) -> Option<OwnRef> {
@@ -123,21 +140,123 @@ impl<'lr> TyCtxt<'lr> {
         self.locals.last_mut().unwrap().insert(x, ownref);
     }
 
-    pub fn uninit(&mut self, place: &Place) {
-        let (_, t) = self.lookup(place);
-        self.update(place, self.cx.mk_uninit(t.size()));
+    pub fn drop(&mut self, x: Local) -> Result<(Bindings<'lr>, Constraint), TypeError<'lr>> {
+        let OwnRef(l) = self.lookup_local(x).unwrap();
+        let typ = self.lookup_location(l).unwrap();
+        let mut bindings = vec![];
+        let c = self.drop_typ(typ, &mut bindings)?;
+        bindings.extend(self.update(&Place::from(x), self.cx.mk_uninit(typ.size())));
+        Ok((bindings, c))
     }
 
-    pub fn update(&mut self, place: &Place, typ: Ty<'lr>) -> (Var, Ty<'lr>) {
+    fn drop_typ(
+        &mut self,
+        typ: Ty<'lr>,
+        bindings: &mut Bindings<'lr>,
+    ) -> Result<Constraint, TypeError<'lr>> {
+        match typ {
+            TyS::Tuple(fields) => {
+                for (_, t) in fields {
+                    self.drop_typ(t, bindings)?;
+                }
+                Ok(Constraint::True)
+            }
+            TyS::MutRef(r, l) => {
+                let t = self.lookup_location(*l).unwrap();
+                if r.len() == 1 {
+                    bindings.extend(self.update(&r[0], t));
+                    Ok(Constraint::True)
+                } else {
+                    let mut cs = vec![];
+                    let t_join = self.foo(t, &mut self.bindings().collect());
+                    cs.push(self.inner_subtype(t, t_join)?);
+                    for p in r {
+                        let (_, t2) = self.lookup(p);
+                        cs.push(self.inner_subtype(t2, t_join)?);
+                        bindings.extend(self.update(p, t_join));
+                    }
+                    Ok(Constraint::Conj(cs))
+                }
+            }
+            TyS::Refine { .. }
+            | TyS::OwnRef(_)
+            | TyS::Fn { .. }
+            | TyS::Uninit(_)
+            | TyS::RefineHole { .. } => Ok(Constraint::True),
+        }
+    }
+
+    fn foo(&mut self, typ: Ty<'lr>, bindings: &mut Bindings<'lr>) -> Ty<'lr> {
+        match typ {
+            TyS::Refine { ty, .. } => {
+                let mut vars: Vec<Var> = vec![Var::Nu];
+                vars.extend(bindings.iter().map(|&(x, _)| x));
+                let kvar = self.fresh_kvar(*ty, bindings);
+                self.cx
+                    .mk_refine(*ty, self.cx.mk_pred(PredS::Kvar(kvar, vars)))
+            }
+            TyS::Tuple(fields) => {
+                let fields: Vec<_> = fields
+                    .iter()
+                    .map(|&(f, t)| {
+                        let t = self.foo(t, bindings);
+                        bindings.push((Var::from(f), t));
+                        (f, t)
+                    })
+                    .collect();
+                self.cx.mk_tuple(&fields)
+            }
+            TyS::Uninit(_)
+            | TyS::Fn { .. }
+            | TyS::OwnRef(_)
+            | TyS::MutRef(_, _)
+            | TyS::RefineHole { .. } => typ,
+        }
+    }
+
+    pub fn update(&mut self, place: &Place, new_typ: Ty<'lr>) -> Bindings<'lr> {
         let OwnRef(l) = self.lookup_local(place.local).unwrap();
-        let updated_typ =
-            self.lookup_location(l)
-                .unwrap()
-                .update_at(self.cx, &place.projection, typ);
-        let fresh_l = self.fresh_location();
-        self.insert_location(fresh_l, updated_typ);
-        self.insert_local(place.local, OwnRef(fresh_l));
-        (Var::from(fresh_l), updated_typ)
+        let typ = self.lookup_location(l).unwrap();
+        let (typ, mut bindings) = self.update_typ(typ, &place.projection, new_typ);
+        let fresh = self.fresh_location();
+        bindings.push((fresh, typ));
+        for &(l, t) in &bindings {
+            self.insert_location(l, t);
+        }
+        self.insert_local(place.local, OwnRef(fresh));
+        bindings
+            .into_iter()
+            .map(|(l, t)| (Var::from(l), t))
+            .collect()
+    }
+
+    fn update_typ(
+        &mut self,
+        typ: Ty<'lr>,
+        proj: &[Projection],
+        new_typ: Ty<'lr>,
+    ) -> (Ty<'lr>, Vec<(Location, Ty<'lr>)>) {
+        match (typ, proj) {
+            (_, []) => {
+                debug_assert!(typ.size() == new_typ.size());
+                (new_typ, vec![])
+            }
+            (TyS::Tuple(fields), [Projection::Field(n), ..]) => {
+                let mut fields = fields.clone();
+                let f = &mut fields[*n as usize];
+                let (t, bindings) = self.update_typ(f.1, &proj[1..], new_typ);
+                f.1 = t;
+                (self.cx.mk_tuple(&fields), bindings)
+            }
+            (TyS::MutRef(r, l), [Projection::Deref, ..]) => {
+                let referee = self.lookup_location(*l).unwrap();
+                let (t, mut bindings) = self.update_typ(referee, &proj[1..], new_typ);
+                let l = self.fresh_location();
+                bindings.push((l, t));
+                (self.cx.mk_ty(TyS::MutRef(r.clone(), l)), bindings)
+            }
+            _ => bug!(""),
+        }
     }
 
     pub fn alloc(&mut self, x: Local, layout: &TypeLayout) {
@@ -145,6 +264,16 @@ impl<'lr> TyCtxt<'lr> {
         let fresh_l = self.fresh_location();
         self.insert_location(fresh_l, self.cx.mk_ty_for_layout(layout));
         self.insert_local(x, OwnRef(fresh_l));
+    }
+
+    pub fn borrow(&mut self, place: &Place) -> (Ty<'lr>, Bindings<'lr>) {
+        let (_, typ) = self.lookup(place);
+        let l = self.fresh_location();
+        self.insert_location(l, typ);
+        (
+            self.cx.mk_ty(TyS::MutRef(Region::new(place.clone()), l)),
+            vec![(Var::from(l), typ)],
+        )
     }
 
     fn fresh_location(&mut self) -> Location {
@@ -178,8 +307,8 @@ impl<'lr> TyCtxt<'lr> {
 
         // Update context after function call
         let fresh_x = Local(Symbol::intern("$")); // FIXME
-        for arg in args {
-            self.uninit(&Place::from(*arg))
+        for &arg in args {
+            let _ = self.drop(arg);
         }
         // FIXME: we are assuming all locations are fresh
         for (l, typ) in out_heap {
@@ -282,10 +411,11 @@ impl<'lr> TypeCk<'lr> {
     ) -> (Pred<'lr>, Ty<'lr>, Bindings<'lr>) {
         match operand {
             Operand::Deref(place) => {
+                // TODO: check ownership safety
                 let mut bindings = vec![];
                 let (pred, typ) = tcx.lookup(place);
                 if !typ.is_copy() {
-                    bindings.push(tcx.update(place, self.cx.mk_uninit(typ.size())));
+                    bindings.extend(tcx.update(place, self.cx.mk_uninit(typ.size())));
                 }
                 (pred, typ, bindings)
             }
@@ -369,6 +499,10 @@ impl<'lr> TypeCk<'lr> {
                     }
                 }
             }
+            Rvalue::RefMut(place) => {
+                // TODO: check ownership safety
+                tcx.borrow(place)
+            }
         };
         Ok(r)
     }
@@ -377,22 +511,32 @@ impl<'lr> TypeCk<'lr> {
         &mut self,
         tcx: &mut TyCtxt<'lr>,
         statement: &Statement,
-    ) -> Result<Bindings<'lr>, TypeError<'lr>> {
-        match statement {
+    ) -> Result<(Bindings<'lr>, Constraint), TypeError<'lr>> {
+        let r = match statement {
             Statement::Let(x, layout) => {
                 tcx.alloc(*x, layout);
-                Ok(vec![])
+                // println!("let {:?}", tcx);
+                (vec![], Constraint::True)
             }
             Statement::Assign(place, rval) => {
+                // TODO: check ownership safety
                 let (_, t1) = tcx.lookup(place);
                 let (t2, mut bindings) = self.wt_rvalue(tcx, rval)?;
                 if t1.size() != t2.size() {
                     return Err(TypeError::SizeMismatch(t1, t2));
                 }
-                bindings.push(tcx.update(place, t2));
-                Ok(bindings)
+                bindings.extend(tcx.update(place, t2));
+                // println!("assign {:?}", tcx);
+                (bindings, Constraint::True)
             }
-        }
+            Statement::Drop(p) => {
+                // TODO: check ownership safety
+                let a = tcx.drop(*p)?;
+                // println!("drop {:?}", tcx);
+                a
+            }
+        };
+        Ok(r)
     }
 
     fn wt_fn_body(&mut self, tcx: &mut TyCtxt<'lr>, fn_body: &FnBody<'lr>) -> Constraint {
@@ -445,9 +589,10 @@ impl<'lr> TypeCk<'lr> {
             }
             FnBody::Jump { target, args } => tcx.check_jump(*target, args).unwrap(),
             FnBody::Seq(statement, rest) => match self.wt_statement(tcx, statement) {
-                Ok(bindings) => {
-                    Constraint::from_bindings(bindings.iter().copied(), self.wt_fn_body(tcx, rest))
-                }
+                Ok((bindings, c)) => Constraint::Conj(vec![
+                    Constraint::from_bindings(bindings.iter().copied(), self.wt_fn_body(tcx, rest)),
+                    c,
+                ]),
                 Err(err) => {
                     self.errors.push(err);
                     Constraint::Err

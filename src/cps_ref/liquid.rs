@@ -167,7 +167,7 @@ impl<'a> LiquidSolver<'a> {
                 self.write_constraint_rec(c, indent + 2)?;
                 write!(self.buf, ")")?;
             }
-            Constraint::True => write!(self.buf, "{:>1$}true", "", indent)?,
+            Constraint::True => write!(self.buf, "\n{:>1$}((true))", "", indent)?,
             Constraint::Err => bug!(),
         }
         Ok(())
