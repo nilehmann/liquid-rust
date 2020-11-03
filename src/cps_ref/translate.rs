@@ -23,7 +23,7 @@ fn translate_place(from: &mir::Place) -> Place {
 
     for proj in from.projection {
         match proj {
-            mir::ProjectionElem::Field(f, _ty) => projection.push(f.as_u32()),
+            mir::ProjectionElem::Field(f, _ty) => projection.push(Projection::Field(f.as_u32())),
             mir::ProjectionElem::Deref => unimplemented!(),
             _ => todo!(),
         };
