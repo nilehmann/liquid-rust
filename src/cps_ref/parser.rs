@@ -1,9 +1,9 @@
 // auto-generated: "lalrpop 0.19.1"
 // sha256: 217babfd8c487919d1eb555f2312c18e3d1d5668ea18cc8ab7199a530a11545
-use std::str::FromStr;
 use crate::cps_ref::ast::*;
-use rustc_span::Symbol;
 use crate::cps_ref::context::LiquidRustCtxt;
+use rustc_span::Symbol;
+use std::str::FromStr;
 #[allow(unused_extern_crates)]
 extern crate lalrpop_util as __lalrpop_util;
 #[allow(unused_imports)]
@@ -5688,24 +5688,17 @@ mod __intern_token {
 pub use self::__lalrpop_util::lexer::Token;
 
 #[allow(unused_variables)]
-fn __action0<
-    'input,
-    'lr,
->(
+fn __action0<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, FnDef<'lr>, usize),
-) -> FnDef<'lr>
-{
+) -> FnDef<'lr> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action1<
-    'input,
-    'lr,
->(
+fn __action1<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5725,16 +5718,20 @@ fn __action1<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, body, _): (usize, Box<FnBody<'lr>>, usize),
-) -> FnDef<'lr>
-{
-    FnDef { name:name, heap:heap, args:args, ret:ret, out_heap:out_heap, out_ty:out_ty, body:body }
+) -> FnDef<'lr> {
+    FnDef {
+        name: name,
+        heap: heap,
+        args: args,
+        ret: ret,
+        out_heap: out_heap,
+        out_ty: out_ty,
+        body: body,
+    }
 }
 
 #[allow(unused_variables)]
-fn __action2<
-    'input,
-    'lr,
->(
+fn __action2<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5742,16 +5739,15 @@ fn __action2<
     (_, def, _): (usize, ContDef<'lr>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, rest, _): (usize, Box<FnBody<'lr>>, usize),
-) -> Box<FnBody<'lr>>
-{
-    Box::new(FnBody::LetCont{ def:def, rest:rest })
+) -> Box<FnBody<'lr>> {
+    Box::new(FnBody::LetCont {
+        def: def,
+        rest: rest,
+    })
 }
 
 #[allow(unused_variables)]
-fn __action3<
-    'input,
-    'lr,
->(
+fn __action3<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5761,16 +5757,16 @@ fn __action3<
     (_, then, _): (usize, Box<FnBody<'lr>>, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, else_, _): (usize, Box<FnBody<'lr>>, usize),
-) -> Box<FnBody<'lr>>
-{
-    Box::new(FnBody::Ite{ discr:discr, then:then, else_:else_ })
+) -> Box<FnBody<'lr>> {
+    Box::new(FnBody::Ite {
+        discr: discr,
+        then: then,
+        else_: else_,
+    })
 }
 
 #[allow(unused_variables)]
-fn __action4<
-    'input,
-    'lr,
->(
+fn __action4<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5781,16 +5777,16 @@ fn __action4<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, ret, _): (usize, Symbol, usize),
-) -> Box<FnBody<'lr>>
-{
-    Box::new(FnBody::Call{ func:func, args:args, ret:ret })
+) -> Box<FnBody<'lr>> {
+    Box::new(FnBody::Call {
+        func: func,
+        args: args,
+        ret: ret,
+    })
 }
 
 #[allow(unused_variables)]
-fn __action5<
-    'input,
-    'lr,
->(
+fn __action5<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5799,46 +5795,37 @@ fn __action5<
     (_, _, _): (usize, &'input str, usize),
     (_, args, _): (usize, ::std::vec::Vec<Local>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Box<FnBody<'lr>>
-{
-    Box::new(FnBody::Jump{ target:target, args:args })
+) -> Box<FnBody<'lr>> {
+    Box::new(FnBody::Jump {
+        target: target,
+        args: args,
+    })
 }
 
 #[allow(unused_variables)]
-fn __action6<
-    'input,
-    'lr,
->(
+fn __action6<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Statement, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __1, _): (usize, Box<FnBody<'lr>>, usize),
-) -> Box<FnBody<'lr>>
-{
+) -> Box<FnBody<'lr>> {
     Box::new(FnBody::Seq(__0, __1))
 }
 
 #[allow(unused_variables)]
-fn __action7<
-    'input,
-    'lr,
->(
+fn __action7<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Box<FnBody<'lr>>
-{
+) -> Box<FnBody<'lr>> {
     Box::new(FnBody::Abort)
 }
 
 #[allow(unused_variables)]
-fn __action8<
-    'input,
-    'lr,
->(
+fn __action8<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5852,16 +5839,18 @@ fn __action8<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, body, _): (usize, Box<FnBody<'lr>>, usize),
-) -> ContDef<'lr>
-{
-    ContDef { name:name, heap:heap, env:env, params:params, body:body }
+) -> ContDef<'lr> {
+    ContDef {
+        name: name,
+        heap: heap,
+        env: env,
+        params: params,
+        body: body,
+    }
 }
 
 #[allow(unused_variables)]
-fn __action9<
-    'input,
-    'lr,
->(
+fn __action9<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5872,32 +5861,24 @@ fn __action9<
     (_, _, _): (usize, &'input str, usize),
     (_, __1, _): (usize, TypeLayout, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Statement
-{
+) -> Statement {
     Statement::Let(__0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action10<
-    'input,
-    'lr,
->(
+fn __action10<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Place, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __1, _): (usize, Rvalue, usize),
-) -> Statement
-{
+) -> Statement {
     Statement::Assign(__0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action11<
-    'input,
-    'lr,
->(
+fn __action11<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -5905,323 +5886,239 @@ fn __action11<
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Statement
-{
+) -> Statement {
     Statement::Drop(__0)
 }
 
 #[allow(unused_variables)]
-fn __action12<
-    'input,
-    'lr,
->(
+fn __action12<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Operand, usize),
-) -> Rvalue
-{
+) -> Rvalue {
     Rvalue::Use(__0)
 }
 
 #[allow(unused_variables)]
-fn __action13<
-    'input,
-    'lr,
->(
+fn __action13<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, lhs, _): (usize, Operand, usize),
     (_, op, _): (usize, BinOp, usize),
     (_, rhs, _): (usize, Operand, usize),
-) -> Rvalue
-{
+) -> Rvalue {
     Rvalue::BinaryOp(op, lhs, rhs)
 }
 
 #[allow(unused_variables)]
-fn __action14<
-    'input,
-    'lr,
->(
+fn __action14<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Place, usize),
-) -> Rvalue
-{
+) -> Rvalue {
     Rvalue::RefMut(__0)
 }
 
 #[allow(unused_variables)]
-fn __action15<
-    'input,
-    'lr,
->(
+fn __action15<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Place, usize),
-) -> Operand
-{
+) -> Operand {
     Operand::Deref(__0)
 }
 
 #[allow(unused_variables)]
-fn __action16<
-    'input,
-    'lr,
->(
+fn __action16<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Constant, usize),
-) -> Operand
-{
+) -> Operand {
     Operand::Constant(__0)
 }
 
 #[allow(unused_variables)]
-fn __action17<
-    'input,
-    'lr,
->(
+fn __action17<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Constant
-{
+) -> Constant {
     Constant::Bool(true)
 }
 
 #[allow(unused_variables)]
-fn __action18<
-    'input,
-    'lr,
->(
+fn __action18<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Constant
-{
+) -> Constant {
     Constant::Bool(false)
 }
 
 #[allow(unused_variables)]
-fn __action19<
-    'input,
-    'lr,
->(
+fn __action19<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Constant
-{
+) -> Constant {
     Constant::Int(u128::from_str(__0).unwrap())
 }
 
 #[allow(unused_variables)]
-fn __action20<
-    'input,
-    'lr,
->(
+fn __action20<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BasicType
-{
+) -> BasicType {
     BasicType::Int
 }
 
 #[allow(unused_variables)]
-fn __action21<
-    'input,
-    'lr,
->(
+fn __action21<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BasicType
-{
+) -> BasicType {
     BasicType::Bool
 }
 
 #[allow(unused_variables)]
-fn __action22<
-    'input,
-    'lr,
->(
+fn __action22<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> TypeLayout
-{
+) -> TypeLayout {
     TypeLayout::Block(u32::from_str(__0).unwrap())
 }
 
 #[allow(unused_variables)]
-fn __action23<
-    'input,
-    'lr,
->(
+fn __action23<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Vec<TypeLayout>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> TypeLayout
-{
+) -> TypeLayout {
     TypeLayout::Tuple(__0)
 }
 
 #[allow(unused_variables)]
-fn __action24<
-    'input,
-    'lr,
->(
+fn __action24<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, p, _): (usize, (Local, Vec<Projection>), usize),
-) -> Place
-{
+) -> Place {
     {
-    let (local, projection) = p;
-    Place { local, projection }
-  }
+        let (local, projection) = p;
+        Place { local, projection }
+    }
 }
 
 #[allow(unused_variables)]
-fn __action25<
-    'input,
-    'lr,
->(
+fn __action25<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, p, _): (usize, (Local, Vec<Projection>), usize),
     (_, path, _): (usize, Vec<Projection>, usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     {
-      let (local, mut proj) = p;
-      proj.extend(path);
-      (local, proj)
-  }
+        let (local, mut proj) = p;
+        proj.extend(path);
+        (local, proj)
+    }
 }
 
 #[allow(unused_variables)]
-fn __action26<
-    'input,
-    'lr,
->(
+fn __action26<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, (Local, Vec<Projection>), usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     {
-    let (local, mut proj) = __0;
-    proj.push(Projection::Deref);
-    (local, proj)
-  }
+        let (local, mut proj) = __0;
+        proj.push(Projection::Deref);
+        (local, proj)
+    }
 }
 
 #[allow(unused_variables)]
-fn __action27<
-    'input,
-    'lr,
->(
+fn __action27<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Local, Vec<Projection>), usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action28<
-    'input,
-    'lr,
->(
+fn __action28<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     (__0, vec![])
 }
 
 #[allow(unused_variables)]
-fn __action29<
-    'input,
-    'lr,
->(
+fn __action29<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, (Local, Vec<Projection>), usize),
     (_, _, _): (usize, &'input str, usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action30<
-    'input,
-    'lr,
->(
+fn __action30<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, local, _): (usize, Local, usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     (local, vec![])
 }
 
 #[allow(unused_variables)]
-fn __action31<
-    'input,
-    'lr,
->(
+fn __action31<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, p, _): (usize, (Local, Vec<Projection>), usize),
     (_, _, _): (usize, &'input str, usize),
     (_, f, _): (usize, &'input str, usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     {
-    let (local, mut proj) = p;
-    proj.push(Projection::Field(u32::from_str(f).unwrap()));
-    (local, proj)
-  }
+        let (local, mut proj) = p;
+        proj.push(Projection::Field(u32::from_str(f).unwrap()));
+        (local, proj)
+    }
 }
 
 #[allow(unused_variables)]
-fn __action32<
-    'input,
-    'lr,
->(
+fn __action32<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -6229,51 +6126,41 @@ fn __action32<
     (_, _, _): (usize, &'input str, usize),
     (_, p, _): (usize, (Local, Vec<Projection>), usize),
     (_, _, _): (usize, &'input str, usize),
-) -> (Local, Vec<Projection>)
-{
+) -> (Local, Vec<Projection>) {
     {
-    let (local, mut proj) = p;
-    proj.push(Projection::Deref);
-    (local, proj)
-  }
+        let (local, mut proj) = p;
+        proj.push(Projection::Deref);
+        (local, proj)
+    }
 }
 
 #[allow(unused_variables)]
-fn __action33<
-    'input,
-    'lr,
->(
+fn __action33<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, &'input str, usize),
-) -> u32
-{
+) -> u32 {
     u32::from_str(__0).unwrap()
 }
 
 #[allow(unused_variables)]
-fn __action34<
-    'input,
-    'lr,
->(
+fn __action34<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, ::std::vec::Vec<&'input str>, usize),
-) -> Vec<Projection>
-{
+) -> Vec<Projection> {
     {
-  __0.iter().map(|s| Projection::Field(u32::from_str(s).unwrap())).collect()
-}
+        __0.iter()
+            .map(|s| Projection::Field(u32::from_str(s).unwrap()))
+            .collect()
+    }
 }
 
 #[allow(unused_variables)]
-fn __action35<
-    'input,
-    'lr,
->(
+fn __action35<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -6281,16 +6168,12 @@ fn __action35<
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Location, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Ty<'lr>
-{
+) -> Ty<'lr> {
     cx.mk_ty(TyS::OwnRef(__0))
 }
 
 #[allow(unused_variables)]
-fn __action36<
-    'input,
-    'lr,
->(
+fn __action36<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -6299,16 +6182,12 @@ fn __action36<
     (_, _, _): (usize, &'input str, usize),
     (_, pred, _): (usize, Pred<'lr>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Ty<'lr>
-{
-    cx.mk_ty(TyS::Refine { ty:ty, pred:pred })
+) -> Ty<'lr> {
+    cx.mk_ty(TyS::Refine { ty: ty, pred: pred })
 }
 
 #[allow(unused_variables)]
-fn __action37<
-    'input,
-    'lr,
->(
+fn __action37<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -6317,19 +6196,15 @@ fn __action37<
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Ty<'lr>
-{
+) -> Ty<'lr> {
     {
-    *holes += 1;
-    cx.mk_ty(TyS::RefineHole {ty, n: *holes})
-  }
+        *holes += 1;
+        cx.mk_ty(TyS::RefineHole { ty, n: *holes })
+    }
 }
 
 #[allow(unused_variables)]
-fn __action38<
-    'input,
-    'lr,
->(
+fn __action38<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -6340,48 +6215,36 @@ fn __action38<
     (_, _, _): (usize, &'input str, usize),
     (_, __1, _): (usize, Location, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Ty<'lr>
-{
+) -> Ty<'lr> {
     cx.mk_ty(TyS::MutRef(__0, __1))
 }
 
 #[allow(unused_variables)]
-fn __action39<
-    'input,
-    'lr,
->(
+fn __action39<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Vec<(Field, Ty<'lr>)>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Ty<'lr>
-{
+) -> Ty<'lr> {
     cx.mk_ty(TyS::Tuple(__0))
 }
 
 #[allow(unused_variables)]
-fn __action40<
-    'input,
-    'lr,
->(
+fn __action40<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Vec<Place>, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Region
-{
+) -> Region {
     Region::from(__0)
 }
 
 #[allow(unused_variables)]
-fn __action41<
-    'input,
-    'lr,
->(
+fn __action41<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -6389,346 +6252,252 @@ fn __action41<
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, Location, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> OwnRef
-{
+) -> OwnRef {
     OwnRef(__0)
 }
 
 #[allow(unused_variables)]
-fn __action42<
-    'input,
-    'lr,
->(
+fn __action42<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Pred<'lr>, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action43<
-    'input,
-    'lr,
->(
+fn __action43<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Pred<'lr>, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action44<
-    'input,
-    'lr,
->(
+fn __action44<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Constant, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     cx.mk_pred(PredS::Constant(__0))
 }
 
 #[allow(unused_variables)]
-fn __action45<
-    'input,
-    'lr,
->(
+fn __action45<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, var, _): (usize, Var, usize),
     (_, projection, _): (usize, ::std::vec::Vec<u32>, usize),
-) -> Pred<'lr>
-{
-    cx.mk_pred(PredS::Place { var:var, projection:projection })
+) -> Pred<'lr> {
+    cx.mk_pred(PredS::Place {
+        var: var,
+        projection: projection,
+    })
 }
 
 #[allow(unused_variables)]
-fn __action46<
-    'input,
-    'lr,
->(
+fn __action46<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Location, usize),
-) -> Var
-{
+) -> Var {
     Var::Location(__0)
 }
 
 #[allow(unused_variables)]
-fn __action47<
-    'input,
-    'lr,
->(
+fn __action47<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Field, usize),
-) -> Var
-{
+) -> Var {
     Var::Field(__0)
 }
 
 #[allow(unused_variables)]
-fn __action48<
-    'input,
-    'lr,
->(
+fn __action48<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Var
-{
+) -> Var {
     Var::Nu
 }
 
 #[allow(unused_variables)]
-fn __action49<
-    'input,
-    'lr,
->(
+fn __action49<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Vec<(Local, OwnRef)>, usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action50<
-    'input,
-    'lr,
->(
+fn __action50<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Vec<(Local, OwnRef)>, usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action51<
-    'input,
-    'lr,
->(
+fn __action51<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Vec<(Location, Ty<'lr>)>, usize),
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action52<
-    'input,
-    'lr,
->(
+fn __action52<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Symbol
-{
+) -> Symbol {
     Symbol::intern(__0)
 }
 
 #[allow(unused_variables)]
-fn __action53<
-    'input,
-    'lr,
->(
+fn __action53<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Symbol, usize),
-) -> Local
-{
+) -> Local {
     Local(__0)
 }
 
 #[allow(unused_variables)]
-fn __action54<
-    'input,
-    'lr,
->(
+fn __action54<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Symbol, usize),
-) -> Location
-{
+) -> Location {
     Location(__0)
 }
 
 #[allow(unused_variables)]
-fn __action55<
-    'input,
-    'lr,
->(
+fn __action55<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> Field
-{
+) -> Field {
     Field::intern(&__0[1..])
 }
 
 #[allow(unused_variables)]
-fn __action56<
-    'input,
-    'lr,
->(
+fn __action56<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BinOp
-{
+) -> BinOp {
     BinOp::Add
 }
 
 #[allow(unused_variables)]
-fn __action57<
-    'input,
-    'lr,
->(
+fn __action57<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BinOp
-{
+) -> BinOp {
     BinOp::Sub
 }
 
 #[allow(unused_variables)]
-fn __action58<
-    'input,
-    'lr,
->(
+fn __action58<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BinOp
-{
+) -> BinOp {
     BinOp::Lt
 }
 
 #[allow(unused_variables)]
-fn __action59<
-    'input,
-    'lr,
->(
+fn __action59<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BinOp
-{
+) -> BinOp {
     BinOp::Le
 }
 
 #[allow(unused_variables)]
-fn __action60<
-    'input,
-    'lr,
->(
+fn __action60<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BinOp
-{
+) -> BinOp {
     BinOp::Eq
 }
 
 #[allow(unused_variables)]
-fn __action61<
-    'input,
-    'lr,
->(
+fn __action61<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BinOp
-{
+) -> BinOp {
     BinOp::Ge
 }
 
 #[allow(unused_variables)]
-fn __action62<
-    'input,
-    'lr,
->(
+fn __action62<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> BinOp
-{
+) -> BinOp {
     BinOp::Gt
 }
 
 #[allow(unused_variables)]
-fn __action63<
-    'input,
-    'lr,
->(
+fn __action63<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, BinOp, usize),
-) -> BinOp
-{
+) -> BinOp {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action64<
-    'input,
-    'lr,
->(
+fn __action64<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, BinOp, usize),
-) -> BinOp
-{
+) -> BinOp {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action65<
-    'input,
-    'lr,
->(
+fn __action65<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Location, Ty<'lr>)>, usize),
     (_, e, _): (usize, ::std::option::Option<(Location, Ty<'lr>)>, usize),
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     match e {
         None => v,
         Some(e) => {
@@ -6740,33 +6509,25 @@ fn __action65<
 }
 
 #[allow(unused_variables)]
-fn __action66<
-    'input,
-    'lr,
->(
+fn __action66<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Location, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __1, _): (usize, Ty<'lr>, usize),
-) -> (Location, Ty<'lr>)
-{
+) -> (Location, Ty<'lr>) {
     (__0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action67<
-    'input,
-    'lr,
->(
+fn __action67<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Local, OwnRef)>, usize),
     (_, e, _): (usize, ::std::option::Option<(Local, OwnRef)>, usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     match e {
         None => v,
         Some(e) => {
@@ -6778,122 +6539,90 @@ fn __action67<
 }
 
 #[allow(unused_variables)]
-fn __action68<
-    'input,
-    'lr,
->(
+fn __action68<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __1, _): (usize, OwnRef, usize),
-) -> (Local, OwnRef)
-{
+) -> (Local, OwnRef) {
     (__0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action69<
-    'input,
-    'lr,
->(
+fn __action69<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<u32>
-{
+) -> ::std::vec::Vec<u32> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action70<
-    'input,
-    'lr,
->(
+fn __action70<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<u32>, usize),
-) -> ::std::vec::Vec<u32>
-{
+) -> ::std::vec::Vec<u32> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action71<
-    'input,
-    'lr,
->(
+fn __action71<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, lhs, _): (usize, Pred<'lr>, usize),
     (_, op, _): (usize, BinOp, usize),
     (_, rhs, _): (usize, Pred<'lr>, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     cx.mk_pred(PredS::BinaryOp(op, lhs, rhs))
 }
 
 #[allow(unused_variables)]
-fn __action72<
-    'input,
-    'lr,
->(
+fn __action72<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Pred<'lr>, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action73<
-    'input,
-    'lr,
->(
+fn __action73<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, lhs, _): (usize, Pred<'lr>, usize),
     (_, op, _): (usize, BinOp, usize),
     (_, rhs, _): (usize, Pred<'lr>, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     cx.mk_pred(PredS::BinaryOp(op, lhs, rhs))
 }
 
 #[allow(unused_variables)]
-fn __action74<
-    'input,
-    'lr,
->(
+fn __action74<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Pred<'lr>, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action75<
-    'input,
-    'lr,
->(
+fn __action75<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Place>, usize),
     (_, e, _): (usize, ::std::option::Option<Place>, usize),
-) -> Vec<Place>
-{
+) -> Vec<Place> {
     match e {
         None => v,
         Some(e) => {
@@ -6905,17 +6634,13 @@ fn __action75<
 }
 
 #[allow(unused_variables)]
-fn __action76<
-    'input,
-    'lr,
->(
+fn __action76<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Field, Ty<'lr>)>, usize),
     (_, e, _): (usize, ::std::option::Option<(Field, Ty<'lr>)>, usize),
-) -> Vec<(Field, Ty<'lr>)>
-{
+) -> Vec<(Field, Ty<'lr>)> {
     match e {
         None => v,
         Some(e) => {
@@ -6927,77 +6652,57 @@ fn __action76<
 }
 
 #[allow(unused_variables)]
-fn __action77<
-    'input,
-    'lr,
->(
+fn __action77<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Field, usize),
     (_, _, _): (usize, &'input str, usize),
     (_, __1, _): (usize, Ty<'lr>, usize),
-) -> (Field, Ty<'lr>)
-{
+) -> (Field, Ty<'lr>) {
     (__0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action78<
-    'input,
-    'lr,
->(
+fn __action78<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<&'input str>
-{
+) -> ::std::vec::Vec<&'input str> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action79<
-    'input,
-    'lr,
->(
+fn __action79<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<&'input str>, usize),
-) -> ::std::vec::Vec<&'input str>
-{
+) -> ::std::vec::Vec<&'input str> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action80<
-    'input,
-    'lr,
->(
+fn __action80<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, _, _): (usize, &'input str, usize),
     (_, __0, _): (usize, &'input str, usize),
-) -> &'input str
-{
+) -> &'input str {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action81<
-    'input,
-    'lr,
->(
+fn __action81<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<TypeLayout>, usize),
     (_, e, _): (usize, ::std::option::Option<TypeLayout>, usize),
-) -> Vec<TypeLayout>
-{
+) -> Vec<TypeLayout> {
     match e {
         None => v,
         Some(e) => {
@@ -7009,46 +6714,34 @@ fn __action81<
 }
 
 #[allow(unused_variables)]
-fn __action82<
-    'input,
-    'lr,
->(
+fn __action82<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action83<
-    'input,
-    'lr,
->(
+fn __action83<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action84<
-    'input,
-    'lr,
->(
+fn __action84<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
     (_, e, _): (usize, ::std::option::Option<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     match e {
         None => v,
         Some(e) => {
@@ -7060,1915 +6753,1144 @@ fn __action84<
 }
 
 #[allow(unused_variables)]
-fn __action85<
-    'input,
-    'lr,
->(
+fn __action85<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
-) -> ::std::option::Option<Local>
-{
+) -> ::std::option::Option<Local> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action86<
-    'input,
-    'lr,
->(
+fn __action86<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<Local>
-{
+) -> ::std::option::Option<Local> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action87<
-    'input,
-    'lr,
->(
+fn __action87<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action88<
-    'input,
-    'lr,
->(
+fn __action88<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action89<
-    'input,
-    'lr,
->(
+fn __action89<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Local
-{
+) -> Local {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action90<
-    'input,
-    'lr,
->(
+fn __action90<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action91<
-    'input,
-    'lr,
->(
+fn __action91<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
     (_, e, _): (usize, Local, usize),
-) -> ::std::vec::Vec<Local>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<Local> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action92<
-    'input,
-    'lr,
->(
+fn __action92<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, TypeLayout, usize),
-) -> ::std::option::Option<TypeLayout>
-{
+) -> ::std::option::Option<TypeLayout> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action93<
-    'input,
-    'lr,
->(
+fn __action93<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<TypeLayout>
-{
+) -> ::std::option::Option<TypeLayout> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action94<
-    'input,
-    'lr,
->(
+fn __action94<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<TypeLayout>
-{
+) -> ::std::vec::Vec<TypeLayout> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action95<
-    'input,
-    'lr,
->(
+fn __action95<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<TypeLayout>, usize),
-) -> ::std::vec::Vec<TypeLayout>
-{
+) -> ::std::vec::Vec<TypeLayout> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action96<
-    'input,
-    'lr,
->(
+fn __action96<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, TypeLayout, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> TypeLayout
-{
+) -> TypeLayout {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action97<
-    'input,
-    'lr,
->(
+fn __action97<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, &'input str, usize),
-) -> ::std::vec::Vec<&'input str>
-{
+) -> ::std::vec::Vec<&'input str> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action98<
-    'input,
-    'lr,
->(
+fn __action98<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<&'input str>, usize),
     (_, e, _): (usize, &'input str, usize),
-) -> ::std::vec::Vec<&'input str>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<&'input str> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action99<
-    'input,
-    'lr,
->(
+fn __action99<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Field, Ty<'lr>), usize),
-) -> ::std::option::Option<(Field, Ty<'lr>)>
-{
+) -> ::std::option::Option<(Field, Ty<'lr>)> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action100<
-    'input,
-    'lr,
->(
+fn __action100<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<(Field, Ty<'lr>)>
-{
+) -> ::std::option::Option<(Field, Ty<'lr>)> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action101<
-    'input,
-    'lr,
->(
+fn __action101<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<(Field, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Field, Ty<'lr>)> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action102<
-    'input,
-    'lr,
->(
+fn __action102<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Field, Ty<'lr>)>, usize),
-) -> ::std::vec::Vec<(Field, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Field, Ty<'lr>)> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action103<
-    'input,
-    'lr,
->(
+fn __action103<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Field, Ty<'lr>), usize),
     (_, _, _): (usize, &'input str, usize),
-) -> (Field, Ty<'lr>)
-{
+) -> (Field, Ty<'lr>) {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action104<
-    'input,
-    'lr,
->(
+fn __action104<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Place, usize),
-) -> ::std::option::Option<Place>
-{
+) -> ::std::option::Option<Place> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action105<
-    'input,
-    'lr,
->(
+fn __action105<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<Place>
-{
+) -> ::std::option::Option<Place> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action106<
-    'input,
-    'lr,
->(
+fn __action106<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<Place>
-{
+) -> ::std::vec::Vec<Place> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action107<
-    'input,
-    'lr,
->(
+fn __action107<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Place>, usize),
-) -> ::std::vec::Vec<Place>
-{
+) -> ::std::vec::Vec<Place> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action108<
-    'input,
-    'lr,
->(
+fn __action108<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Place, usize),
     (_, _, _): (usize, &'input str, usize),
-) -> Place
-{
+) -> Place {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action109<
-    'input,
-    'lr,
->(
+fn __action109<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, u32, usize),
-) -> ::std::vec::Vec<u32>
-{
+) -> ::std::vec::Vec<u32> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action110<
-    'input,
-    'lr,
->(
+fn __action110<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<u32>, usize),
     (_, e, _): (usize, u32, usize),
-) -> ::std::vec::Vec<u32>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<u32> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action111<
-    'input,
-    'lr,
->(
+fn __action111<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Local, OwnRef), usize),
-) -> ::std::option::Option<(Local, OwnRef)>
-{
+) -> ::std::option::Option<(Local, OwnRef)> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action112<
-    'input,
-    'lr,
->(
+fn __action112<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<(Local, OwnRef)>
-{
+) -> ::std::option::Option<(Local, OwnRef)> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action113<
-    'input,
-    'lr,
->(
+fn __action113<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<(Local, OwnRef)>
-{
+) -> ::std::vec::Vec<(Local, OwnRef)> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action114<
-    'input,
-    'lr,
->(
+fn __action114<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Local, OwnRef)>, usize),
-) -> ::std::vec::Vec<(Local, OwnRef)>
-{
+) -> ::std::vec::Vec<(Local, OwnRef)> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action115<
-    'input,
-    'lr,
->(
+fn __action115<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Local, OwnRef), usize),
     (_, _, _): (usize, &'input str, usize),
-) -> (Local, OwnRef)
-{
+) -> (Local, OwnRef) {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action116<
-    'input,
-    'lr,
->(
+fn __action116<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Location, Ty<'lr>), usize),
-) -> ::std::option::Option<(Location, Ty<'lr>)>
-{
+) -> ::std::option::Option<(Location, Ty<'lr>)> {
     Some(__0)
 }
 
 #[allow(unused_variables)]
-fn __action117<
-    'input,
-    'lr,
->(
+fn __action117<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::option::Option<(Location, Ty<'lr>)>
-{
+) -> ::std::option::Option<(Location, Ty<'lr>)> {
     None
 }
 
 #[allow(unused_variables)]
-fn __action118<
-    'input,
-    'lr,
->(
+fn __action118<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> ::std::vec::Vec<(Location, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Location, Ty<'lr>)> {
     vec![]
 }
 
 #[allow(unused_variables)]
-fn __action119<
-    'input,
-    'lr,
->(
+fn __action119<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Location, Ty<'lr>)>, usize),
-) -> ::std::vec::Vec<(Location, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Location, Ty<'lr>)> {
     v
 }
 
 #[allow(unused_variables)]
-fn __action120<
-    'input,
-    'lr,
->(
+fn __action120<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Location, Ty<'lr>), usize),
     (_, _, _): (usize, &'input str, usize),
-) -> (Location, Ty<'lr>)
-{
+) -> (Location, Ty<'lr>) {
     __0
 }
 
 #[allow(unused_variables)]
-fn __action121<
-    'input,
-    'lr,
->(
+fn __action121<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Location, Ty<'lr>), usize),
-) -> ::std::vec::Vec<(Location, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Location, Ty<'lr>)> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action122<
-    'input,
-    'lr,
->(
+fn __action122<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Location, Ty<'lr>)>, usize),
     (_, e, _): (usize, (Location, Ty<'lr>), usize),
-) -> ::std::vec::Vec<(Location, Ty<'lr>)>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<(Location, Ty<'lr>)> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action123<
-    'input,
-    'lr,
->(
+fn __action123<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Local, OwnRef), usize),
-) -> ::std::vec::Vec<(Local, OwnRef)>
-{
+) -> ::std::vec::Vec<(Local, OwnRef)> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action124<
-    'input,
-    'lr,
->(
+fn __action124<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Local, OwnRef)>, usize),
     (_, e, _): (usize, (Local, OwnRef), usize),
-) -> ::std::vec::Vec<(Local, OwnRef)>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<(Local, OwnRef)> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action125<
-    'input,
-    'lr,
->(
+fn __action125<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Place, usize),
-) -> ::std::vec::Vec<Place>
-{
+) -> ::std::vec::Vec<Place> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action126<
-    'input,
-    'lr,
->(
+fn __action126<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Place>, usize),
     (_, e, _): (usize, Place, usize),
-) -> ::std::vec::Vec<Place>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<Place> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action127<
-    'input,
-    'lr,
->(
+fn __action127<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, (Field, Ty<'lr>), usize),
-) -> ::std::vec::Vec<(Field, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Field, Ty<'lr>)> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action128<
-    'input,
-    'lr,
->(
+fn __action128<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<(Field, Ty<'lr>)>, usize),
     (_, e, _): (usize, (Field, Ty<'lr>), usize),
-) -> ::std::vec::Vec<(Field, Ty<'lr>)>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<(Field, Ty<'lr>)> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action129<
-    'input,
-    'lr,
->(
+fn __action129<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, TypeLayout, usize),
-) -> ::std::vec::Vec<TypeLayout>
-{
+) -> ::std::vec::Vec<TypeLayout> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action130<
-    'input,
-    'lr,
->(
+fn __action130<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<TypeLayout>, usize),
     (_, e, _): (usize, TypeLayout, usize),
-) -> ::std::vec::Vec<TypeLayout>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<TypeLayout> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action131<
-    'input,
-    'lr,
->(
+fn __action131<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, __0, _): (usize, Local, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     vec![__0]
 }
 
 #[allow(unused_variables)]
-fn __action132<
-    'input,
-    'lr,
->(
+fn __action132<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     (_, v, _): (usize, ::std::vec::Vec<Local>, usize),
     (_, e, _): (usize, Local, usize),
-) -> ::std::vec::Vec<Local>
-{
-    { let mut v = v; v.push(e); v }
+) -> ::std::vec::Vec<Local> {
+    {
+        let mut v = v;
+        v.push(e);
+        v
+    }
 }
 
 #[allow(unused_variables)]
-fn __action133<
-    'input,
-    'lr,
->(
+fn __action133<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, &'input str, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<&'input str>
-{
+) -> ::std::vec::Vec<&'input str> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action80(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action80(cx, holes, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action97(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action97(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action134<
-    'input,
-    'lr,
->(
+fn __action134<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<&'input str>, usize),
     __1: (usize, &'input str, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<&'input str>
-{
+) -> ::std::vec::Vec<&'input str> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action80(
-        cx,
-        holes,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action80(cx, holes, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action98(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action98(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action135<
-    'input,
-    'lr,
->(
+fn __action135<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Projection>
-{
+) -> Vec<Projection> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action78(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action78(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action34(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action34(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action136<
-    'input,
-    'lr,
->(
+fn __action136<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<&'input str>, usize),
-) -> Vec<Projection>
-{
+) -> Vec<Projection> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action79(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action79(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action34(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action34(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action137<
-    'input,
-    'lr,
->(
+fn __action137<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, (Field, Ty<'lr>), usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<(Field, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Field, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action103(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action103(cx, holes, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action127(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action127(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action138<
-    'input,
-    'lr,
->(
+fn __action138<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Field, Ty<'lr>)>, usize),
     __1: (usize, (Field, Ty<'lr>), usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<(Field, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Field, Ty<'lr>)> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action103(
-        cx,
-        holes,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action103(cx, holes, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action128(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action128(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action139<
-    'input,
-    'lr,
->(
+fn __action139<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::option::Option<(Field, Ty<'lr>)>, usize),
-) -> Vec<(Field, Ty<'lr>)>
-{
+) -> Vec<(Field, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action101(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action101(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action76(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __0,
-    )
+    __action76(cx, holes, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action140<
-    'input,
-    'lr,
->(
+fn __action140<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Field, Ty<'lr>)>, usize),
     __1: (usize, ::std::option::Option<(Field, Ty<'lr>)>, usize),
-) -> Vec<(Field, Ty<'lr>)>
-{
+) -> Vec<(Field, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action102(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action102(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action76(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __1,
-    )
+    __action76(cx, holes, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action141<
-    'input,
-    'lr,
->(
+fn __action141<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, (Local, OwnRef), usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<(Local, OwnRef)>
-{
+) -> ::std::vec::Vec<(Local, OwnRef)> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action115(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action115(cx, holes, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action123(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action123(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action142<
-    'input,
-    'lr,
->(
+fn __action142<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Local, OwnRef)>, usize),
     __1: (usize, (Local, OwnRef), usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<(Local, OwnRef)>
-{
+) -> ::std::vec::Vec<(Local, OwnRef)> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action115(
-        cx,
-        holes,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action115(cx, holes, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action124(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action124(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action143<
-    'input,
-    'lr,
->(
+fn __action143<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::option::Option<(Local, OwnRef)>, usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action113(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action113(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action67(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __0,
-    )
+    __action67(cx, holes, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action144<
-    'input,
-    'lr,
->(
+fn __action144<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Local, OwnRef)>, usize),
     __1: (usize, ::std::option::Option<(Local, OwnRef)>, usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action114(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action114(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action67(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __1,
-    )
+    __action67(cx, holes, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action145<
-    'input,
-    'lr,
->(
+fn __action145<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, (Location, Ty<'lr>), usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<(Location, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Location, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action120(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action120(cx, holes, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action121(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action121(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action146<
-    'input,
-    'lr,
->(
+fn __action146<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Location, Ty<'lr>)>, usize),
     __1: (usize, (Location, Ty<'lr>), usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<(Location, Ty<'lr>)>
-{
+) -> ::std::vec::Vec<(Location, Ty<'lr>)> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action120(
-        cx,
-        holes,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action120(cx, holes, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action122(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action122(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action147<
-    'input,
-    'lr,
->(
+fn __action147<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::option::Option<(Location, Ty<'lr>)>, usize),
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action118(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action118(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action65(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __0,
-    )
+    __action65(cx, holes, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action148<
-    'input,
-    'lr,
->(
+fn __action148<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Location, Ty<'lr>)>, usize),
     __1: (usize, ::std::option::Option<(Location, Ty<'lr>)>, usize),
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action119(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action119(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action65(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __1,
-    )
+    __action65(cx, holes, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action149<
-    'input,
-    'lr,
->(
+fn __action149<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, Local, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action89(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action89(cx, holes, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action131(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action131(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action150<
-    'input,
-    'lr,
->(
+fn __action150<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
     __1: (usize, Local, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Local>
-{
+) -> ::std::vec::Vec<Local> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action89(
-        cx,
-        holes,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action89(cx, holes, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action132(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action132(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action151<
-    'input,
-    'lr,
->(
+fn __action151<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::option::Option<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action87(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action87(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action84(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __0,
-    )
+    __action84(cx, holes, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action152<
-    'input,
-    'lr,
->(
+fn __action152<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
     __1: (usize, ::std::option::Option<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action88(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action88(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action84(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __1,
-    )
+    __action84(cx, holes, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action153<
-    'input,
-    'lr,
->(
+fn __action153<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, Place, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Place>
-{
+) -> ::std::vec::Vec<Place> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action108(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action108(cx, holes, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action125(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action125(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action154<
-    'input,
-    'lr,
->(
+fn __action154<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Place>, usize),
     __1: (usize, Place, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<Place>
-{
+) -> ::std::vec::Vec<Place> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action108(
-        cx,
-        holes,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action108(cx, holes, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action126(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action126(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action155<
-    'input,
-    'lr,
->(
+fn __action155<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::option::Option<Place>, usize),
-) -> Vec<Place>
-{
+) -> Vec<Place> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action106(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action106(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action75(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __0,
-    )
+    __action75(cx, holes, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action156<
-    'input,
-    'lr,
->(
+fn __action156<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Place>, usize),
     __1: (usize, ::std::option::Option<Place>, usize),
-) -> Vec<Place>
-{
+) -> Vec<Place> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action107(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action107(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action75(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __1,
-    )
+    __action75(cx, holes, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action157<
-    'input,
-    'lr,
->(
+fn __action157<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, TypeLayout, usize),
     __1: (usize, &'input str, usize),
-) -> ::std::vec::Vec<TypeLayout>
-{
+) -> ::std::vec::Vec<TypeLayout> {
     let __start0 = __0.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action96(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-    );
+    let __temp0 = __action96(cx, holes, input, __0, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action129(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action129(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action158<
-    'input,
-    'lr,
->(
+fn __action158<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<TypeLayout>, usize),
     __1: (usize, TypeLayout, usize),
     __2: (usize, &'input str, usize),
-) -> ::std::vec::Vec<TypeLayout>
-{
+) -> ::std::vec::Vec<TypeLayout> {
     let __start0 = __1.0.clone();
     let __end0 = __2.2.clone();
-    let __temp0 = __action96(
-        cx,
-        holes,
-        input,
-        __1,
-        __2,
-    );
+    let __temp0 = __action96(cx, holes, input, __1, __2);
     let __temp0 = (__start0, __temp0, __end0);
-    __action130(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action130(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action159<
-    'input,
-    'lr,
->(
+fn __action159<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::option::Option<TypeLayout>, usize),
-) -> Vec<TypeLayout>
-{
+) -> Vec<TypeLayout> {
     let __start0 = __0.0.clone();
     let __end0 = __0.0.clone();
-    let __temp0 = __action94(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action94(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action81(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __0,
-    )
+    __action81(cx, holes, input, __temp0, __0)
 }
 
 #[allow(unused_variables)]
-fn __action160<
-    'input,
-    'lr,
->(
+fn __action160<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<TypeLayout>, usize),
     __1: (usize, ::std::option::Option<TypeLayout>, usize),
-) -> Vec<TypeLayout>
-{
+) -> Vec<TypeLayout> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action95(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action95(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action81(
-        cx,
-        holes,
-        input,
-        __temp0,
-        __1,
-    )
+    __action81(cx, holes, input, __temp0, __1)
 }
 
 #[allow(unused_variables)]
-fn __action161<
-    'input,
-    'lr,
->(
+fn __action161<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, (Field, Ty<'lr>), usize),
-) -> Vec<(Field, Ty<'lr>)>
-{
+) -> Vec<(Field, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action99(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action99(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action139(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action139(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action162<
-    'input,
-    'lr,
->(
+fn __action162<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<(Field, Ty<'lr>)>
-{
+) -> Vec<(Field, Ty<'lr>)> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action100(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action100(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action139(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action139(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action163<
-    'input,
-    'lr,
->(
+fn __action163<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Field, Ty<'lr>)>, usize),
     __1: (usize, (Field, Ty<'lr>), usize),
-) -> Vec<(Field, Ty<'lr>)>
-{
+) -> Vec<(Field, Ty<'lr>)> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action99(
-        cx,
-        holes,
-        input,
-        __1,
-    );
+    let __temp0 = __action99(cx, holes, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action140(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action140(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action164<
-    'input,
-    'lr,
->(
+fn __action164<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Field, Ty<'lr>)>, usize),
-) -> Vec<(Field, Ty<'lr>)>
-{
+) -> Vec<(Field, Ty<'lr>)> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action100(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action100(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action140(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action140(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action165<
-    'input,
-    'lr,
->(
+fn __action165<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, (Local, OwnRef), usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action111(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action111(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action143(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action143(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action166<
-    'input,
-    'lr,
->(
+fn __action166<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action112(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action112(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action143(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action143(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action167<
-    'input,
-    'lr,
->(
+fn __action167<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Local, OwnRef)>, usize),
     __1: (usize, (Local, OwnRef), usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action111(
-        cx,
-        holes,
-        input,
-        __1,
-    );
+    let __temp0 = __action111(cx, holes, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action144(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action144(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action168<
-    'input,
-    'lr,
->(
+fn __action168<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Local, OwnRef)>, usize),
-) -> Vec<(Local, OwnRef)>
-{
+) -> Vec<(Local, OwnRef)> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action112(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action112(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action144(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action144(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action169<
-    'input,
-    'lr,
->(
+fn __action169<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, (Location, Ty<'lr>), usize),
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action116(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action116(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action147(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action147(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action170<
-    'input,
-    'lr,
->(
+fn __action170<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action117(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action117(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action147(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action147(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action171<
-    'input,
-    'lr,
->(
+fn __action171<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Location, Ty<'lr>)>, usize),
     __1: (usize, (Location, Ty<'lr>), usize),
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action116(
-        cx,
-        holes,
-        input,
-        __1,
-    );
+    let __temp0 = __action116(cx, holes, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action148(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action148(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action172<
-    'input,
-    'lr,
->(
+fn __action172<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<(Location, Ty<'lr>)>, usize),
-) -> Vec<(Location, Ty<'lr>)>
-{
+) -> Vec<(Location, Ty<'lr>)> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action117(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action117(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action148(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action148(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action173<
-    'input,
-    'lr,
->(
+fn __action173<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -8976,35 +7898,16 @@ fn __action173<
     __1: (usize, Symbol, usize),
     __2: (usize, &'input str, usize),
     __3: (usize, &'input str, usize),
-) -> Box<FnBody<'lr>>
-{
+) -> Box<FnBody<'lr>> {
     let __start0 = __2.2.clone();
     let __end0 = __3.0.clone();
-    let __temp0 = __action82(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action82(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action5(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-        __2,
-        __temp0,
-        __3,
-    )
+    __action5(cx, holes, input, __0, __1, __2, __temp0, __3)
 }
 
 #[allow(unused_variables)]
-fn __action174<
-    'input,
-    'lr,
->(
+fn __action174<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
@@ -9013,454 +7916,243 @@ fn __action174<
     __2: (usize, &'input str, usize),
     __3: (usize, ::std::vec::Vec<Local>, usize),
     __4: (usize, &'input str, usize),
-) -> Box<FnBody<'lr>>
-{
+) -> Box<FnBody<'lr>> {
     let __start0 = __3.0.clone();
     let __end0 = __3.2.clone();
-    let __temp0 = __action83(
-        cx,
-        holes,
-        input,
-        __3,
-    );
+    let __temp0 = __action83(cx, holes, input, __3);
     let __temp0 = (__start0, __temp0, __end0);
-    __action5(
-        cx,
-        holes,
-        input,
-        __0,
-        __1,
-        __2,
-        __temp0,
-        __4,
-    )
+    __action5(cx, holes, input, __0, __1, __2, __temp0, __4)
 }
 
 #[allow(unused_variables)]
-fn __action175<
-    'input,
-    'lr,
->(
+fn __action175<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, Local, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action85(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action85(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action151(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action151(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action176<
-    'input,
-    'lr,
->(
+fn __action176<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action86(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action86(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action151(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action151(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action177<
-    'input,
-    'lr,
->(
+fn __action177<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
     __1: (usize, Local, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action85(
-        cx,
-        holes,
-        input,
-        __1,
-    );
+    let __temp0 = __action85(cx, holes, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action152(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action152(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action178<
-    'input,
-    'lr,
->(
+fn __action178<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Local>, usize),
-) -> Vec<Local>
-{
+) -> Vec<Local> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action86(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action86(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action152(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action152(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action179<
-    'input,
-    'lr,
->(
+fn __action179<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, Place, usize),
-) -> Vec<Place>
-{
+) -> Vec<Place> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action104(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action104(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action155(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action155(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action180<
-    'input,
-    'lr,
->(
+fn __action180<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<Place>
-{
+) -> Vec<Place> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action105(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action105(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action155(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action155(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action181<
-    'input,
-    'lr,
->(
+fn __action181<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Place>, usize),
     __1: (usize, Place, usize),
-) -> Vec<Place>
-{
+) -> Vec<Place> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action104(
-        cx,
-        holes,
-        input,
-        __1,
-    );
+    let __temp0 = __action104(cx, holes, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action156(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action156(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action182<
-    'input,
-    'lr,
->(
+fn __action182<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<Place>, usize),
-) -> Vec<Place>
-{
+) -> Vec<Place> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action105(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action105(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action156(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action156(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action183<
-    'input,
-    'lr,
->(
+fn __action183<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, Var, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action69(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action69(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action45(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action45(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action184<
-    'input,
-    'lr,
->(
+fn __action184<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, Var, usize),
     __1: (usize, ::std::vec::Vec<u32>, usize),
-) -> Pred<'lr>
-{
+) -> Pred<'lr> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action70(
-        cx,
-        holes,
-        input,
-        __1,
-    );
+    let __temp0 = __action70(cx, holes, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action45(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action45(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action185<
-    'input,
-    'lr,
->(
+fn __action185<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, TypeLayout, usize),
-) -> Vec<TypeLayout>
-{
+) -> Vec<TypeLayout> {
     let __start0 = __0.0.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action92(
-        cx,
-        holes,
-        input,
-        __0,
-    );
+    let __temp0 = __action92(cx, holes, input, __0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action159(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action159(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action186<
-    'input,
-    'lr,
->(
+fn __action186<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __lookbehind: &usize,
     __lookahead: &usize,
-) -> Vec<TypeLayout>
-{
+) -> Vec<TypeLayout> {
     let __start0 = __lookbehind.clone();
     let __end0 = __lookahead.clone();
-    let __temp0 = __action93(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action93(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action159(
-        cx,
-        holes,
-        input,
-        __temp0,
-    )
+    __action159(cx, holes, input, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action187<
-    'input,
-    'lr,
->(
+fn __action187<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<TypeLayout>, usize),
     __1: (usize, TypeLayout, usize),
-) -> Vec<TypeLayout>
-{
+) -> Vec<TypeLayout> {
     let __start0 = __1.0.clone();
     let __end0 = __1.2.clone();
-    let __temp0 = __action92(
-        cx,
-        holes,
-        input,
-        __1,
-    );
+    let __temp0 = __action92(cx, holes, input, __1);
     let __temp0 = (__start0, __temp0, __end0);
-    __action160(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action160(cx, holes, input, __0, __temp0)
 }
 
 #[allow(unused_variables)]
-fn __action188<
-    'input,
-    'lr,
->(
+fn __action188<'input, 'lr>(
     cx: &'lr LiquidRustCtxt<'lr>,
     holes: &mut u32,
     input: &'input str,
     __0: (usize, ::std::vec::Vec<TypeLayout>, usize),
-) -> Vec<TypeLayout>
-{
+) -> Vec<TypeLayout> {
     let __start0 = __0.2.clone();
     let __end0 = __0.2.clone();
-    let __temp0 = __action93(
-        cx,
-        holes,
-        input,
-        &__start0,
-        &__end0,
-    );
+    let __temp0 = __action93(cx, holes, input, &__start0, &__end0);
     let __temp0 = (__start0, __temp0, __end0);
-    __action160(
-        cx,
-        holes,
-        input,
-        __0,
-        __temp0,
-    )
+    __action160(cx, holes, input, __0, __temp0)
 }
 
-pub trait __ToTriple<'input, 'lr, > {
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>>;
+pub trait __ToTriple<'input, 'lr> {
+    fn to_triple(
+        value: Self,
+    ) -> Result<
+        (usize, Token<'input>, usize),
+        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+    >;
 }
 
-impl<'input, 'lr, > __ToTriple<'input, 'lr, > for (usize, Token<'input>, usize) {
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
+impl<'input, 'lr> __ToTriple<'input, 'lr> for (usize, Token<'input>, usize) {
+    fn to_triple(
+        value: Self,
+    ) -> Result<
+        (usize, Token<'input>, usize),
+        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+    > {
         Ok(value)
     }
 }
-impl<'input, 'lr, > __ToTriple<'input, 'lr, > for Result<(usize, Token<'input>, usize), &'static str> {
-    fn to_triple(value: Self) -> Result<(usize,Token<'input>,usize), __lalrpop_util::ParseError<usize, Token<'input>, &'static str>> {
+impl<'input, 'lr> __ToTriple<'input, 'lr> for Result<(usize, Token<'input>, usize), &'static str> {
+    fn to_triple(
+        value: Self,
+    ) -> Result<
+        (usize, Token<'input>, usize),
+        __lalrpop_util::ParseError<usize, Token<'input>, &'static str>,
+    > {
         match value {
             Ok(v) => Ok(v),
             Err(error) => Err(__lalrpop_util::ParseError::User { error }),

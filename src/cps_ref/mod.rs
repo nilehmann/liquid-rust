@@ -3,8 +3,8 @@ pub mod constraint;
 pub mod context;
 pub mod liquid;
 pub mod parser;
-pub mod translate;
 pub mod subst;
+pub mod translate;
 pub mod typeck;
 pub mod utils;
 
@@ -14,19 +14,24 @@ use rustc_mir::transform::MirSource;
 use context::LiquidRustCtxt;
 use liquid::LiquidSolver;
 use rustc_hir::BodyId;
-use typeck::TypeCk;
 use translate::Transformer;
+use typeck::TypeCk;
 
 // TODO: deal with errors w/o unwrapping and asserting
 /// Runs the typechecking pipeline on a function body, based on its body id.
-pub fn check_body<'lr>(cx: &'lr LiquidRustCtxt<'lr>, hir: Map<'_>, tcx: TyCtxt<'_>, body_id: BodyId) {
+pub fn check_body<'lr>(
+    cx: &'lr LiquidRustCtxt<'lr>,
+    hir: Map<'_>,
+    tcx: TyCtxt<'_>,
+    body_id: BodyId,
+) {
     // We first have to translate the body to the CPS IR.
     let def_id = hir.body_owner_def_id(body_id);
     let body = tcx.optimized_mir(def_id);
 
     let mut t = Transformer::new(tcx, cx);
     let ir = t.translate_body(MirSource::item(def_id.to_def_id()), body);
-    
+
     // Once we have our IR, we can generate our constraint
     let (c, kvars) = TypeCk::cgen(cx, &ir).unwrap();
     assert!(LiquidSolver::new().unwrap().check(&c, &kvars).unwrap());

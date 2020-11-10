@@ -2,13 +2,46 @@
 
 use super::ast::*;
 use super::context::LiquidRustCtxt;
-use rustc_mir::transform::MirSource;
+use rustc_index::bit_set::BitSet;
 use rustc_middle::{
-    mir::{self, interpret::{ConstValue, Scalar}, terminator::TerminatorKind, Body, StatementKind},
-    ty,
+    mir::{
+        self,
+        interpret::{ConstValue, Scalar},
+        terminator::TerminatorKind,
+        Body, PlaceRef, StatementKind,
+    },
+    ty::{self, ParamEnv},
+};
+use rustc_mir::{
+    dataflow::{
+        impls::MaybeUninitializedPlaces,
+        move_paths::{LookupResult, MoveData, MovePathIndex},
+        Analysis, MoveDataParamEnv,
+    },
+    transform::MirSource,
 };
 use rustc_span::Symbol;
 use std::{collections::HashMap, convert::TryInto, mem::size_of};
+
+// TODO: This is ugly as hell, but the MoveDataParamEnv struct fields
+// are private, and we want to reuse the MIR dataflow analysis
+// that the compiler provides us
+struct MPDE<'tcx> {
+    pub move_data: MoveData<'tcx>,
+    pub param_env: ParamEnv<'tcx>,
+}
+
+fn create_mpde<'tcx>(
+    move_data: MoveData<'tcx>,
+    param_env: ParamEnv<'tcx>,
+) -> MoveDataParamEnv<'tcx> {
+    let res = MPDE {
+        move_data,
+        param_env,
+    };
+
+    unsafe { std::mem::transmute::<MPDE<'tcx>, MoveDataParamEnv<'tcx>>(res) }
+}
 
 // TODO: Mayhaps a Visitor pattern would be appropriate here
 
@@ -49,20 +82,26 @@ fn translate_const(from: &mir::Constant) -> Operand {
                 ConstValue::Scalar(s) => {
                     match (s, &from.literal.ty.kind) {
                         // Bool
-                        (Scalar::Raw { data: 0, .. }, ty::Bool) => Operand::Constant(Constant::Bool(false)),
-                        (Scalar::Raw { data: 1, .. }, ty::Bool) => Operand::Constant(Constant::Bool(true)),
+                        (Scalar::Raw { data: 0, .. }, ty::Bool) => {
+                            Operand::Constant(Constant::Bool(false))
+                        }
+                        (Scalar::Raw { data: 1, .. }, ty::Bool) => {
+                            Operand::Constant(Constant::Bool(true))
+                        }
                         // TODO: Floats, when support is added
                         // Int
-                        (Scalar::Raw { data, .. }, ty::Uint(_ui)) => Operand::Constant(Constant::Int(data)),
+                        (Scalar::Raw { data, .. }, ty::Uint(_ui)) => {
+                            Operand::Constant(Constant::Int(data))
+                        }
                         // TODO: Signed ints, when support is added
                         // TODO: Chars, when support is added
                         _ => todo!(),
                     }
-                },
-                _ => todo!()
+                }
+                _ => todo!(),
             }
-        },
-        _ => todo!()
+        }
+        _ => todo!(),
     }
 }
 
@@ -102,17 +141,53 @@ fn get_basic_type<'tcx>(t: ty::Ty<'tcx>) -> BasicType {
     }
 }
 
+// TODO: For some reason, TyS::size returns 1 for all scalar types
+// Idk why, but once this is fixed, we'll actually get the size
+// of types correctly
+
+/// Gets the size of a type for use of creating an uninitalized type of that
+/// sizer later. The type must be a scalar type - no tuples!
+fn get_size<'tcx>(_t: ty::Ty<'tcx>) -> u32 {
+    1
+    // match &t.kind {
+    //     ty::TyKind::Bool => size_of::<bool>().try_into().unwrap(),
+    //     ty::TyKind::Int(it) => it.bit_width()
+    //         .map(|x| x >> 3)
+    //         .unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32,
+    //     ty::TyKind::Uint(it) => it.bit_width()
+    //         .map(|x| x >> 3 as u32)
+    //         .unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32,
+    //     _ => todo!(),
+    // }
+}
+
 /// Creates a TypeLayout based on a Rust TyKind.
 fn get_layout<'tcx>(t: ty::Ty<'tcx>) -> TypeLayout {
     // Get the Rust type for ints, bools, tuples (of ints, bools, tuples)
     // Do case analysis, generate TypeLayout based on that.
     // Give up if not supported type
+    // match &t.kind {
+    //     ty::TyKind::Bool => TypeLayout::Block(size_of::<bool>().try_into().unwrap()),
+    //     ty::TyKind::Int(it) => TypeLayout::Block(
+    //         it.bit_width()
+    //             .map(|x| x >> 3)
+    //             .unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32,
+    //     ),
+    //     ty::TyKind::Uint(it) => TypeLayout::Block(
+    //         it.bit_width()
+    //             .map(|x| x >> 3 as u32)
+    //             .unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32,
+    //     ),
+    //     ty::TyKind::Tuple(_) => {
+    //         TypeLayout::Tuple(t.tuple_fields().map(|c| get_layout(c)).collect::<Vec<_>>())
+    //     }
+    //     _ => todo!(),
+    // }
     match &t.kind {
-        ty::TyKind::Bool => TypeLayout::Block(size_of::<bool>().try_into().unwrap()),
-        ty::TyKind::Int(it) => TypeLayout::Block(it.bit_width().map(|x| x >> 3).unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32),
-        ty::TyKind::Uint(it) => TypeLayout::Block(it.bit_width().map(|x| x >> 3 as u32).unwrap_or_else(|| size_of::<isize>().try_into().unwrap()) as u32),
-        ty::TyKind::Tuple(_) => TypeLayout::Tuple(t.tuple_fields().map(|c| get_layout(c)).collect::<Vec<_>>()),
-        _ => todo!(),
+        ty::TyKind::Tuple(_) => {
+            TypeLayout::Tuple(t.tuple_fields().map(|c| get_layout(c)).collect::<Vec<_>>())
+        }
+        _ => TypeLayout::Block(1),
     }
 }
 
@@ -179,10 +254,59 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
     /// or a tuple of holy types.
     fn get_holy_type(&mut self, t: ty::Ty<'tcx>) -> Ty<'lr> {
         match &t.kind {
-            ty::TyKind::Tuple(_) => self.cps_cx.mk_tuple(&t.tuple_fields().enumerate().map(|(i, f)| {
-                (Field::nth(i.try_into().unwrap()), self.get_holy_type(f))
-            }).collect::<Vec<_>>()),
+            ty::TyKind::Tuple(_) => self.cps_cx.mk_tuple(
+                &t.tuple_fields()
+                    .enumerate()
+                    .map(|(i, f)| (Field::nth(i.try_into().unwrap()), self.get_holy_type(f)))
+                    .collect::<Vec<_>>(),
+            ),
             _ => self.mk_refine_hole(get_basic_type(t)),
+        }
+    }
+
+    /// For a given local, based on the structure of its type and which
+    /// of its parts are initialized, return either a RefineHole or an uninitalized
+    /// block of the corresponding size, or a tuple of maybe holy types
+    fn get_maybe_holy_type(
+        &mut self,
+        move_data: &MoveData<'tcx>,
+        uninited: &BitSet<MovePathIndex>,
+        l: mir::Local,
+        ps: &mut Vec<mir::PlaceElem<'tcx>>,
+        t: ty::Ty<'tcx>,
+    ) -> Ty<'lr> {
+        match &t.kind {
+            ty::TyKind::Tuple(_) => self.cps_cx.mk_tuple(
+                &t.tuple_fields()
+                    .enumerate()
+                    .map(|(i, f)| {
+                        ps.push(mir::ProjectionElem::Field(mir::Field::from_usize(i), f));
+                        let res = (
+                            Field::nth(i.try_into().unwrap()),
+                            self.get_maybe_holy_type(move_data, uninited, l, ps, f),
+                        );
+                        let _ = ps.pop();
+
+                        res
+                    })
+                    .collect::<Vec<_>>(),
+            ),
+            _ => {
+                let mpi = match move_data.rev_lookup.find(PlaceRef {
+                    local: l,
+                    projection: ps,
+                }) {
+                    LookupResult::Exact(ix) => ix,
+                    LookupResult::Parent(Some(ix)) => ix,
+                    LookupResult::Parent(None) => return self.cps_cx.mk_uninit(get_size(t)),
+                };
+
+                if uninited.contains(mpi) {
+                    self.cps_cx.mk_uninit(get_size(t))
+                } else {
+                    self.mk_refine_hole(get_basic_type(t))
+                }
+            }
         }
     }
 
@@ -195,7 +319,22 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
         // The let-bound local representing the return value of the function
         let retv = Symbol::intern("_0");
 
-        // We first generate a jump instruction to jump to the continuation
+        // We first perform dataflow analysis on our body to determine
+        // which locals are initialized in which basic blocks, so that we can
+        // set the types of the heap arguments of our basic blocks
+
+        let param_env = self.tcx.param_env(source.def_id());
+        let mdpe_move_data =
+            MoveData::gather_moves(body, self.tcx, param_env).unwrap_or_else(|x| x.0);
+        let move_data = MoveData::gather_moves(body, self.tcx, param_env).unwrap_or_else(|x| x.0);
+        let mdpe = create_mpde(mdpe_move_data, param_env);
+
+        let mut results = MaybeUninitializedPlaces::new(self.tcx, body, &mdpe)
+            .into_engine(self.tcx, body, source.def_id())
+            .iterate_to_fixpoint()
+            .into_results_cursor(body);
+
+        // We then generate a jump instruction to jump to the continuation
         // corresponding to the first/root basic block, bb0.
         let mut nb = FnBody::Jump {
             target: Symbol::intern("bb0"),
@@ -223,6 +362,7 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
                     discr,
                     targets,
                     values,
+                    switch_ty,
                     ..
                 } => {
                     // We have to test our operand against each provided target value.
@@ -233,7 +373,6 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
                     let mut tgs = targets.iter().rev();
 
                     let otherwise = tgs.next().unwrap();
-                    // TODO: pass in actual args
                     let mut ite = FnBody::Jump {
                         target: Symbol::intern(format!("bb{}", otherwise.as_u32()).as_str()),
                         args: vec![],
@@ -245,7 +384,6 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
                         // We first have to translate our discriminator into an AST Operand.
                         let op = translate_op(discr);
 
-                        // TODO: pass in actual args
                         let then = FnBody::Jump {
                             target: Symbol::intern(format!("bb{}", target.as_u32()).as_str()),
                             args: vec![],
@@ -256,15 +394,37 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
                         let sym = Local(self.fresh(Symbol::intern(format!("_g").as_str())));
                         // Bools are guaranteed to be one byte, so assuming a one byte
                         // TypeLayout should be ok!
-                        let bind = Statement::Let(sym, TypeLayout::Block(size_of::<bool>().try_into().unwrap()));
+                        let bind = Statement::Let(
+                            sym,
+                            TypeLayout::Block(size_of::<bool>().try_into().unwrap()),
+                        );
 
                         let pl = Place {
                             local: sym,
                             projection: vec![],
                         };
+
+                        // If the discr type is a bool, we compare to a bool constant.
+                        // otherwise, compare with an int constant.
+                        let is_bool = match switch_ty.kind {
+                            ty::TyKind::Bool => true,
+                            _ => false,
+                        };
                         let asgn = Statement::Assign(
                             pl.clone(),
-                            Rvalue::BinaryOp(BinOp::Eq, op, Operand::Constant(Constant::Int(*val))),
+                            if !is_bool {
+                                Rvalue::BinaryOp(
+                                    BinOp::Eq,
+                                    op,
+                                    Operand::Constant(Constant::Int(*val)),
+                                )
+                            } else {
+                                if *val != 0 {
+                                    Rvalue::Use(op)
+                                } else {
+                                    Rvalue::UnaryOp(UnOp::Not, op)
+                                }
+                            }
                         );
 
                         ite = FnBody::Seq(
@@ -387,13 +547,19 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
             }
 
             // We update our body here
-            // TODO: Fill this out with proper things
 
-            // For now, for our continuations, we use all of the locals
+            // For our continuations, we use all of the locals
             // as our env arguments, keeping the parameters empty.
-            // These env arguments point to heap locations, where the BasicType
-            // corresponds to the type of the local, and the refinement is a
-            // hole (we use RefineHole)
+            // These env arguments point to locations on the heap, one for each
+            // env arg. If we know the local to be initialized for sure upon
+            // entering this basic block, we give the location a refinement type,
+            // where the BasicType corresponds to the type of the local,
+            // and the refinement is a hole (we use RefineHole)
+            // Otherwise, the heap argument is given an Uninit type, since all types
+            // are subtypes of the Uninit type of the same size.
+
+            results.seek_to_block_start(bb);
+            let uninited = results.get();
 
             let mut env = vec![];
             let mut heap = vec![];
@@ -401,7 +567,10 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
             for (lix, decl) in body.local_decls.iter_enumerated() {
                 let arg = Local(Symbol::intern(format!("_{}", lix.index()).as_str()));
                 let loc = Location(Symbol::intern(format!("loc_{}", lix.index()).as_str()));
-                let ty = self.get_holy_type(decl.ty);
+
+                // Check if this local has been initialized yet.
+                let mut ps = vec![];
+                let ty = self.get_maybe_holy_type(&move_data, &uninited, lix, &mut ps, decl.ty);
 
                 env.push((arg, OwnRef(loc)));
                 heap.push((loc, ty));
@@ -414,7 +583,7 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
                 params: vec![],
                 body: Box::new(bbod),
             };
-            
+
             nb = FnBody::LetCont {
                 def: lc,
                 rest: Box::new(nb),
@@ -466,7 +635,7 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
 
         // Return our translated body
         // TODO: Different out_heap than input heap?
-        FnDef {
+        let ret = FnDef {
             name: Symbol::intern(self.tcx.def_path_str(source.def_id()).as_str()),
             heap: heap.clone(),
             args,
@@ -474,6 +643,8 @@ impl<'lr, 'tcx> Transformer<'lr, 'tcx> {
             out_heap: heap,
             out_ty,
             body: Box::new(nb),
-        }
+        };
+
+        ret
     }
 }
