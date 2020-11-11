@@ -112,7 +112,54 @@ pub struct Place {
     pub projection: Vec<Projection>,
 }
 
-#[derive(Debug, Eq, PartialEq, Hash, Clone)]
+pub struct Path(pub Vec<u32>);
+
+impl Path {
+    fn empty() -> Self {
+        Path(vec![])
+    }
+
+    fn append(&self, i: u32) -> Self {
+        let mut v = self.0.clone();
+        v.push(i);
+        Path(v)
+    }
+}
+
+impl Place {
+    pub fn new(local: Local, projection: Vec<Projection>) -> Self {
+        Place { local, projection }
+    }
+
+    pub fn extend<'a, I>(&self, rhs: I) -> Place
+    where
+        I: IntoIterator<Item = &'a Projection>,
+    {
+        Place {
+            local: self.local,
+            projection: self
+                .projection
+                .iter()
+                .copied()
+                .chain(rhs.into_iter().copied())
+                .collect(),
+        }
+    }
+
+    pub fn overlaps(&self, rhs: &Place) -> bool {
+        if self.local != rhs.local {
+            return false;
+        }
+        for (&p1, &p2) in self.projection.iter().zip(&rhs.projection) {
+            if p1 != p2 {
+                return false;
+            }
+        }
+        true
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 pub enum Projection {
     Field(u32),
     Deref,
@@ -193,8 +240,8 @@ impl Region {
     }
 
     pub fn subset_of(&self, rhs: &Region) -> bool {
-        for borrow in &self.0 {
-            if rhs.iter().any(|b| borrow == b) {
+        for place in &self.0 {
+            if rhs.iter().any(|p| place == p) {
                 return true;
             }
         }
@@ -234,6 +281,15 @@ impl std::ops::Index<usize> for Region {
 pub enum BorrowKind {
     Shared,
     Mut,
+}
+
+impl BorrowKind {
+    pub fn is_mut(&self) -> bool {
+        match self {
+            BorrowKind::Shared => false,
+            BorrowKind::Mut => true,
+        }
+    }
 }
 
 #[derive(Eq, PartialEq, Hash)]
@@ -319,6 +375,30 @@ impl<'lr> TyS<'lr> {
             TyS::Refine { .. } | TyS::RefineHole { .. } => 1,
             TyS::Tuple(fields) => fields.iter().map(|f| f.1.size()).sum(),
             TyS::Uninit(size) => *size,
+        }
+    }
+
+    pub fn borrows<'a>(&'a self) -> Box<dyn Iterator<Item = (Path, BorrowKind, &Region)> + 'a> {
+        self.borrows_(Path::empty())
+    }
+
+    fn borrows_<'a>(
+        &'a self,
+        path: Path,
+    ) -> Box<dyn Iterator<Item = (Path, BorrowKind, &Region)> + 'a> {
+        match self {
+            TyS::Ref(kind, r, _) => Box::new(std::iter::once((path, *kind, r))),
+            TyS::Tuple(fields) => Box::new(
+                fields
+                    .iter()
+                    .enumerate()
+                    .flat_map(move |(i, (_, t))| t.borrows_(path.append(i as u32))),
+            ),
+            TyS::Fn { .. }
+            | TyS::OwnRef(_)
+            | TyS::Refine { .. }
+            | TyS::Uninit(_)
+            | TyS::RefineHole { .. } => Box::new(std::iter::empty()),
         }
     }
 }

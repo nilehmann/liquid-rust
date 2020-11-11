@@ -105,11 +105,15 @@ impl<'lr> TyCtxt<'lr> {
     }
 
     pub fn lookup(&self, place: &Place) -> (Pred<'lr>, Ty<'lr>) {
-        let OwnRef(mut location) = self.lookup_local(place.local).unwrap();
+        self.lookup_(place.local, &place.projection)
+    }
+
+    fn lookup_(&self, local: Local, projection: &[Projection]) -> (Pred<'lr>, Ty<'lr>) {
+        let OwnRef(mut location) = self.lookup_local(local).unwrap();
         let mut typ = self.lookup_location(location).unwrap();
 
         let mut v = Vec::new();
-        for p in &place.projection {
+        for p in projection {
             match (typ, p) {
                 (TyS::Tuple(fields), &Projection::Field(n)) => {
                     typ = fields[n as usize].1;
@@ -120,7 +124,7 @@ impl<'lr> TyCtxt<'lr> {
                     location = *l;
                     typ = self.lookup_location(location).unwrap();
                 }
-                _ => bug!("{:?} {:?} {:?}", typ, place, p),
+                _ => bug!("{:?} {:?}{:?} {:?}", typ, local, projection, p),
             }
         }
         let pred = self.cx.mk_place(location.into(), &v);
@@ -403,6 +407,59 @@ impl<'lr> TyCtxt<'lr> {
         self.kvars.push((n, vars));
         n
     }
+
+    fn locals(&self) -> impl Iterator<Item = (&Local, &OwnRef)> {
+        self.locals.last().unwrap().iter()
+    }
+
+    fn ownership(&self, kind: BorrowKind, place: &Place, reborrow: &mut Vec<Place>) {
+        for (&x, &OwnRef(l)) in self.locals() {
+            let t = self.lookup_location(l).unwrap();
+            for (path, k, region) in t.borrows() {
+                let in_reborrow_list = reborrow.iter().any(|p| {
+                    if p.local != x {
+                        return false;
+                    }
+                    for (&i, &proj) in path.0.iter().zip(&p.projection) {
+                        if let Projection::Field(n) = proj {
+                            if n == i {
+                                return false;
+                            }
+                        }
+                    }
+                    return path.0.len() == p.projection.len();
+                });
+                if in_reborrow_list {
+                    continue;
+                }
+
+                for p in region {
+                    if place.overlaps(p) && (kind.is_mut() || k.is_mut()) {
+                        todo!("Conflicting borrow {:?} {:?}", x, t);
+                    }
+                }
+            }
+        }
+
+        for (i, proj) in place.projection.iter().enumerate() {
+            match proj {
+                Projection::Field(_) => {}
+                Projection::Deref => {
+                    reborrow.push(Place::new(place.local, Vec::from(&place.projection[0..i])));
+                    let (_, t) = self.lookup_(place.local, &place.projection[0..i]);
+                    if let TyS::Ref(k, region, _) = t {
+                        if *k > kind {
+                            todo!("{:?} {:?}", place.local, t);
+                        }
+                        for p in region {
+                            self.ownership(kind, &p.extend(&place.projection[i + 1..]), reborrow);
+                        }
+                    }
+                    reborrow.pop();
+                }
+            }
+        }
+    }
 }
 
 pub struct TypeCk<'lr> {
@@ -527,7 +584,7 @@ impl<'lr> TypeCk<'lr> {
                 }
             }
             Rvalue::Ref(kind, place) => {
-                // TODO: check ownership safety
+                tcx.ownership(*kind, place, &mut vec![]);
                 tcx.borrow(*kind, place)
             }
         };
@@ -545,18 +602,18 @@ impl<'lr> TypeCk<'lr> {
                 (vec![], Constraint::True)
             }
             Statement::Assign(place, rval) => {
-                // TODO: check ownership safety
                 let (_, t1) = tcx.lookup(place);
                 let (t2, mut bindings) = self.wt_rvalue(tcx, rval)?;
+                tcx.ownership(BorrowKind::Mut, place, &mut vec![]);
                 if t1.size() != t2.size() {
                     return Err(TypeError::SizeMismatch(t1, t2));
                 }
                 bindings.extend(tcx.update(place, t2));
                 (bindings, Constraint::True)
             }
-            Statement::Drop(p) => {
-                // TODO: check ownership safety
-                tcx.drop(*p)?
+            &Statement::Drop(x) => {
+                tcx.ownership(BorrowKind::Mut, &Place::from(x), &mut vec![]);
+                tcx.drop(x)?
             }
         };
         Ok(r)
