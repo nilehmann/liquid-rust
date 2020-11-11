@@ -112,20 +112,6 @@ pub struct Place {
     pub projection: Vec<Projection>,
 }
 
-pub struct Path(pub Vec<u32>);
-
-impl Path {
-    fn empty() -> Self {
-        Path(vec![])
-    }
-
-    fn append(&self, i: u32) -> Self {
-        let mut v = self.0.clone();
-        v.push(i);
-        Path(v)
-    }
-}
-
 impl Place {
     pub fn new(local: Local, projection: Vec<Projection>) -> Self {
         Place { local, projection }
@@ -156,6 +142,20 @@ impl Place {
             }
         }
         true
+    }
+
+    pub fn equals(&self, local: Local, path: &Vec<u32>) -> bool {
+        if self.local != local {
+            return false;
+        }
+        for (&proj, &i) in self.projection.iter().zip(path) {
+            if let Projection::Field(n) = proj {
+                if n != i {
+                    return false;
+                }
+            }
+        }
+        path.len() == self.projection.len()
     }
 }
 
@@ -378,29 +378,37 @@ impl<'lr> TyS<'lr> {
         }
     }
 
-    pub fn borrows<'a>(&'a self) -> Box<dyn Iterator<Item = (Path, BorrowKind, &Region)> + 'a> {
-        self.borrows_(Path::empty())
+    pub fn walk<T>(&'lr self, mut act: impl FnMut(&Vec<u32>, Ty<'lr>) -> Walk<T>) -> Option<T> {
+        self.walk_(&mut act, &mut vec![])
     }
 
-    fn borrows_<'a>(
-        &'a self,
-        path: Path,
-    ) -> Box<dyn Iterator<Item = (Path, BorrowKind, &Region)> + 'a> {
-        match self {
-            TyS::Ref(kind, r, _) => Box::new(std::iter::once((path, *kind, r))),
-            TyS::Tuple(fields) => Box::new(
-                fields
-                    .iter()
-                    .enumerate()
-                    .flat_map(move |(i, (_, t))| t.borrows_(path.append(i as u32))),
-            ),
-            TyS::Fn { .. }
-            | TyS::OwnRef(_)
-            | TyS::Refine { .. }
-            | TyS::Uninit(_)
-            | TyS::RefineHole { .. } => Box::new(std::iter::empty()),
+    fn walk_<T>(
+        &'lr self,
+        act: &mut impl FnMut(&Vec<u32>, Ty<'lr>) -> Walk<T>,
+        path: &mut Vec<u32>,
+    ) -> Option<T> {
+        if let Walk::Stop(t) = act(path, self) {
+            return Some(t);
         }
+        match self {
+            TyS::Tuple(fields) => {
+                for i in 0..fields.len() {
+                    path.push(i as u32);
+                    if let Some(r) = fields[i].1.walk_(act, path) {
+                        return Some(r);
+                    }
+                    path.pop();
+                }
+            }
+            _ => {}
+        }
+        None
     }
+}
+
+pub enum Walk<T = ()> {
+    Continue,
+    Stop(T),
 }
 
 impl Field {

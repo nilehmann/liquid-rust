@@ -412,50 +412,51 @@ impl<'lr> TyCtxt<'lr> {
         self.locals.last().unwrap().iter()
     }
 
-    fn ownership(&self, kind: BorrowKind, place: &Place, reborrow: &mut Vec<Place>) {
+    fn ownership(&self, kind: BorrowKind, place: &Place, reborrow_list: &mut Vec<Place>) {
         for (&x, &OwnRef(l)) in self.locals() {
             let t = self.lookup_location(l).unwrap();
-            for (path, k, region) in t.borrows() {
-                let in_reborrow_list = reborrow.iter().any(|p| {
-                    if p.local != x {
-                        return false;
-                    }
-                    for (&i, &proj) in path.0.iter().zip(&p.projection) {
-                        if let Projection::Field(n) = proj {
-                            if n == i {
-                                return false;
+            let conflict = t.walk(|path, typ| {
+                match typ {
+                    TyS::Ref(k, r, _) => {
+                        if reborrow_list.iter().any(|p| p.equals(x, path)) {
+                            return Walk::Continue;
+                        }
+
+                        for p in r {
+                            if place.overlaps(p) && (kind.is_mut() || k.is_mut()) {
+                                return Walk::Stop(typ);
                             }
                         }
                     }
-                    return path.0.len() == p.projection.len();
-                });
-                if in_reborrow_list {
-                    continue;
+                    _ => {}
                 }
-
-                for p in region {
-                    if place.overlaps(p) && (kind.is_mut() || k.is_mut()) {
-                        todo!("Conflicting borrow {:?} {:?}", x, t);
-                    }
-                }
+                Walk::Continue
+            });
+            if let Some(t) = conflict {
+                todo!("Conflicting borrow {:?} {:?}", x, t);
             }
         }
 
-        for (i, proj) in place.projection.iter().enumerate() {
-            match proj {
+        for i in 0..place.projection.len() {
+            match place.projection[i] {
                 Projection::Field(_) => {}
                 Projection::Deref => {
-                    reborrow.push(Place::new(place.local, Vec::from(&place.projection[0..i])));
+                    reborrow_list.push(Place::new(place.local, Vec::from(&place.projection[0..i])));
                     let (_, t) = self.lookup_(place.local, &place.projection[0..i]);
                     if let TyS::Ref(k, region, _) = t {
-                        if *k > kind {
+                        if kind > *k {
                             todo!("{:?} {:?}", place.local, t);
                         }
                         for p in region {
-                            self.ownership(kind, &p.extend(&place.projection[i + 1..]), reborrow);
+                            self.ownership(
+                                kind,
+                                &p.extend(&place.projection[i + 1..]),
+                                reborrow_list,
+                            );
                         }
+                        return;
                     }
-                    reborrow.pop();
+                    reborrow_list.pop();
                 }
             }
         }
