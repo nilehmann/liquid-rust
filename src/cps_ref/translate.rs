@@ -81,6 +81,10 @@ fn translate_const(from: &mir::Constant) -> Operand {
             match value {
                 ConstValue::Scalar(s) => {
                     match (s, &from.literal.ty.kind) {
+                        // Unit
+                        (Scalar::Raw { size: 0, .. }, _t) => {
+                            Operand::Constant(Constant::Unit)
+                        }
                         // Bool
                         (Scalar::Raw { data: 0, .. }, ty::Bool) => {
                             Operand::Constant(Constant::Bool(false))
