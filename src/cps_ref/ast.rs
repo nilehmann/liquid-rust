@@ -99,7 +99,7 @@ pub enum Statement {
 #[derive(Debug)]
 pub enum Rvalue {
     Use(Operand),
-    RefMut(Place),
+    Ref(BorrowKind, Place),
     BinaryOp(BinOp, Operand, Operand),
     CheckedBinaryOp(BinOp, Operand, Operand),
     UnaryOp(UnOp, Operand),
@@ -112,10 +112,108 @@ pub struct Place {
     pub projection: Vec<Projection>,
 }
 
-#[derive(Debug, Eq, PartialEq, Hash, Clone)]
+impl Place {
+    pub fn new<T>(local: Local, projection: T) -> Self
+    where
+        T: Into<Vec<Projection>>,
+    {
+        Place {
+            local,
+            projection: projection.into(),
+        }
+    }
+
+    pub fn extend<'a, I>(&self, rhs: I) -> Place
+    where
+        I: IntoIterator<Item = &'a Projection>,
+    {
+        Place {
+            local: self.local,
+            projection: self
+                .projection
+                .iter()
+                .copied()
+                .chain(rhs.into_iter().copied())
+                .collect(),
+        }
+    }
+
+    pub fn overlaps(&self, rhs: &Place) -> bool {
+        if self.local != rhs.local {
+            return false;
+        }
+        for (&p1, &p2) in self.projection.iter().zip(&rhs.projection) {
+            if p1 != p2 {
+                return false;
+            }
+        }
+        true
+    }
+
+    pub fn equals(&self, local: Local, path: &Vec<u32>) -> bool {
+        if self.local != local {
+            return false;
+        }
+        for (&proj, &i) in self.projection.iter().zip(path) {
+            if let Projection::Field(n) = proj {
+                if n != i {
+                    return false;
+                }
+            }
+        }
+        path.len() == self.projection.len()
+    }
+}
+
+#[derive(Clone, Debug)]
+pub struct Path(pub Vec<u32>);
+
+impl Path {
+    pub fn new() -> Self {
+        Path(vec![])
+    }
+}
+
+impl std::ops::Deref for Path {
+    type Target = Vec<u32>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
+    }
+}
+
+impl std::ops::DerefMut for Path {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.0
+    }
+}
+
+impl From<&Path> for Vec<Projection> {
+    fn from(path: &Path) -> Self {
+        path.0.iter().copied().map(Projection::from).collect()
+    }
+}
+
+impl<'a> IntoIterator for &'a Path {
+    type Item = &'a u32;
+
+    type IntoIter = std::slice::Iter<'a, u32>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.iter()
+    }
+}
+
+#[derive(Debug, Eq, PartialEq, Hash, Clone, Copy)]
 pub enum Projection {
     Field(u32),
     Deref,
+}
+
+impl From<u32> for Projection {
+    fn from(v: u32) -> Self {
+        Projection::Field(v)
+    }
 }
 
 impl From<Local> for Place {
@@ -141,6 +239,7 @@ pub enum Operand {
 pub enum Constant {
     Bool(bool),
     Int(u128),
+    Unit,
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Hash)]
@@ -184,21 +283,21 @@ pub type Ty<'lr> = &'lr TyS<'lr>;
 pub struct Region(Vec<Place>);
 
 impl Region {
-    pub fn new(p: Place) -> Self {
-        Self(vec![p])
+    pub fn new(place: Place) -> Self {
+        Self(vec![place])
     }
 
     pub fn len(&self) -> usize {
         self.0.len()
     }
 
-    pub fn contains(&self, rhs: &Region) -> bool {
-        for p in &rhs.0 {
-            if self.0.iter().find(|&x| p == x).is_none() {
-                return false;
+    pub fn subset_of(&self, rhs: &Region) -> bool {
+        for place in &self.0 {
+            if rhs.iter().any(|p| place == p) {
+                return true;
             }
         }
-        true
+        false
     }
 
     pub fn iter(&self) -> impl Iterator<Item = &Place> + '_ {
@@ -230,6 +329,30 @@ impl std::ops::Index<usize> for Region {
     }
 }
 
+#[derive(Eq, PartialEq, Hash, Copy, Clone, Debug, PartialOrd)]
+pub enum BorrowKind {
+    Shared,
+    Mut,
+}
+
+impl std::fmt::Display for BorrowKind {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            BorrowKind::Shared => write!(f, "shared"),
+            BorrowKind::Mut => write!(f, "mutable"),
+        }
+    }
+}
+
+impl BorrowKind {
+    pub fn is_mut(&self) -> bool {
+        match self {
+            BorrowKind::Shared => false,
+            BorrowKind::Mut => true,
+        }
+    }
+}
+
 #[derive(Eq, PartialEq, Hash)]
 pub enum TyS<'lr> {
     /// A function type
@@ -248,7 +371,7 @@ pub enum TyS<'lr> {
     /// An owned reference
     OwnRef(Location),
     /// A mutable reference
-    MutRef(Region, Location),
+    Ref(BorrowKind, Region, Location),
     /// A refinement type { bind: ty | pred }.
     Refine { ty: BasicType, pred: Pred<'lr> },
     /// A dependent tuple.
@@ -286,10 +409,16 @@ pub enum Var {
 
 pub type Pred<'lr> = &'lr PredS<'lr>;
 
+#[derive(Eq, PartialEq, Hash, Copy, Clone)]
+pub enum ConstantP {
+    Bool(bool),
+    Int(u128),
+}
+
 /// A refinement type predicate
 #[derive(Eq, PartialEq, Hash)]
 pub enum PredS<'lr> {
-    Constant(Constant),
+    Constant(ConstantP),
     Place { var: Var, projection: Vec<u32> },
     BinaryOp(BinOp, &'lr PredS<'lr>, &'lr PredS<'lr>),
     UnaryOp(UnOp, &'lr PredS<'lr>),
@@ -309,11 +438,45 @@ impl<'lr> TyS<'lr> {
 
     pub fn size(&self) -> u32 {
         match self {
-            TyS::Fn { .. } | TyS::OwnRef(_) | TyS::MutRef(_, _) => 1,
+            TyS::Fn { .. } | TyS::OwnRef(_) | TyS::Ref(..) => 1,
             TyS::Refine { .. } | TyS::RefineHole { .. } => 1,
             TyS::Tuple(fields) => fields.iter().map(|f| f.1.size()).sum(),
             TyS::Uninit(size) => *size,
         }
+    }
+
+    pub fn walk(&'lr self, mut act: impl FnMut(&Path, Ty<'lr>)) {
+        self.walk_(
+            &mut |path, typ| Ok::<(), ()>(act(path, typ)),
+            &mut Path::new(),
+        )
+        .unwrap()
+    }
+
+    pub fn try_walk<T>(
+        &'lr self,
+        mut act: impl FnMut(&Path, Ty<'lr>) -> Result<(), T>,
+    ) -> Result<(), T> {
+        self.walk_(&mut act, &mut Path::new())
+    }
+
+    fn walk_<T>(
+        &'lr self,
+        act: &mut impl FnMut(&Path, Ty<'lr>) -> Result<(), T>,
+        path: &mut Path,
+    ) -> Result<(), T> {
+        act(path, self)?;
+        match self {
+            TyS::Tuple(fields) => {
+                for i in 0..fields.len() {
+                    path.push(i as u32);
+                    fields[i].1.walk_(act, path)?;
+                    path.pop();
+                }
+            }
+            _ => {}
+        }
+        Ok(())
     }
 }
 
@@ -336,15 +499,6 @@ impl From<Location> for Var {
 impl From<Field> for Var {
     fn from(f: Field) -> Self {
         Var::Field(f)
-    }
-}
-
-impl Constant {
-    pub fn ty(&self) -> BasicType {
-        match self {
-            Constant::Bool(_) => BasicType::Bool,
-            Constant::Int(_) => BasicType::Int,
-        }
     }
 }
 
@@ -375,6 +529,16 @@ impl Debug for Constant {
         match self {
             Constant::Bool(b) => write!(f, "{}", b),
             Constant::Int(i) => write!(f, "{}", i),
+            Constant::Unit => write!(f, "()"),
+        }
+    }
+}
+
+impl Debug for ConstantP {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            ConstantP::Bool(b) => write!(f, "{}", b),
+            ConstantP::Int(i) => write!(f, "{}", i),
         }
     }
 }
@@ -429,7 +593,8 @@ impl Debug for TyS<'_> {
             TyS::Tuple(fields) => write!(f, "{:?}", fields),
             TyS::Uninit(size) => write!(f, "Uninit({})", size),
             TyS::RefineHole { ty, .. } => write!(f, "{{ {:?} | _ }}", ty),
-            TyS::MutRef(r, l) => write!(f, "&mut({:?}, {:?})", r, l),
+            TyS::Ref(BorrowKind::Mut, r, l) => write!(f, "&mut({:?}, {:?})", r, l),
+            TyS::Ref(BorrowKind::Shared, r, l) => write!(f, "&({:?}, {:?})", r, l),
         }
     }
 }

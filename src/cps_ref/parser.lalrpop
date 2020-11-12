@@ -5,6 +5,13 @@ use crate::cps_ref::context::LiquidRustCtxt;
 
 grammar<'lr>(cx: &'lr LiquidRustCtxt<'lr>, holes: &mut u32);
 
+match {
+  r"\s*" => {}, // The default whitespace skipping is disabled if an `ignore pattern` is specified
+  r"//[^\n\r]*[\n\r]*" => { },                          // Skip `// comments`
+  r"/\*([^\*]*\*+[^\*/])*([^\*]*\*+|[^\*])*\*/" => { }, // Skip `/* comments */`
+  _,
+}
+
 pub Fn: FnDef<'lr> =
  "fn" <name: Symbol>
  "(" <heap: Heap> ";" <args: Args> ")"
@@ -34,26 +41,34 @@ ContDef: ContDef<'lr> = {
 }
 
 Statement: Statement = {
-  "let" <Local> "=" "new" "(" <TypeLayout> ")" => Statement::Let(<>),
-  <Place> ":=" <Rvalue>                        => Statement::Assign(<>),
-  "drop" "(" <Local> ")"                       => Statement::Drop(<>)
+  "let" <Local> "=" "alloc" "(" <TypeLayout> ")" => Statement::Let(<>),
+  <Place> ":=" <Rvalue>                          => Statement::Assign(<>),
+  "drop" "(" <Local> ")"                         => Statement::Drop(<>)
 }
 
 Rvalue: Rvalue = {
   Operand                                   => Rvalue::Use(<>),
   <lhs: Operand> <op: BinOp> <rhs: Operand> => Rvalue::BinaryOp(op, lhs, rhs),
-  "&" "mut" <Place>                         => Rvalue::RefMut(<>)
+  "&" <p: Place>                            => Rvalue::Ref(BorrowKind::Shared, p),
+  "&" "mut" <p: Place>                      => Rvalue::Ref(BorrowKind::Mut, p),
 }
 
 Operand: Operand = {
-  <Place>    => Operand::Deref(<>),
   <Constant> => Operand::Constant(<>),
+  <Place>    => Operand::Deref(<>),
 }
 
 Constant: Constant = {
-  "true" => Constant::Bool(true),
-  "false" => Constant::Bool(false),
-  r"[0-9]+" => Constant::Int(u128::from_str(<>).unwrap())
+  "true"    => Constant::Bool(true),
+  "false"   => Constant::Bool(false),
+  r"[0-9]+" => Constant::Int(u128::from_str(<>).unwrap()),
+  "(" ")"   => Constant::Unit
+}
+
+ConstantP: ConstantP = {
+  "true"    => ConstantP::Bool(true),
+  "false"   => ConstantP::Bool(false),
+  r"[0-9]+" => ConstantP::Int(u128::from_str(<>).unwrap())
 }
 
 BasicType: BasicType = {
@@ -95,20 +110,6 @@ PlaceLevel3: (Local, Vec<Projection>) = {
   "(" <PlaceLevel1> ")"
 }
 
-Place_: (Local, Vec<Projection>) = {
-  <local: Local>                  => (local, vec![]),
-  <p: Place_> "." <f: r"[0-9]+">  => {
-    let (local, mut proj) = p;
-    proj.push(Projection::Field(u32::from_str(f).unwrap()));
-    (local, proj)
-  },
-  "*" "(" <p: Place_> ")"         => {
-    let (local, mut proj) = p;
-    proj.push(Projection::Deref);
-    (local, proj)
-  }
-}
-
 Projection: u32 = "." <r"[0-9]+"> => u32::from_str(<>).unwrap();
 
 Path_: Vec<Projection> = ("." <r"[0-9]+">)* => {
@@ -122,8 +123,10 @@ Ty: Ty<'lr> = {
     *holes += 1;
     cx.mk_ty(TyS::RefineHole {ty, n: *holes})
   },
-  "&" "mut" "(" <Region> "," <Location> ")"      => cx.mk_ty(TyS::MutRef(<>)),
-  "(" <Comma<Binding<Field, Ty>>> ")"            => cx.mk_ty(TyS::Tuple(<>))
+  "&" "(" <Region> "," <Location> ")"          => cx.mk_ty(TyS::Ref(BorrowKind::Shared, <>)),
+  "&" "shared" "(" <Region> "," <Location> ")" => cx.mk_ty(TyS::Ref(BorrowKind::Shared, <>)),
+  "&" "mut" "(" <Region> "," <Location> ")"    => cx.mk_ty(TyS::Ref(BorrowKind::Mut, <>)),
+  "(" <Comma<Binding<Field, Ty>>> ")"          => cx.mk_ty(TyS::Tuple(<>))
 }
 
 Region: Region = {
@@ -137,7 +140,7 @@ PredLevel1 = LeftAssoc<BinOpGroup1, PredLevel2>;
 PredLevel2 = LeftAssoc<BinOpGroup2, PredLevel3>;
 
 PredLevel3: Pred<'lr> = {
-  Constant                             => cx.mk_pred(PredS::Constant(<>)),
+  ConstantP                            => cx.mk_pred(PredS::Constant(<>)),
   <var: Var> <projection: Projection*> => cx.mk_pred(PredS::Place { <> })
 }
 

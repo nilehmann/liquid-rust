@@ -8,6 +8,8 @@ use super::{
     utils::{Dict, OrderedHashMap, Scoped},
 };
 
+use thiserror::Error;
+
 type LocalsMap = HashMap<Local, OwnRef>;
 type LocationsMap<'lr> = OrderedHashMap<Location, Ty<'lr>>;
 type Binding<'lr> = (Var, Ty<'lr>);
@@ -103,22 +105,26 @@ impl<'lr> TyCtxt<'lr> {
     }
 
     pub fn lookup(&self, place: &Place) -> (Pred<'lr>, Ty<'lr>) {
-        let OwnRef(mut location) = self.lookup_local(place.local).unwrap();
+        self.lookup_(place.local, &place.projection)
+    }
+
+    fn lookup_(&self, local: Local, projection: &[Projection]) -> (Pred<'lr>, Ty<'lr>) {
+        let OwnRef(mut location) = self.lookup_local(local).unwrap();
         let mut typ = self.lookup_location(location).unwrap();
 
         let mut v = Vec::new();
-        for p in &place.projection {
+        for p in projection {
             match (typ, p) {
                 (TyS::Tuple(fields), &Projection::Field(n)) => {
                     typ = fields[n as usize].1;
                     v.push(n);
                 }
-                (TyS::MutRef(_, l), Projection::Deref) => {
+                (TyS::Ref(.., l), Projection::Deref) => {
                     v.clear();
                     location = *l;
                     typ = self.lookup_location(location).unwrap();
                 }
-                _ => bug!("{:?} {:?} {:?}", typ, place, p),
+                _ => bug!("{:?} {:?}{:?} {:?}", typ, local, projection, p),
             }
         }
         let pred = self.cx.mk_place(location.into(), &v);
@@ -146,47 +152,36 @@ impl<'lr> TyCtxt<'lr> {
     pub fn drop(&mut self, x: Local) -> Result<(Bindings<'lr>, Constraint), TypeError<'lr>> {
         let OwnRef(l) = self.lookup_local(x).unwrap();
         let typ = self.lookup_location(l).unwrap();
-        let mut bindings = vec![];
-        let c = self.drop_typ(typ, &mut bindings)?;
+        let (c, mut bindings) = self.drop_typ(typ)?;
         bindings.extend(self.update(&Place::from(x), self.cx.mk_uninit(typ.size())));
         Ok((bindings, c))
     }
 
-    fn drop_typ(
-        &mut self,
-        typ: Ty<'lr>,
-        bindings: &mut Bindings<'lr>,
-    ) -> Result<Constraint, TypeError<'lr>> {
-        match typ {
-            TyS::Tuple(fields) => {
-                for (_, t) in fields {
-                    self.drop_typ(t, bindings)?;
-                }
-                Ok(Constraint::True)
-            }
-            TyS::MutRef(r, l) => {
-                let t = self.lookup_location(*l).unwrap();
-                if r.len() == 1 {
-                    bindings.extend(self.update(&r[0], t));
-                    Ok(Constraint::True)
-                } else {
-                    let mut cs = vec![];
-                    let t_join = self.replace_refine_with_kvars(t, &mut self.bindings().collect());
-                    cs.push(inner_subtype(self.cx, &self.locations, t, t_join)?);
-                    for p in r {
-                        let (_, t2) = self.lookup(p);
-                        cs.push(inner_subtype(self.cx, &self.locations, t2, t_join)?);
-                        bindings.extend(self.update(p, t_join));
+    fn drop_typ(&mut self, typ: Ty<'lr>) -> Result<(Constraint, Bindings<'lr>), TypeError<'lr>> {
+        let mut constraints = vec![];
+        let mut bindings = vec![];
+        typ.try_walk(|_, typ| {
+            match typ {
+                TyS::Ref(BorrowKind::Mut, r, l) => {
+                    let t = self.lookup_location(*l).unwrap();
+                    if r.len() == 1 {
+                        bindings.extend(self.update(&r[0], t));
+                    } else {
+                        let t_join =
+                            self.replace_refine_with_kvars(t, &mut self.bindings().collect());
+                        constraints.push(inner_subtype(self.cx, &self.locations, t, t_join)?);
+                        for p in r {
+                            let (_, t2) = self.lookup(p);
+                            constraints.push(inner_subtype(self.cx, &self.locations, t2, t_join)?);
+                            bindings.extend(self.update(p, t_join));
+                        }
                     }
-                    Ok(Constraint::Conj(cs))
                 }
+                _ => {}
             }
-            TyS::Refine { .. }
-            | TyS::OwnRef(_)
-            | TyS::Fn { .. }
-            | TyS::Uninit(_)
-            | TyS::RefineHole { .. } => Ok(Constraint::True),
-        }
+            Ok(())
+        })?;
+        Ok((Constraint::Conj(constraints), bindings))
     }
 
     fn replace_refine_with_kvars(&mut self, typ: Ty<'lr>, bindings: &mut Bindings<'lr>) -> Ty<'lr> {
@@ -212,7 +207,7 @@ impl<'lr> TyCtxt<'lr> {
             TyS::Uninit(_)
             | TyS::Fn { .. }
             | TyS::OwnRef(_)
-            | TyS::MutRef(_, _)
+            | TyS::Ref(..)
             | TyS::RefineHole { .. } => typ,
         }
     }
@@ -220,7 +215,8 @@ impl<'lr> TyCtxt<'lr> {
     pub fn update(&mut self, place: &Place, new_typ: Ty<'lr>) -> Bindings<'lr> {
         let OwnRef(l) = self.lookup_local(place.local).unwrap();
         let typ = self.lookup_location(l).unwrap();
-        let (typ, mut bindings) = self.update_typ(typ, &place.projection, new_typ);
+        let (typ, mut bindings) =
+            self.update_typ(Var::from(l), &mut vec![], typ, &place.projection, new_typ);
         let fresh = self.fresh_location();
         bindings.push((fresh, typ));
         for &(l, t) in &bindings {
@@ -235,6 +231,8 @@ impl<'lr> TyCtxt<'lr> {
 
     fn update_typ(
         &mut self,
+        var: Var,
+        path: &mut Vec<u32>,
         typ: Ty<'lr>,
         proj: &[Projection],
         new_typ: Ty<'lr>,
@@ -245,18 +243,30 @@ impl<'lr> TyCtxt<'lr> {
                 (new_typ, vec![])
             }
             (TyS::Tuple(fields), [Projection::Field(n), ..]) => {
-                let mut fields = fields.clone();
+                let mut fields = fields
+                    .iter()
+                    .enumerate()
+                    .map(|(i, &(f, t))| {
+                        path.push(i as u32);
+                        let t = selfify(self.cx, var, path, t);
+                        path.pop();
+                        (f, t)
+                    })
+                    .collect::<Vec<_>>();
+                path.push(*n);
                 let f = &mut fields[*n as usize];
-                let (t, bindings) = self.update_typ(f.1, &proj[1..], new_typ);
+                let (t, bindings) = self.update_typ(var, path, f.1, &proj[1..], new_typ);
                 f.1 = t;
+                path.pop();
                 (self.cx.mk_tuple(&fields), bindings)
             }
-            (TyS::MutRef(r, l), [Projection::Deref, ..]) => {
+            (TyS::Ref(kind, r, l), [Projection::Deref, ..]) => {
                 let referee = self.lookup_location(*l).unwrap();
-                let (t, mut bindings) = self.update_typ(referee, &proj[1..], new_typ);
+                let (t, mut bindings) =
+                    self.update_typ(Var::from(*l), &mut vec![], referee, &proj[1..], new_typ);
                 let l = self.fresh_location();
                 bindings.push((l, t));
-                (self.cx.mk_ty(TyS::MutRef(r.clone(), l)), bindings)
+                (self.cx.mk_ty(TyS::Ref(*kind, r.clone(), l)), bindings)
             }
             _ => bug!(""),
         }
@@ -269,12 +279,12 @@ impl<'lr> TyCtxt<'lr> {
         self.insert_local(x, OwnRef(fresh_l));
     }
 
-    pub fn borrow(&mut self, place: &Place) -> (Ty<'lr>, Bindings<'lr>) {
+    pub fn borrow(&mut self, kind: BorrowKind, place: &Place) -> (Ty<'lr>, Bindings<'lr>) {
         let (_, typ) = self.lookup(place);
         let l = self.fresh_location();
         self.insert_location(l, typ);
         (
-            self.cx.mk_ty(TyS::MutRef(Region::new(place.clone()), l)),
+            self.cx.mk_ty(TyS::Ref(kind, Region::new(place.clone()), l)),
             vec![(Var::from(l), typ)],
         )
     }
@@ -385,6 +395,66 @@ impl<'lr> TyCtxt<'lr> {
         self.kvars.push((n, vars));
         n
     }
+
+    fn locals(&self) -> impl Iterator<Item = (&Local, &OwnRef)> {
+        self.locals.last().unwrap().iter()
+    }
+
+    fn ownership(
+        &self,
+        kind: BorrowKind,
+        place: &Place,
+        reborrow_list: &mut Vec<Place>,
+    ) -> Result<(), OwnershipError<'lr>> {
+        for (&x, &OwnRef(l)) in self.locals() {
+            let t = self.lookup_location(l).unwrap();
+            t.try_walk(|path, typ| {
+                match typ {
+                    TyS::Ref(k, r, _) => {
+                        if reborrow_list.iter().any(|p| p.equals(x, path)) {
+                            return Ok(());
+                        }
+
+                        for p in r {
+                            if place.overlaps(p) && (kind.is_mut() || k.is_mut()) {
+                                return Err(OwnershipError::ConflictingBorrow(
+                                    Place::new(x, path),
+                                    typ,
+                                ));
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+                Ok(())
+            })?;
+        }
+
+        for i in 0..place.projection.len() {
+            match place.projection[i] {
+                Projection::Field(_) => {}
+                Projection::Deref => {
+                    reborrow_list.push(Place::new(place.local, Vec::from(&place.projection[0..i])));
+                    let (_, t) = self.lookup_(place.local, &place.projection[0..i]);
+                    if let TyS::Ref(k, region, _) = t {
+                        if kind > *k {
+                            return Err(OwnershipError::BehindShared);
+                        }
+                        for p in region {
+                            self.ownership(
+                                kind,
+                                &p.extend(&place.projection[i + 1..]),
+                                reborrow_list,
+                            )?;
+                        }
+                        return Ok(());
+                    }
+                    reborrow_list.pop();
+                }
+            }
+        }
+        Ok(())
+    }
 }
 
 pub struct TypeCk<'lr> {
@@ -396,14 +466,14 @@ impl<'lr> TypeCk<'lr> {
     pub fn cgen(
         cx: &'lr LiquidRustCtxt<'lr>,
         fn_def: &FnDef<'lr>,
-    ) -> Result<(Constraint, Vec<Kvar>), Vec<TypeError<'lr>>> {
+    ) -> Result<(Constraint, Vec<Kvar>), TypeErrors<'lr>> {
         let mut checker = Self { cx, errors: vec![] };
         let mut tcx = TyCtxt::new(cx);
         let c = tcx.enter_fn_def(fn_def, |tcx| checker.wt_fn_body(tcx, &fn_def.body));
         if checker.errors.is_empty() {
             Ok((c, tcx.kvars))
         } else {
-            Err(checker.errors)
+            Err(TypeErrors(checker.errors))
         }
     }
 
@@ -422,16 +492,17 @@ impl<'lr> TypeCk<'lr> {
                 }
                 (pred, typ, bindings)
             }
-            Operand::Constant(c) => {
-                let pred = self
-                    .cx
-                    .mk_binop(BinOp::Eq, self.cx.preds.nu, self.cx.mk_const(*c));
-                (
-                    self.cx.mk_const(*c),
-                    self.cx.mk_refine(c.ty(), pred),
-                    vec![],
-                )
+            &Operand::Constant(Constant::Bool(b)) => {
+                let c = self.cx.mk_const(ConstantP::Bool(b));
+                let pred = self.cx.mk_binop(BinOp::Eq, self.cx.preds.nu, c);
+                (c, self.cx.mk_refine(BasicType::Bool, pred), vec![])
             }
+            &Operand::Constant(Constant::Int(i)) => {
+                let c = self.cx.mk_const(ConstantP::Int(i));
+                let pred = self.cx.mk_binop(BinOp::Eq, self.cx.preds.nu, c);
+                (c, self.cx.mk_refine(BasicType::Int, pred), vec![])
+            }
+            Operand::Constant(Constant::Unit) => (self.cx.preds.tt, self.cx.types.unit, vec![]),
         }
     }
 
@@ -471,7 +542,13 @@ impl<'lr> TypeCk<'lr> {
         let r = match val {
             Rvalue::Use(operand) => {
                 let (p, typ, bindings) = self.wt_operand(tcx, operand);
-                (selfify(self.cx, p, &typ), bindings)
+                match p {
+                    PredS::Place { var, projection } => (
+                        selfify(self.cx, *var, &mut projection.clone(), &typ),
+                        bindings,
+                    ),
+                    _ => (typ, bindings),
+                }
             }
             Rvalue::BinaryOp(op, lhs, rhs) => self.wt_binop(tcx, *op, rhs, lhs)?,
             Rvalue::CheckedBinaryOp(op, lhs, rhs) => {
@@ -502,9 +579,17 @@ impl<'lr> TypeCk<'lr> {
                     }
                 }
             }
-            Rvalue::RefMut(place) => {
-                // TODO: check ownership safety
-                tcx.borrow(place)
+            Rvalue::Ref(kind, place) => {
+                tcx.ownership(*kind, place, &mut vec![])
+                    .map_err(|e| match e {
+                        OwnershipError::ConflictingBorrow(p, t) => {
+                            TypeError::BorrowConflict(place.clone(), *kind, p, t)
+                        }
+                        OwnershipError::BehindShared => {
+                            TypeError::BorrowBehindShared(place.clone())
+                        }
+                    })?;
+                tcx.borrow(*kind, place)
             }
         };
         Ok(r)
@@ -518,25 +603,35 @@ impl<'lr> TypeCk<'lr> {
         let r = match statement {
             Statement::Let(x, layout) => {
                 tcx.alloc(*x, layout);
-                // println!("let {:?}", tcx);
                 (vec![], Constraint::True)
             }
             Statement::Assign(place, rval) => {
-                // TODO: check ownership safety
                 let (_, t1) = tcx.lookup(place);
                 let (t2, mut bindings) = self.wt_rvalue(tcx, rval)?;
+                tcx.ownership(BorrowKind::Mut, place, &mut vec![])
+                    .map_err(|e| match e {
+                        OwnershipError::ConflictingBorrow(p, t) => {
+                            TypeError::AssignConflict(place.clone(), p, t)
+                        }
+                        OwnershipError::BehindShared => {
+                            TypeError::AssignBehindShared(place.clone())
+                        }
+                    })?;
                 if t1.size() != t2.size() {
                     return Err(TypeError::SizeMismatch(t1, t2));
                 }
                 bindings.extend(tcx.update(place, t2));
-                // println!("assign {:?}", tcx);
                 (bindings, Constraint::True)
             }
-            Statement::Drop(p) => {
-                // TODO: check ownership safety
-                let a = tcx.drop(*p)?;
-                // println!("drop {:?}", tcx);
-                a
+            &Statement::Drop(x) => {
+                tcx.ownership(BorrowKind::Mut, &Place::from(x), &mut vec![])
+                    .map_err(|e| match e {
+                        OwnershipError::ConflictingBorrow(p, t) => TypeError::DropConflict(x, p, t),
+                        OwnershipError::BehindShared => {
+                            bug!("A local cannot be behind a shared reference")
+                        }
+                    })?;
+                tcx.drop(x)?
             }
         };
         Ok(r)
@@ -605,11 +700,29 @@ impl<'lr> TypeCk<'lr> {
         }
     }
 }
-fn selfify<'lr>(cx: &'lr LiquidRustCtxt<'lr>, pred: Pred<'lr>, typ: Ty<'lr>) -> Ty<'lr> {
+fn selfify<'lr>(
+    cx: &'lr LiquidRustCtxt<'lr>,
+    var: Var,
+    proj: &mut Vec<u32>,
+    typ: Ty<'lr>,
+) -> Ty<'lr> {
     match typ {
         TyS::Refine { ty, .. } => {
-            let r = cx.mk_binop(BinOp::Eq, cx.preds.nu, pred);
+            let r = cx.mk_binop(BinOp::Eq, cx.preds.nu, cx.mk_place(var, &proj));
             cx.mk_refine(*ty, r)
+        }
+        TyS::Tuple(fields) => {
+            let fields = fields
+                .iter()
+                .enumerate()
+                .map(|(i, &(f, t))| {
+                    proj.push(i as u32);
+                    let t = selfify(cx, var, proj, t);
+                    proj.pop();
+                    (f, t)
+                })
+                .collect::<Vec<_>>();
+            cx.mk_tuple(&fields)
         }
         _ => typ,
     }
@@ -635,16 +748,56 @@ struct Cont<'lr> {
     pub params: Vec<OwnRef>,
 }
 
-#[derive(Debug)]
+#[derive(Error, Debug)]
+pub struct TypeErrors<'lr>(Vec<TypeError<'lr>>);
+
+impl<'lr> std::fmt::Display for TypeErrors<'lr> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        let s = self
+            .0
+            .iter()
+            .map(|e| format!("error: {}", e))
+            .collect::<Vec<_>>()
+            .join("\n\n");
+        write!(f, "{}\n", s)
+    }
+}
+
+pub enum OwnershipError<'lr> {
+    ConflictingBorrow(Place, Ty<'lr>),
+    BehindShared,
+}
+
+#[derive(Error, Debug)]
 pub enum TypeError<'lr> {
+    #[error("{0:?} is not a subtype of {1:?}")]
     SubtypingError(Ty<'lr>, Ty<'lr>),
+    #[error("{0:?} does not have the same size than {1:?}")]
     SizeMismatch(Ty<'lr>, Ty<'lr>),
+    #[error("duplicate local {0:?}")]
     DupLocal(Local),
+    #[error("invalid operator application {0:?} for values of type {1:?} and {2:?}")]
     BinOpMismatch(BinOp, Ty<'lr>, Ty<'lr>),
+    #[error("invalid operator application {0:?} for value of type {1:?}")]
     UnOpMismatch(UnOp, Ty<'lr>),
+    #[error("{0:?} is not a function type")]
     NotFun(Ty<'lr>),
+    #[error("{0:?} is not a boolean type")]
     NotBool(Ty<'lr>),
+    #[error("wrong number of arguments")]
     ArgCount,
+    #[error("cannot borrow `{0:?}` as {1:} because there is a conflicting borrow at place `{2:?}` of type {3:?}")]
+    BorrowConflict(Place, BorrowKind, Place, Ty<'lr>),
+    #[error("cannot borrow `{0:?}` as mutable because is behind a shared reference")]
+    BorrowBehindShared(Place),
+    #[error("cannot assing to`{0:?}` because there is a conflicting borrow at place `{1:?}` of type {2:?}")]
+    AssignConflict(Place, Place, Ty<'lr>),
+    #[error("cannot assign to `{0:?}` because is behind a shared reference")]
+    AssignBehindShared(Place),
+    #[error(
+        "cannot drop `{0:?}` because there is a conflicting borrow at place `{1:?}` of type {2:?}"
+    )]
+    DropConflict(Local, Place, Ty<'lr>),
 }
 
 fn env_incl<'lr>(
@@ -659,8 +812,7 @@ fn env_incl<'lr>(
     let mut vec = vec![];
     for (x, OwnRef(l2)) in locals2 {
         let OwnRef(l1) = locals1[x];
-        let p = cx.mk_place(l1.into(), &[]);
-        let typ1 = selfify(cx, p, locations1[l1]);
+        let typ1 = selfify(cx, Var::from(l1), &mut vec![], locations1[l1]);
         let typ2 = locations2.get(l2);
         vec.push(subtype(cx, locations1, typ1.into(), locations2, typ2)?);
     }
@@ -679,19 +831,20 @@ fn subtype<'lr>(
     let c = match (typ1, typ2) {
         (TyS::Fn { .. }, TyS::Fn { .. }) => todo!("implement function subtyping"),
         (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
-            let p = cx.mk_place((*l1).into(), &[]);
-            let typ1 = selfify(cx, p, locations1[*l1]).into();
+            let typ1 = selfify(cx, Var::from(*l1), &mut vec![], locations1[*l1]);
             let typ2 = locations2.get(l2);
-            subtype(cx, locations1, typ1, locations2, typ2)?
+            subtype(cx, locations1, typ1.into(), locations2, typ2)?
         }
-        (TyS::MutRef(r1, l1), TyS::MutRef(r2, l2)) => {
-            if !r2.contains(r1) {
-                todo!("")
+        (TyS::Ref(kind1, r1, l1), TyS::Ref(kind2, r2, l2)) => {
+            if !r1.subset_of(r2) {
+                todo!("{:?} {:?}", r1, r2)
             }
-            let p = cx.mk_place((*l1).into(), &[]);
-            let typ1 = selfify(cx, p, locations1[*l1]).into();
+            if kind1 != kind2 {
+                todo!("{:?} {:?}", kind1, kind2)
+            }
+            let typ1 = selfify(cx, Var::from(*l1), &mut vec![], locations1[*l1]);
             let typ2 = locations2.get(l2);
-            subtype(cx, locations1, typ1, locations2, typ2)?
+            subtype(cx, locations1, typ1.into(), locations2, typ2)?
         }
         (
             TyS::Refine {
@@ -750,17 +903,18 @@ fn inner_subtype<'lr>(
     let c = match (typ1, typ2) {
         (TyS::Fn { .. }, TyS::Fn { .. }) => todo!("implement function subtyping"),
         (TyS::OwnRef(l1), TyS::OwnRef(l2)) => {
-            let p = cx.mk_place((*l1).into(), &[]);
-            let typ1 = selfify(cx, p, locations[*l1]);
+            let typ1 = selfify(cx, Var::from(*l1), &mut vec![], locations[*l1]);
             let typ2 = locations[*l2];
-            inner_subtype(cx, locations, typ1, typ2)?
+            inner_subtype(cx, locations, typ1.into(), typ2)?
         }
-        (TyS::MutRef(r1, l1), TyS::MutRef(r2, l2)) => {
-            if !r2.contains(r1) {
+        (TyS::Ref(kind1, r1, l1), TyS::Ref(kind2, r2, l2)) => {
+            if !r1.subset_of(r2) {
                 todo!("")
             }
-            let p = cx.mk_place((*l1).into(), &[]);
-            let typ1 = selfify(cx, p, locations[*l1]);
+            if kind1 != kind2 {
+                todo!("")
+            }
+            let typ1 = selfify(cx, Var::from(*l1), &mut vec![], locations[*l1]);
             let typ2 = locations[*l2];
             inner_subtype(cx, locations, typ1, typ2)?
         }
