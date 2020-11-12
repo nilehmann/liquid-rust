@@ -45,7 +45,7 @@ pub struct LiquidSolver<'a> {
 
 impl<'a> LiquidSolver<'a> {
     pub fn new() -> io::Result<Self> {
-        let mut kid = Command::new("./fixpoint")
+        let mut kid = Command::new("fixpoint")
             .arg("-q")
             .arg("--stdin")
             .arg("--json")
