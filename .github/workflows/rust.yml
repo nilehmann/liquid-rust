@@ -15,9 +15,6 @@ jobs:
 
       - name: Install toolchain
         uses: actions-rs/toolchain@v1.0.6
-        with:
-          profile: minimal
-          components: rustc-dev
 
       - run: sudo chown -R $(whoami):$(id -ng) ~/.cargo/
 
