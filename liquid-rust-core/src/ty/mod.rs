@@ -24,44 +24,32 @@ impl TyS {
     }
 
     pub fn is_int(&self) -> bool {
-        matches!(
-            self.kind(),
-            TyKind::Refine {
-                bty: BaseType::Int,
-                ..
-            }
-        )
+        matches!(self.kind(), TyKind::Refine(BaseType::Int, ..))
     }
 
     pub fn is_bool(&self) -> bool {
-        matches!(
-            self.kind(),
-            TyKind::Refine {
-                bty: BaseType::Bool,
-                ..
-            }
-        )
+        matches!(self.kind(), TyKind::Refine(BaseType::Bool, ..))
     }
 
     pub fn size(&self) -> usize {
         match self.kind() {
-            TyKind::Fn(_) => 1,
-            TyKind::OwnRef(_) => 1,
-            TyKind::Ref(_, _, _) => 1,
+            TyKind::Fn(..) => 1,
+            TyKind::OwnRef(..) => 1,
+            TyKind::Ref(..) => 1,
             TyKind::Tuple(tup) => tup.types().map(|ty| ty.size()).sum(),
             TyKind::Uninit(n) => *n,
-            TyKind::Refine { .. } => 1,
+            TyKind::Refine(..) => 1,
         }
     }
 
     pub fn shape_eq(&self, ty: &Ty) -> bool {
         match (self.kind(), ty.kind()) {
             (TyKind::Fn(ty1), TyKind::Fn(ty2)) => ty1.shape_eq(&ty2),
-            (TyKind::OwnRef(_), TyKind::OwnRef(_)) => true,
-            (TyKind::Ref(bk1, _, _), TyKind::Ref(bk2, _, _)) => bk1 == bk2,
+            (TyKind::OwnRef(..), TyKind::OwnRef(..)) => true,
+            (TyKind::Ref(bk1, ..), TyKind::Ref(bk2, ..)) => bk1 == bk2,
             (TyKind::Tuple(tuple1), TyKind::Tuple(tuple2)) => tuple1.shape_eq(tuple2),
             (TyKind::Uninit(n1), TyKind::Uninit(n2)) => n1 == n2,
-            (TyKind::Refine { bty: bty1, .. }, TyKind::Refine { bty: bty2, .. }) => bty1 == bty2,
+            (TyKind::Refine(bty1, ..), TyKind::Refine(bty2, ..)) => bty1 == bty2,
             _ => false,
         }
     }
@@ -70,7 +58,7 @@ impl TyS {
 impl fmt::Display for TyS {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.kind() {
-            TyKind::Fn(_) => todo!(),
+            TyKind::Fn(..) => todo!(),
             TyKind::OwnRef(l) => write!(f, "Own(l${})", l.0),
             TyKind::Ref(BorrowKind::Shared, r, l) => write!(f, "&({}, $l{})", r, l.0),
             TyKind::Ref(BorrowKind::Mut, r, l) => write!(f, "&mut ({}, $l{})", r, l.0),
@@ -83,14 +71,8 @@ impl fmt::Display for TyS {
                 write!(f, "({})", tup)
             }
             TyKind::Uninit(size) => write!(f, "Uninit({})", size),
-            TyKind::Refine {
-                bty,
-                refine: Refine::Infer(k),
-            } => write!(f, "{{ {} | $k{} }}", bty, k.0),
-            TyKind::Refine {
-                bty,
-                refine: Refine::Pred(pred),
-            } => write!(f, "{{ {} | {} }}", bty, pred),
+            TyKind::Refine(bty, Refine::Infer(k)) => write!(f, "{{ {} | $k{} }}", bty, k.0),
+            TyKind::Refine(bty, Refine::Pred(pred)) => write!(f, "{{ {} | {} }}", bty, pred),
         }
     }
 }
@@ -102,7 +84,7 @@ pub enum TyKind {
     Ref(BorrowKind, Region, Location),
     Tuple(Tuple),
     Uninit(usize),
-    Refine { bty: BaseType, refine: Refine },
+    Refine(BaseType, Refine),
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]

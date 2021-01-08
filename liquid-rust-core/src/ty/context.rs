@@ -83,14 +83,11 @@ impl TyCtxt {
     }
 
     pub fn mk_refine(&self, bty: BaseType, refine: Refine) -> Ty {
-        self.mk_ty(TyKind::Refine { bty, refine })
+        self.mk_ty(TyKind::Refine(bty, refine))
     }
 
-    pub fn mk_unrefined(&self, ty: BaseType) -> Ty {
-        self.mk_ty(TyKind::Refine {
-            bty: ty,
-            refine: Refine::Pred(self.preds.tt()),
-        })
+    pub fn mk_unrefined(&self, bty: BaseType) -> Ty {
+        self.mk_ty(TyKind::Refine(bty, Refine::Pred(self.preds.tt())))
     }
 
     pub fn mk_ref(&self, bk: BorrowKind, region: Region, location: Location) -> Ty {
@@ -137,10 +134,7 @@ pub struct CommonTypes {
 impl CommonTypes {
     fn new(interner: &mut CtxtInterner, preds: &CommonPreds) -> Self {
         let mut intern = |typ| interner.intern_ty(typ);
-        let mk_refine = |ty| TyKind::Refine {
-            bty: ty,
-            refine: Refine::Pred(preds.tt()),
-        };
+        let mk_refine = |bty| TyKind::Refine(bty, Refine::Pred(preds.tt()));
         CommonTypes {
             unit: intern(mk_refine(BaseType::Unit)),
             int: intern(mk_refine(BaseType::Int)),

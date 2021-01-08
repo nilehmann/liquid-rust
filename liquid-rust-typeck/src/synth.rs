@@ -75,8 +75,8 @@ impl Synth for ast::Operand {
 impl Synth for ast::Constant {
     fn synth(&self, tcx: &TyCtxt, _env: &mut Env) -> Ty {
         match self {
-            ast::Constant::Bool(_) => tcx.types.bool(),
-            ast::Constant::Int(_) => tcx.types.int(),
+            ast::Constant::Bool(..) => tcx.types.bool(),
+            ast::Constant::Int(..) => tcx.types.int(),
             ast::Constant::Unit => tcx.types.unit(),
         }
     }

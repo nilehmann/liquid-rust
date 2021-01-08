@@ -97,7 +97,7 @@ impl<I> Visitor<I> for RegionInferer<'_> {
 
 fn subtype(constraints: &mut Constraints, heap1: &ty::Heap, ty1: &Ty, heap2: &ty::Heap, ty2: &Ty) {
     match (ty1.kind(), ty2.kind()) {
-        (ty::TyKind::Fn(_), ty::TyKind::Fn(_)) => todo!(),
+        (ty::TyKind::Fn(..), ty::TyKind::Fn(..)) => todo!(),
         (ty::TyKind::Tuple(tup1), ty::TyKind::Tuple(tup2)) if tup1.len() == tup2.len() => {
             for (ty1, ty2) in tup1.types().zip(tup2.types()) {
                 subtype(constraints, heap1, ty1, heap2, ty2);
@@ -110,8 +110,7 @@ fn subtype(constraints: &mut Constraints, heap1: &ty::Heap, ty1: &Ty, heap2: &ty
         (ty::TyKind::OwnRef(l1), ty::TyKind::OwnRef(l2)) => {
             subtype(constraints, heap1, &heap1[l1], heap2, &heap2[l2]);
         }
-        (ty::TyKind::Refine { bty: bty1, .. }, ty::TyKind::Refine { bty: bty2, .. })
-            if bty1 == bty2 => {}
+        (ty::TyKind::Refine(bty1, ..), ty::TyKind::Refine(bty2, ..)) if bty1 == bty2 => {}
         (_, ty::TyKind::Uninit(n)) if ty1.size() == *n => {}
         _ => bug!("{} {}", ty1, ty2),
     }
