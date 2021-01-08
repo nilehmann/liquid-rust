@@ -1,4 +1,4 @@
-use std::collections::{hash_map::Entry, HashMap, HashSet};
+use std::collections::{HashMap, HashSet};
 
 use crate::{env::Env, synth::Synth};
 use ast::{Place, StatementKind};
@@ -8,21 +8,22 @@ use liquid_rust_core::{
         visitor::{self as vis, Visitor},
         FnBody, Statement,
     },
+    lower::TypeLowerer,
     names::ContId,
-    ty::{self, Ty, TyCtxt},
+    ty::{self, LocalsMap, Ty, TyCtxt},
 };
 
 pub struct RegionInferer<'a> {
-    cont_tys: &'a HashMap<ContId, ty::ContTy>,
+    cont_tys: HashMap<ContId, ty::ContTy>,
     tcx: &'a TyCtxt,
     env: Env<'a>,
     constraints: Constraints,
 }
 
 impl<'a> RegionInferer<'a> {
-    pub fn new(tcx: &'a TyCtxt, cont_tys: &'a HashMap<ContId, ty::ContTy>) -> Self {
+    pub fn new(tcx: &'a TyCtxt) -> Self {
         RegionInferer {
-            cont_tys,
+            cont_tys: HashMap::new(),
             tcx,
             env: Env::new(tcx),
             constraints: Constraints::new(),
@@ -36,6 +37,12 @@ impl<'a> RegionInferer<'a> {
     ) -> HashMap<ty::RegionVid, Vec<Place>> {
         self.env.insert_locals(fn_ty.locals(&func.params));
         self.env.insert_heap(&fn_ty.in_heap);
+        let ret_cont_ty = ty::ContTy::new(
+            TypeLowerer::new(self.tcx, vec![]).lower_heap(&func.ty.out_heap),
+            LocalsMap::empty(),
+            vec![func.ty.output],
+        );
+        self.cont_tys.insert(func.ret, ret_cont_ty);
         self.visit_fn_body(&func.body);
         self.constraints.solve()
     }
@@ -66,6 +73,12 @@ impl<I> Visitor<I> for RegionInferer<'_> {
             }
             FnBody::LetCont(defs, rest) => {
                 for def in defs {
+                    self.cont_tys.insert(
+                        def.name,
+                        TypeLowerer::new(self.tcx, self.env.vars_in_scope()).lower_cont_ty(&def.ty),
+                    );
+                }
+                for def in defs {
                     let cont_ty = &self.cont_tys[&def.name];
                     let snapshot = self.env.snapshot_without_locals();
                     let locals = cont_ty.locals(&def.params);
@@ -80,7 +93,7 @@ impl<I> Visitor<I> for RegionInferer<'_> {
         }
     }
 
-    fn visit_statement(&mut self, stmnt: &Statement<I>) {
+    fn visit_stmnt(&mut self, stmnt: &Statement<I>) {
         match &stmnt.kind {
             StatementKind::Let(local, layout) => {
                 let ty = self.tcx.mk_ty_for_layout(layout);

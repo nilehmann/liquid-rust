@@ -1,6 +1,4 @@
 pub mod context;
-pub mod pred;
-
 use std::fmt;
 
 pub use crate::ast::{BaseType, BorrowKind, LocalsMap};
@@ -9,7 +7,7 @@ use crate::{ast::Place, names::Local};
 pub use context::TyCtxt;
 use hashconsing::HConsed;
 use indexmap::IndexMap;
-pub use pred::{Pred, PredS};
+pub use pred::{Pred, PredS, Var};
 
 pub type Ty = HConsed<TyS>;
 
@@ -71,7 +69,7 @@ impl fmt::Display for TyS {
                 write!(f, "({})", tup)
             }
             TyKind::Uninit(size) => write!(f, "Uninit({})", size),
-            TyKind::Refine(bty, Refine::Infer(k)) => write!(f, "{{ {} | $k{} }}", bty, k.0),
+            TyKind::Refine(bty, Refine::Infer(k)) => write!(f, "{{ {} | {} }}", bty, k),
             TyKind::Refine(bty, Refine::Pred(pred)) => write!(f, "{{ {} | {} }}", bty, pred),
         }
     }
@@ -235,25 +233,25 @@ impl From<Place> for Region {
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub enum Refine {
     Pred(Pred),
-    Infer(KVid),
+    Infer(Kvar),
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct Kvar(pub KVid, pub Vec<pred::Var>);
+
+impl fmt::Display for Kvar {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let vars = (self.1)
+            .iter()
+            .map(|v| format!("{}", v))
+            .collect::<Vec<_>>()
+            .join(", ");
+        write!(f, "$k{}[{}]", (self.0).0, vars)
+    }
 }
 
 #[derive(Clone, Debug)]
 pub struct Heap(IndexMap<Location, Ty>);
-
-impl std::fmt::Display for Heap {
-    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-        write!(f, "[")?;
-        for (i, (l, ty)) in self.iter().enumerate() {
-            if i > 0 {
-                write!(f, ", ")?;
-            }
-            write!(f, "$l{}: {}", l.0, ty)?;
-        }
-        write!(f, "]")?;
-        Ok(())
-    }
-}
 
 impl Heap {
     pub fn new() -> Self {
@@ -278,6 +276,24 @@ impl Heap {
 
     pub fn iter(&self) -> indexmap::map::Iter<Location, Ty> {
         self.0.iter()
+    }
+
+    pub fn keys(&self) -> impl Iterator<Item = &Location> {
+        self.0.keys()
+    }
+}
+
+impl std::fmt::Display for Heap {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "[")?;
+        for (i, (l, ty)) in self.iter().enumerate() {
+            if i > 0 {
+                write!(f, ", ")?;
+            }
+            write!(f, "$l{}: {}", l.0, ty)?;
+        }
+        write!(f, "]")?;
+        Ok(())
     }
 }
 
@@ -336,3 +352,35 @@ pub struct KVid(pub usize);
 /// A **Region** **v**ariable **ID**
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct RegionVid(pub usize);
+
+pub mod pred {
+    use hashconsing::HConsed;
+
+    pub use crate::ast::pred::{BinOp, Constant, Place, UnOp, Var};
+
+    pub type Pred = HConsed<PredS>;
+
+    #[derive(Debug, Clone, Hash, PartialEq, Eq)]
+    pub enum PredS {
+        Constant(Constant),
+        Place(Place),
+        BinaryOp(BinOp, Pred, Pred),
+        UnaryOp(UnOp, Pred),
+    }
+
+    impl std::fmt::Display for PredS {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            match self {
+                PredS::Constant(c) => write!(f, "{}", c)?,
+                PredS::Place(place) => write!(f, "{}", place)?,
+                PredS::BinaryOp(op, lhs, rhs) => {
+                    write!(f, "({} {} {})", lhs, op, rhs)?;
+                }
+                PredS::UnaryOp(op, operand) => {
+                    write!(f, "{}({})", op, operand)?;
+                }
+            }
+            Ok(())
+        }
+    }
+}

@@ -1,117 +1,88 @@
-use std::collections::HashMap;
-
-use crate::ast::{
-    self,
-    visitor::{self as vis, Visitor},
-    LocalsMap,
-};
-use crate::names::ContId;
+use crate::ast;
 use crate::ty::{self, TyCtxt};
 
-pub struct ContTyLowerer<'a> {
-    map: HashMap<ty::ContId, ty::ContTy>,
+pub struct TypeLowerer<'a> {
     tcx: &'a TyCtxt,
+    vars: Vec<ty::Var>,
 }
 
-impl<'a> ContTyLowerer<'a> {
-    pub fn new(tcx: &'a TyCtxt) -> Self {
-        ContTyLowerer {
-            map: HashMap::new(),
-            tcx,
+impl<'a> TypeLowerer<'a> {
+    pub fn new(tcx: &'a TyCtxt, vars: Vec<ty::Var>) -> Self {
+        Self { vars, tcx }
+    }
+
+    pub fn lower_ty(&mut self, ty: &ast::Ty) -> ty::Ty {
+        match ty {
+            ast::Ty::Fn(fn_ty) => self.tcx.mk_fn_ty(self.lower_fn_ty(fn_ty)),
+            ast::Ty::OwnRef(location) => self.tcx.mk_own_ref(*location),
+            ast::Ty::Ref(bk, region, location) => {
+                self.tcx.mk_ref(*bk, self.lower_region(region), *location)
+            }
+            ast::Ty::Tuple(tup) => {
+                let mut vec = Vec::new();
+                for (f, ty) in tup {
+                    self.vars.push(ty::Var::Field(*f));
+                    vec.push((*f, self.lower_ty(ty)));
+                    self.vars.pop();
+                }
+                self.tcx.mk_tuple(ty::Tuple::from(vec))
+            }
+            ast::Ty::Uninit(n) => self.tcx.mk_uninit(*n),
+            ast::Ty::Refine { bty: ty, refine } => {
+                self.tcx.mk_refine(*ty, self.lower_refine(refine))
+            }
         }
     }
-}
 
-impl ContTyLowerer<'_> {
-    pub fn lower<I>(mut self, func: &ast::FnDef<I>) -> HashMap<ContId, ty::ContTy> {
-        self.visit_fn_body(&func.body);
-        let ret_cont_ty = ty::ContTy::new(
-            func.ty.out_heap.lower(&self.tcx),
-            LocalsMap::empty(),
-            vec![func.ty.output],
-        );
-        self.map.insert(func.ret, ret_cont_ty);
-        self.map
-    }
-}
-
-impl<I> Visitor<I> for ContTyLowerer<'_> {
-    fn visit_cont_def(&mut self, def: &ast::ContDef<I>) {
-        self.map.insert(def.name, def.ty.lower(self.tcx));
-        vis::walk_cont_def(self, def);
-    }
-}
-
-impl ast::Ty {
-    fn lower(&self, tcx: &TyCtxt) -> ty::Ty {
-        match self {
-            ast::Ty::Fn(fn_ty) => tcx.mk_fn_ty(fn_ty.lower(tcx)),
-            ast::Ty::OwnRef(location) => tcx.mk_own_ref(*location),
-            ast::Ty::Ref(bk, region, location) => tcx.mk_ref(*bk, region.lower(tcx), *location),
-            ast::Ty::Tuple(tup) => tcx.mk_tuple(ty::Tuple::from(
-                tup.iter().map(|(f, ty)| (*f, ty.lower(tcx))),
-            )),
-            ast::Ty::Uninit(n) => tcx.mk_uninit(*n),
-            ast::Ty::Refine { bty: ty, refine } => tcx.mk_refine(*ty, refine.lower(tcx)),
-        }
-    }
-}
-
-impl ast::ContTy {
-    pub fn lower(&self, tcx: &TyCtxt) -> ty::ContTy {
+    pub fn lower_cont_ty(&mut self, cont_ty: &ast::ContTy) -> ty::ContTy {
         ty::ContTy::new(
-            self.heap.lower(tcx),
-            self.locals.clone(),
-            self.inputs.clone(),
+            self.lower_heap(&cont_ty.heap),
+            cont_ty.locals.clone(),
+            cont_ty.inputs.clone(),
         )
     }
-}
 
-impl ast::FnTy {
-    pub fn lower(&self, tcx: &TyCtxt) -> ty::FnTy {
+    pub fn lower_fn_ty(&mut self, fn_ty: &ast::FnTy) -> ty::FnTy {
         ty::FnTy {
-            in_heap: self.in_heap.lower(tcx),
-            inputs: self.inputs.clone(),
-            out_heap: self.out_heap.lower(tcx),
-            output: self.output.clone(),
+            in_heap: self.lower_heap(&fn_ty.in_heap),
+            inputs: fn_ty.inputs.clone(),
+            out_heap: self.lower_heap(&fn_ty.out_heap),
+            output: fn_ty.output.clone(),
         }
     }
-}
 
-impl ast::Heap {
-    fn lower(&self, tcx: &TyCtxt) -> ty::Heap {
+    pub fn lower_heap(&mut self, heap: &ast::Heap) -> ty::Heap {
         ty::Heap::from(
-            self.into_iter()
-                .map(|(location, ty)| (*location, ty.lower(tcx))),
+            heap.into_iter()
+                .map(|(location, ty)| (*location, self.lower_ty(ty))),
         )
     }
-}
 
-impl ast::Region {
-    fn lower(&self, tcx: &TyCtxt) -> ty::Region {
-        match self {
+    fn lower_region(&mut self, region: &ast::Region) -> ty::Region {
+        match region {
             ast::Region::Concrete(places) => ty::Region::Concrete(places.clone()),
-            ast::Region::Infer => ty::Region::Infer(tcx.fresh_region_vid()),
+            ast::Region::Infer => ty::Region::Infer(self.tcx.fresh_region_vid()),
         }
     }
-}
 
-impl ast::Refine {
-    fn lower(&self, tcx: &TyCtxt) -> ty::Refine {
-        match self {
-            ast::Refine::Pred(pred) => ty::Refine::Pred(pred.lower(tcx)),
-            ast::Refine::Infer => ty::Refine::Infer(tcx.fresh_kvar()),
+    fn lower_refine(&self, refine: &ast::Refine) -> ty::Refine {
+        match refine {
+            ast::Refine::Pred(pred) => ty::Refine::Pred(self.lower_pred(pred)),
+            ast::Refine::Infer => {
+                ty::Refine::Infer(ty::Kvar(self.tcx.fresh_kvar(), self.vars.clone()))
+            }
         }
     }
-}
 
-impl ast::Pred {
-    fn lower(&self, tcx: &TyCtxt) -> ty::Pred {
-        match self {
-            ast::Pred::Constant(c) => tcx.mk_constant(*c),
-            ast::Pred::Place(place) => tcx.mk_pred_place(place.clone()),
-            ast::Pred::BinaryOp(op, lhs, rhs) => tcx.mk_bin_op(*op, lhs.lower(tcx), rhs.lower(tcx)),
-            ast::Pred::UnaryOp(op, operand) => tcx.mk_un_op(*op, operand.lower(tcx)),
+    fn lower_pred(&self, pred: &ast::Pred) -> ty::Pred {
+        match pred {
+            ast::Pred::Constant(c) => self.tcx.mk_constant(*c),
+            ast::Pred::Place(place) => self.tcx.mk_pred_place(place.clone()),
+            ast::Pred::BinaryOp(bin_op, op1, op2) => {
+                self.tcx
+                    .mk_bin_op(*bin_op, self.lower_pred(op1), self.lower_pred(op2))
+            }
+            ast::Pred::UnaryOp(un_op, op) => self.tcx.mk_un_op(*un_op, self.lower_pred(op)),
         }
     }
 }

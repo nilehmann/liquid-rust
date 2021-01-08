@@ -38,6 +38,10 @@ impl Env<'_> {
         &self.heap
     }
 
+    pub fn vars_in_scope(&self) -> Vec<ty::Var> {
+        self.heap.keys().map(|&l| ty::Var::Location(l)).collect()
+    }
+
     pub fn snapshot(&mut self) -> Snapshot {
         let heap_len = self.heap.len();
         let locals_len = self.locals.len();
