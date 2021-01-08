@@ -130,7 +130,6 @@ pub enum BorrowKind {
 
 #[derive(Debug)]
 pub enum Ty<S = usize> {
-    Fn(FnTy<S>),
     OwnRef(Location<S>),
     Ref(BorrowKind, Region<S>, Location<S>),
     Tuple(Vec<(Field<S>, Ty<S>)>),

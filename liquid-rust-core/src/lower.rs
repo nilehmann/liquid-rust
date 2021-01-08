@@ -13,7 +13,6 @@ impl<'a> TypeLowerer<'a> {
 
     pub fn lower_ty(&mut self, ty: &ast::Ty) -> ty::Ty {
         match ty {
-            ast::Ty::Fn(fn_ty) => self.tcx.mk_fn_ty(self.lower_fn_ty(fn_ty)),
             ast::Ty::OwnRef(location) => self.tcx.mk_own_ref(*location),
             ast::Ty::Ref(bk, region, location) => {
                 self.tcx.mk_ref(*bk, self.lower_region(region), *location)

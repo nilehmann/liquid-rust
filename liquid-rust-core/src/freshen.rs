@@ -208,7 +208,6 @@ where
     fn freshen_ty(&mut self, ty: Ty<S>) -> Ty {
         use Ty::*;
         match ty {
-            Fn(fn_ty) => Fn(self.freshen_fn_ty(fn_ty)),
             OwnRef(location) => OwnRef(self.freshen_location(location)),
             Ref(kind, region, location) => Ref(
                 kind,
