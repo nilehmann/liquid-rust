@@ -202,17 +202,17 @@ Var: pred::Var<&'input str> = {
 }
 
 BinOpGroup1: pred::BinOp = {
-  "+" => pred::BinOp::Add,
-  "-" => pred::BinOp::Sub
-}
-
-BinOpGroup2: pred::BinOp = {
   "<"  => pred::BinOp::Lt,
   "<=" => pred::BinOp::Le,
   "==" => pred::BinOp::Eq,
   ">=" => pred::BinOp::Ge,
   ">"  => pred::BinOp::Gt,
 };
+
+BinOpGroup2: pred::BinOp = {
+  "+" => pred::BinOp::Add,
+  "-" => pred::BinOp::Sub
+}
 
 LeftAssoc<OpGroup, NextExprLevel>: Pred<&'input str> = {
   <lhs: LeftAssoc<OpGroup,NextExprLevel>>
