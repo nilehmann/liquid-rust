@@ -1,6 +1,9 @@
 use std::collections::{HashMap, HashSet};
 
-use crate::{env::Env, synth::Synth};
+use crate::{
+    env::{ContEnv, Env},
+    synth::Synth,
+};
 use ast::{Place, StatementKind};
 use liquid_rust_core::{
     ast::{
@@ -8,13 +11,11 @@ use liquid_rust_core::{
         visitor::{self as vis, Visitor},
         FnBody, Statement,
     },
-    lower::TypeLowerer,
-    names::ContId,
-    ty::{self, LocalsMap, Ty, TyCtxt},
+    ty::{self, TyCtxt, TyS},
 };
 
 pub struct RegionInferer<'a> {
-    cont_tys: HashMap<ContId, ty::ContTy>,
+    conts: ContEnv<'a>,
     tcx: &'a TyCtxt,
     env: Env<'a>,
     constraints: Constraints,
@@ -23,7 +24,7 @@ pub struct RegionInferer<'a> {
 impl<'a> RegionInferer<'a> {
     pub fn new(tcx: &'a TyCtxt) -> Self {
         RegionInferer {
-            cont_tys: HashMap::new(),
+            conts: ContEnv::new(tcx),
             tcx,
             env: Env::new(tcx),
             constraints: Constraints::new(),
@@ -36,13 +37,9 @@ impl<'a> RegionInferer<'a> {
         fn_ty: &ty::FnTy,
     ) -> HashMap<ty::RegionVid, Vec<Place>> {
         self.env.insert_locals(fn_ty.locals(&func.params));
-        self.env.insert_heap(&fn_ty.in_heap);
-        let ret_cont_ty = ty::ContTy::new(
-            TypeLowerer::new(self.tcx, vec![]).lower_heap(&func.ty.out_heap),
-            LocalsMap::empty(),
-            vec![func.ty.output],
-        );
-        self.cont_tys.insert(func.ret, ret_cont_ty);
+        self.env.extend_heap(&fn_ty.in_heap);
+        self.conts
+            .define_ret_cont(func.ret, &func.ty, self.env.vars_in_scope());
         self.visit_fn_body(&func.body);
         self.constraints.solve()
     }
@@ -52,11 +49,11 @@ impl<I> Visitor<I> for RegionInferer<'_> {
     fn visit_fn_body(&mut self, body: &FnBody<I>) {
         match body {
             FnBody::Jump { target, args } => {
-                let cont_ty = &self.cont_tys[target];
+                let cont_ty = &self.conts[target];
                 for (x, l) in cont_ty.locals(args) {
                     let ty1 = self.env.lookup(&Place::from(x));
                     let ty2 = &cont_ty.heap[&l];
-                    subtype(
+                    subtyping(
                         &mut self.constraints,
                         self.env.heap(),
                         ty1,
@@ -73,17 +70,15 @@ impl<I> Visitor<I> for RegionInferer<'_> {
             }
             FnBody::LetCont(defs, rest) => {
                 for def in defs {
-                    self.cont_tys.insert(
-                        def.name,
-                        TypeLowerer::new(self.tcx, self.env.vars_in_scope()).lower_cont_ty(&def.ty),
-                    );
+                    self.conts
+                        .define_cont(def.name, &def.ty, self.env.vars_in_scope());
                 }
                 for def in defs {
-                    let cont_ty = &self.cont_tys[&def.name];
+                    let cont_ty = &self.conts[&def.name];
                     let snapshot = self.env.snapshot_without_locals();
                     let locals = cont_ty.locals(&def.params);
                     self.env.insert_locals(locals);
-                    self.env.insert_heap(&cont_ty.heap);
+                    self.env.extend_heap(&cont_ty.heap);
                     self.visit_cont_def(def);
                     self.env.rollback_to(snapshot);
                 }
@@ -103,25 +98,33 @@ impl<I> Visitor<I> for RegionInferer<'_> {
                 let ty = rvalue.synth(self.tcx, &mut self.env);
                 self.env.update(place, ty);
             }
-            StatementKind::Drop(local) => self.env.drop(local),
+            StatementKind::Drop(local) => {
+                self.env.drop(local);
+            }
         }
     }
 }
 
-fn subtype(constraints: &mut Constraints, heap1: &ty::Heap, ty1: &Ty, heap2: &ty::Heap, ty2: &Ty) {
+fn subtyping(
+    constraints: &mut Constraints,
+    heap1: &ty::Heap,
+    ty1: &TyS,
+    heap2: &ty::Heap,
+    ty2: &TyS,
+) {
     match (ty1.kind(), ty2.kind()) {
         (ty::TyKind::Fn(..), ty::TyKind::Fn(..)) => todo!(),
         (ty::TyKind::Tuple(tup1), ty::TyKind::Tuple(tup2)) if tup1.len() == tup2.len() => {
             for (ty1, ty2) in tup1.types().zip(tup2.types()) {
-                subtype(constraints, heap1, ty1, heap2, ty2);
+                subtyping(constraints, heap1, ty1, heap2, ty2);
             }
         }
         (ty::TyKind::Ref(bk1, r1, l1), ty::TyKind::Ref(bk2, r2, l2)) if bk1 >= bk2 => {
             constraints.add(r1.clone(), r2.clone());
-            subtype(constraints, heap1, &heap1[l1], heap2, &heap2[l2]);
+            subtyping(constraints, heap1, &heap1[l1], heap2, &heap2[l2]);
         }
         (ty::TyKind::OwnRef(l1), ty::TyKind::OwnRef(l2)) => {
-            subtype(constraints, heap1, &heap1[l1], heap2, &heap2[l2]);
+            subtyping(constraints, heap1, &heap1[l1], heap2, &heap2[l2]);
         }
         (ty::TyKind::Refine(bty1, ..), ty::TyKind::Refine(bty2, ..)) if bty1 == bty2 => {}
         (_, ty::TyKind::Uninit(n)) if ty1.size() == *n => {}

@@ -6,5 +6,7 @@ edition = "2018"
 
 [dependencies]
 indexmap = "1.6"
+quickscope = "0.1"
 liquid-rust-core = { path = "../liquid-rust-core" }
 liquid-rust-common = { path = "../liquid-rust-common" }
+liquid-rust-liquid = { path = "../liquid-rust-liquid" }

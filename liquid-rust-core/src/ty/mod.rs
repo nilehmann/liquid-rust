@@ -1,13 +1,18 @@
 pub mod context;
+pub mod subst;
 use std::fmt;
 
-pub use crate::ast::{BaseType, BorrowKind, LocalsMap};
-pub use crate::names::{ContId, Field, Location};
 use crate::{ast::Place, names::Local};
+pub use crate::{
+    ast::{
+        pred::{BinOp, UnOp, Var},
+        BaseTy, BorrowKind,
+    },
+    names::{ContId, Field, Location},
+};
 pub use context::TyCtxt;
 use hashconsing::HConsed;
 use indexmap::IndexMap;
-pub use pred::{Pred, PredS, Var};
 
 pub type Ty = HConsed<TyS>;
 
@@ -22,11 +27,11 @@ impl TyS {
     }
 
     pub fn is_int(&self) -> bool {
-        matches!(self.kind(), TyKind::Refine(BaseType::Int, ..))
+        matches!(self.kind(), TyKind::Refine(BaseTy::Int, ..))
     }
 
     pub fn is_bool(&self) -> bool {
-        matches!(self.kind(), TyKind::Refine(BaseType::Bool, ..))
+        matches!(self.kind(), TyKind::Refine(BaseTy::Bool, ..))
     }
 
     pub fn size(&self) -> usize {
@@ -49,6 +54,22 @@ impl TyS {
             (TyKind::Uninit(n1), TyKind::Uninit(n2)) => n1 == n2,
             (TyKind::Refine(bty1, ..), TyKind::Refine(bty2, ..)) => bty1 == bty2,
             _ => false,
+        }
+    }
+
+    pub fn walk(&self, f: &mut impl FnMut(&TyS)) {
+        f(self);
+        match self.kind() {
+            TyKind::Tuple(tup) => {
+                for ty in tup.types() {
+                    ty.walk(f);
+                }
+            }
+            TyKind::OwnRef(_)
+            | TyKind::Ref(_, _, _)
+            | TyKind::Fn(_)
+            | TyKind::Uninit(_)
+            | TyKind::Refine(_, _) => {}
         }
     }
 }
@@ -82,7 +103,7 @@ pub enum TyKind {
     Ref(BorrowKind, Region, Location),
     Tuple(Tuple),
     Uninit(usize),
-    Refine(BaseType, Refine),
+    Refine(BaseTy, Refine),
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
@@ -100,11 +121,10 @@ impl FnTy {
 
     pub fn locals(&self, args: &[Local]) -> LocalsMap {
         assert!(self.inputs.len() == args.len());
-        let mut vec = Vec::new();
-        for (&x, &l) in args.iter().zip(&self.inputs) {
-            vec.push((x, l));
-        }
-        LocalsMap::from(vec)
+        args.iter()
+            .zip(&self.inputs)
+            .map(|(x, l)| (*x, *l))
+            .collect()
     }
 }
 
@@ -130,15 +150,27 @@ impl Tuple {
         Tuple(v)
     }
 
+    pub fn map(&self, mut f: impl FnMut(usize, &Field, &Ty) -> (Field, Ty)) -> Tuple {
+        self.0
+            .iter()
+            .enumerate()
+            .map(|(i, (fld, ty))| f(i, fld, ty))
+            .collect()
+    }
+
     pub fn ty_at(&self, n: usize) -> &Ty {
         &self.0[n].1
     }
 
-    pub fn types(&self) -> impl Iterator<Item = &Ty> {
+    pub fn types(&self) -> impl DoubleEndedIterator<Item = &Ty> + ExactSizeIterator {
         self.0.iter().map(|x| &x.1)
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = &(Field, Ty)> {
+    pub fn fields(&self) -> impl DoubleEndedIterator<Item = &Field> + ExactSizeIterator {
+        self.0.iter().map(|x| &x.0)
+    }
+
+    pub fn iter(&self) -> impl DoubleEndedIterator<Item = &(Field, Ty)> + ExactSizeIterator {
         self.0.iter()
     }
 }
@@ -173,6 +205,12 @@ impl<'a> IntoIterator for &'a Tuple {
     }
 }
 
+impl std::iter::FromIterator<(Field, Ty)> for Tuple {
+    fn from_iter<T: IntoIterator<Item = (Field, Ty)>>(iter: T) -> Self {
+        Tuple(iter.into_iter().collect())
+    }
+}
+
 #[derive(Debug)]
 pub struct ContTy {
     pub heap: Heap,
@@ -191,14 +229,11 @@ impl ContTy {
 
     pub fn locals(&self, args: &[Local]) -> LocalsMap {
         assert!(self.inputs.len() == args.len());
-        let mut vec = Vec::new();
-        for &(x, l) in &self.locals {
-            vec.push((x, l));
-        }
-        for (&x, &l) in args.iter().zip(&self.inputs) {
-            vec.push((x, l));
-        }
-        LocalsMap::from(vec)
+        self.locals
+            .iter()
+            .chain(args.iter().zip(&self.inputs))
+            .map(|(x, l)| (*x, *l))
+            .collect()
     }
 }
 
@@ -236,8 +271,20 @@ pub enum Refine {
     Infer(Kvar),
 }
 
+impl From<Kvar> for Refine {
+    fn from(v: Kvar) -> Self {
+        Refine::Infer(v)
+    }
+}
+
+impl From<Pred> for Refine {
+    fn from(v: Pred) -> Self {
+        Refine::Pred(v)
+    }
+}
+
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
-pub struct Kvar(pub KVid, pub Vec<pred::Var>);
+pub struct Kvar(pub KVid, pub Vec<Var>);
 
 impl fmt::Display for Kvar {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
@@ -262,8 +309,8 @@ impl Heap {
         self.0.len()
     }
 
-    pub fn split_off(&mut self, at: usize) -> Heap {
-        Heap(self.0.split_off(at))
+    pub fn truncate(&mut self, len: usize) {
+        self.0.truncate(len);
     }
 
     pub fn get(&self, l: &Location) -> Option<&Ty> {
@@ -280,6 +327,14 @@ impl Heap {
 
     pub fn keys(&self) -> impl Iterator<Item = &Location> {
         self.0.keys()
+    }
+
+    pub fn bindings(&self) -> Vec<(Location, Ty)> {
+        self.0.iter().map(|(l, ty)| (*l, ty.clone())).collect()
+    }
+
+    pub fn map_ty(&self, mut f: impl FnMut(&Ty) -> Ty) -> Heap {
+        self.iter().map(|(l, ty)| (*l, f(ty))).collect()
     }
 }
 
@@ -336,51 +391,130 @@ impl<'a> IntoIterator for &'a Heap {
     }
 }
 
-impl<I> From<I> for Heap
-where
-    I: IntoIterator<Item = (Location, Ty)>,
-{
-    fn from(it: I) -> Self {
-        Heap(it.into_iter().collect())
+impl std::iter::FromIterator<(Location, Ty)> for Heap {
+    fn from_iter<T>(iter: T) -> Self
+    where
+        T: IntoIterator<Item = (Location, Ty)>,
+    {
+        Heap(iter.into_iter().collect())
+    }
+}
+
+#[derive(Debug, Clone)]
+pub struct LocalsMap(IndexMap<Local, Location>);
+
+impl LocalsMap {
+    pub fn empty() -> Self {
+        LocalsMap(IndexMap::new())
+    }
+
+    pub fn locals(&self) -> impl Iterator<Item = &Local> {
+        self.iter().map(|(x, _)| x)
+    }
+
+    pub fn iter(&self) -> indexmap::map::Iter<Local, Location> {
+        self.0.iter()
+    }
+
+    pub fn get(&self, x: &Local) -> Option<&Location> {
+        self.0.get(x)
+    }
+
+    pub fn insert(&mut self, x: Local, l: Location) -> Option<Location> {
+        self.0.insert(x, l)
+    }
+}
+
+impl<'a> std::ops::Index<&'a Local> for LocalsMap {
+    type Output = Location;
+
+    fn index(&self, x: &'a Local) -> &Self::Output {
+        self.get(x).expect("LocalsMap: local not found")
+    }
+}
+
+impl std::iter::FromIterator<(Local, Location)> for LocalsMap {
+    fn from_iter<T>(iter: T) -> Self
+    where
+        T: IntoIterator<Item = (Local, Location)>,
+    {
+        LocalsMap(iter.into_iter().collect())
+    }
+}
+
+impl<'a> IntoIterator for &'a LocalsMap {
+    type Item = (&'a Local, &'a Location);
+
+    type IntoIter = indexmap::map::Iter<'a, Local, Location>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.iter()
+    }
+}
+
+impl IntoIterator for LocalsMap {
+    type Item = (Local, Location);
+
+    type IntoIter = indexmap::map::IntoIter<Local, Location>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
+    }
+}
+
+impl Extend<(Local, Location)> for LocalsMap {
+    fn extend<T: IntoIterator<Item = (Local, Location)>>(&mut self, iter: T) {
+        self.0.extend(iter)
     }
 }
 
 /// A **K** **v**ariable **ID**
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]
 pub struct KVid(pub usize);
 
 /// A **Region** **v**ariable **ID**
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]
 pub struct RegionVid(pub usize);
 
-pub mod pred {
-    use hashconsing::HConsed;
+// Predicates
 
-    pub use crate::ast::pred::{BinOp, Constant, Place, UnOp, Var};
+pub type Pred = HConsed<PredS>;
 
-    pub type Pred = HConsed<PredS>;
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct PredS {
+    kind: PredKind,
+}
 
-    #[derive(Debug, Clone, Hash, PartialEq, Eq)]
-    pub enum PredS {
-        Constant(Constant),
-        Place(Place),
-        BinaryOp(BinOp, Pred, Pred),
-        UnaryOp(UnOp, Pred),
+impl PredS {
+    pub fn kind(&self) -> &PredKind {
+        &self.kind
     }
+}
 
-    impl std::fmt::Display for PredS {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            match self {
-                PredS::Constant(c) => write!(f, "{}", c)?,
-                PredS::Place(place) => write!(f, "{}", place)?,
-                PredS::BinaryOp(op, lhs, rhs) => {
-                    write!(f, "({} {} {})", lhs, op, rhs)?;
-                }
-                PredS::UnaryOp(op, operand) => {
-                    write!(f, "{}({})", op, operand)?;
-                }
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub enum PredKind {
+    Constant(pred::Constant),
+    Place(pred::Place),
+    BinaryOp(BinOp, Pred, Pred),
+    UnaryOp(UnOp, Pred),
+}
+
+impl std::fmt::Display for PredS {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self.kind() {
+            PredKind::Constant(c) => write!(f, "{}", c)?,
+            PredKind::Place(place) => write!(f, "{}", place)?,
+            PredKind::BinaryOp(op, lhs, rhs) => {
+                write!(f, "({} {} {})", lhs, op, rhs)?;
             }
-            Ok(())
+            PredKind::UnaryOp(op, operand) => {
+                write!(f, "{}({})", op, operand)?;
+            }
         }
+        Ok(())
     }
+}
+
+pub mod pred {
+    pub use crate::ast::pred::{Constant, Place};
 }

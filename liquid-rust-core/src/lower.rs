@@ -1,14 +1,16 @@
-use crate::ast;
-use crate::ty::{self, TyCtxt};
+use crate::{
+    ast,
+    ty::{self, TyCtxt, Var},
+};
 
 pub struct TypeLowerer<'a> {
     tcx: &'a TyCtxt,
-    vars: Vec<ty::Var>,
+    vars_in_scope: Vec<Var>,
 }
 
 impl<'a> TypeLowerer<'a> {
-    pub fn new(tcx: &'a TyCtxt, vars: Vec<ty::Var>) -> Self {
-        Self { vars, tcx }
+    pub fn new(tcx: &'a TyCtxt, vars_in_scope: Vec<Var>) -> Self {
+        Self { tcx, vars_in_scope }
     }
 
     pub fn lower_ty(&mut self, ty: &ast::Ty) -> ty::Ty {
@@ -20,9 +22,9 @@ impl<'a> TypeLowerer<'a> {
             ast::Ty::Tuple(tup) => {
                 let mut vec = Vec::new();
                 for (f, ty) in tup {
-                    self.vars.push(ty::Var::Field(*f));
+                    self.vars_in_scope.push(Var::Field(*f));
                     vec.push((*f, self.lower_ty(ty)));
-                    self.vars.pop();
+                    self.vars_in_scope.pop();
                 }
                 self.tcx.mk_tuple(ty::Tuple::from(vec))
             }
@@ -36,7 +38,7 @@ impl<'a> TypeLowerer<'a> {
     pub fn lower_cont_ty(&mut self, cont_ty: &ast::ContTy) -> ty::ContTy {
         ty::ContTy::new(
             self.lower_heap(&cont_ty.heap),
-            cont_ty.locals.clone(),
+            cont_ty.locals.iter().copied().collect(),
             cont_ty.inputs.clone(),
         )
     }
@@ -51,10 +53,13 @@ impl<'a> TypeLowerer<'a> {
     }
 
     pub fn lower_heap(&mut self, heap: &ast::Heap) -> ty::Heap {
-        ty::Heap::from(
-            heap.into_iter()
-                .map(|(location, ty)| (*location, self.lower_ty(ty))),
-        )
+        heap.into_iter()
+            .map(|(l, ty)| {
+                let r = (*l, self.lower_ty(ty));
+                self.vars_in_scope.push(Var::from(*l));
+                r
+            })
+            .collect()
     }
 
     fn lower_region(&mut self, region: &ast::Region) -> ty::Region {
@@ -68,7 +73,9 @@ impl<'a> TypeLowerer<'a> {
         match refine {
             ast::Refine::Pred(pred) => ty::Refine::Pred(self.lower_pred(pred)),
             ast::Refine::Infer => {
-                ty::Refine::Infer(ty::Kvar(self.tcx.fresh_kvar(), self.vars.clone()))
+                let mut vars_in_scope = vec![Var::Nu];
+                vars_in_scope.extend(&self.vars_in_scope);
+                ty::Refine::Infer(ty::Kvar(self.tcx.fresh_kvar(), vars_in_scope))
             }
         }
     }

@@ -1,0 +1,11 @@
+[package]
+name = "liquid-rust-liquid"
+version = "0.1.0"
+authors = ["Nico Lehmann <nico.lehmannm@gmail.com>"]
+edition = "2018"
+
+[dependencies]
+liquid-rust-core = { path = "../liquid-rust-core" }
+serde = { version = "1.0", features = ["derive"] }
+quickscope = "0.1"
+serde_json = "1.0"
