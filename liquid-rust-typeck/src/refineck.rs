@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::{
     constraint::Constraint,
     subtyping::{infer_subst, subtyping},
@@ -5,34 +7,27 @@ use crate::{
 use ast::{FnBody, StatementKind};
 use liquid_rust_core::{
     ast::{self, ContDef, FnDef, Place, Statement},
-    ty::{self, TyCtxt},
+    names::ContId,
+    ty::{self, ContTy, TyCtxt},
 };
 use ty::pred;
 
-use crate::{
-    env::{ContEnv, Env},
-    synth::Synth,
-};
+use crate::{env::Env, synth::Synth};
 
 pub struct RefineChecker<'a> {
-    conts: ContEnv<'a>,
+    conts: &'a HashMap<ContId, ContTy>,
     tcx: &'a TyCtxt,
 }
 
 impl<'a> RefineChecker<'a> {
-    pub fn new(tcx: &'a TyCtxt) -> Self {
-        Self {
-            tcx,
-            conts: ContEnv::new(tcx),
-        }
+    pub fn new(tcx: &'a TyCtxt, conts: &'a HashMap<ContId, ContTy>) -> Self {
+        Self { tcx, conts }
     }
 
     pub fn check_fn_def<I>(mut self, func: &FnDef<I>, fn_ty: &ty::FnTy) -> Constraint {
         let mut env = Env::new(self.tcx);
         env.insert_locals(fn_ty.locals(&func.params));
         env.extend_heap(&fn_ty.in_heap);
-        self.conts
-            .define_ret_cont(func.ret, &func.ty, env.vars_in_scope());
 
         Constraint::from_bindings(
             fn_ty.in_heap.bindings(),
@@ -43,10 +38,6 @@ impl<'a> RefineChecker<'a> {
     pub fn check_body<I>(&mut self, env: &mut Env, body: &FnBody<I>) -> Constraint {
         match body {
             FnBody::LetCont(defs, rest) => {
-                for def in defs {
-                    self.conts
-                        .define_cont(def.name, &def.ty, env.vars_in_scope());
-                }
                 let mut vec = Vec::new();
                 for def in defs {
                     vec.push(self.check_cont_def(env, def));

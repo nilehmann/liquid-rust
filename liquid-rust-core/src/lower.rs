@@ -1,19 +1,55 @@
+use std::collections::HashMap;
+
+use ast::ContDef;
+
 use crate::{
-    ast,
-    ty::{self, TyCtxt, Var},
+    ast::{self, visitor::Visitor, FnDef},
+    names::ContId,
+    ty::{self, LocalsMap, TyCtxt, Var},
 };
 
 pub struct TypeLowerer<'a> {
     tcx: &'a TyCtxt,
     vars_in_scope: Vec<Var>,
+    conts: HashMap<ContId, ty::ContTy>,
+}
+
+impl<I> Visitor<I> for TypeLowerer<'_> {
+    fn visit_cont_def(&mut self, def: &ContDef<I>) {
+        let cont_ty = self.lower_cont_ty(&def.ty);
+
+        let len = self.vars_in_scope.len();
+        self.vars_in_scope
+            .extend(cont_ty.heap.iter().map(|(l, _)| Var::from(*l)));
+        self.visit_fn_body(&def.body);
+        self.vars_in_scope.truncate(len);
+
+        self.conts.insert(def.name, cont_ty);
+    }
 }
 
 impl<'a> TypeLowerer<'a> {
-    pub fn new(tcx: &'a TyCtxt, vars_in_scope: Vec<Var>) -> Self {
-        Self { tcx, vars_in_scope }
+    pub fn new(tcx: &'a TyCtxt) -> Self {
+        Self {
+            tcx,
+            vars_in_scope: Vec::new(),
+            conts: HashMap::new(),
+        }
     }
 
-    pub fn lower_ty(&mut self, ty: &ast::Ty) -> ty::Ty {
+    pub fn lower_fn_def<I>(mut self, func: &FnDef<I>) -> (HashMap<ContId, ty::ContTy>, ty::FnTy) {
+        self.visit_fn_body(&func.body);
+        let fn_ty = self.lower_fn_ty(&func.ty);
+        let ret_cont_ty = ty::ContTy::new(
+            self.lower_heap(&func.ty.out_heap),
+            LocalsMap::empty(),
+            vec![func.ty.output],
+        );
+        self.conts.insert(func.ret, ret_cont_ty);
+        (self.conts, fn_ty)
+    }
+
+    fn lower_ty(&mut self, ty: &ast::Ty) -> ty::Ty {
         match ty {
             ast::Ty::OwnRef(location) => self.tcx.mk_own_ref(*location),
             ast::Ty::Ref(bk, region, location) => {
@@ -35,7 +71,7 @@ impl<'a> TypeLowerer<'a> {
         }
     }
 
-    pub fn lower_cont_ty(&mut self, cont_ty: &ast::ContTy) -> ty::ContTy {
+    fn lower_cont_ty(&mut self, cont_ty: &ast::ContTy) -> ty::ContTy {
         ty::ContTy::new(
             self.lower_heap(&cont_ty.heap),
             cont_ty.locals.iter().copied().collect(),
@@ -43,7 +79,7 @@ impl<'a> TypeLowerer<'a> {
         )
     }
 
-    pub fn lower_fn_ty(&mut self, fn_ty: &ast::FnTy) -> ty::FnTy {
+    fn lower_fn_ty(&mut self, fn_ty: &ast::FnTy) -> ty::FnTy {
         ty::FnTy {
             in_heap: self.lower_heap(&fn_ty.in_heap),
             inputs: fn_ty.inputs.clone(),
@@ -52,14 +88,18 @@ impl<'a> TypeLowerer<'a> {
         }
     }
 
-    pub fn lower_heap(&mut self, heap: &ast::Heap) -> ty::Heap {
-        heap.into_iter()
+    fn lower_heap(&mut self, heap: &ast::Heap) -> ty::Heap {
+        let len = self.vars_in_scope.len();
+        let heap = heap
+            .into_iter()
             .map(|(l, ty)| {
                 let r = (*l, self.lower_ty(ty));
                 self.vars_in_scope.push(Var::from(*l));
                 r
             })
-            .collect()
+            .collect();
+        self.vars_in_scope.truncate(len);
+        heap
     }
 
     fn lower_region(&mut self, region: &ast::Region) -> ty::Region {

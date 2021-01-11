@@ -214,8 +214,8 @@ impl std::iter::FromIterator<(Field, Ty)> for Tuple {
 #[derive(Debug)]
 pub struct ContTy {
     pub heap: Heap,
-    locals: LocalsMap,
-    inputs: Vec<Location>,
+    pub locals: LocalsMap,
+    pub inputs: Vec<Location>,
 }
 
 impl ContTy {
@@ -378,6 +378,16 @@ impl std::hash::Hash for Heap {
             l.hash(state);
             ty.hash(state);
         }
+    }
+}
+
+impl IntoIterator for Heap {
+    type Item = (Location, Ty);
+
+    type IntoIter = indexmap::map::IntoIter<Location, Ty>;
+
+    fn into_iter(self) -> Self::IntoIter {
+        self.0.into_iter()
     }
 }
 

@@ -390,7 +390,6 @@ dependencies = [
  "liquid-rust-common",
  "liquid-rust-core",
  "liquid-rust-liquid",
- "quickscope",
 ]
 
 [[package]]

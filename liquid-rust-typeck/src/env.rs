@@ -2,11 +2,9 @@ use crate::subtyping::subtyping;
 use ast::Proj;
 use liquid_rust_core::{
     ast,
-    lower::TypeLowerer,
-    names::{ContId, Local, Location},
+    names::{Local, Location},
     ty::{self, pred::Place, Heap, LocalsMap, Ty, TyCtxt},
 };
-use quickscope::ScopeMap;
 use std::fmt;
 use ty::{BorrowKind, TyKind};
 
@@ -288,59 +286,5 @@ impl fmt::Debug for Env<'_> {
             .collect::<Vec<_>>()
             .join(", ");
         write!(f, "[{}]", s)
-    }
-}
-
-pub struct ContEnv<'a> {
-    map: ScopeMap<ty::ContId, ty::ContTy>,
-    tcx: &'a TyCtxt,
-}
-
-impl<'a> ContEnv<'a> {
-    pub fn new(tcx: &'a TyCtxt) -> Self {
-        Self {
-            map: ScopeMap::new(),
-            tcx,
-        }
-    }
-
-    pub fn define_cont(
-        &mut self,
-        cont_id: ContId,
-        cont_ty: &ast::ContTy,
-        vars_in_scope: Vec<ty::Var>,
-    ) {
-        self.map.define(
-            cont_id,
-            TypeLowerer::new(self.tcx, vars_in_scope).lower_cont_ty(cont_ty),
-        )
-    }
-
-    pub fn define_ret_cont(
-        &mut self,
-        cont_id: ContId,
-        fn_ty: &ast::FnTy,
-        vars_in_scope: Vec<ty::Var>,
-    ) {
-        self.map.define(
-            cont_id,
-            ty::ContTy::new(
-                TypeLowerer::new(self.tcx, vars_in_scope).lower_heap(&fn_ty.out_heap),
-                LocalsMap::empty(),
-                vec![fn_ty.output],
-            ),
-        )
-    }
-
-    pub fn get_ty(&self, cont_id: &ContId) -> Option<&ty::ContTy> {
-        self.map.get(cont_id)
-    }
-}
-
-impl<'a> std::ops::Index<&'a ContId> for ContEnv<'_> {
-    type Output = ty::ContTy;
-
-    fn index(&self, index: &'a ContId) -> &Self::Output {
-        &self.get_ty(index).expect("ContEnv: continuation not found")
     }
 }
