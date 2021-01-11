@@ -187,7 +187,7 @@ fn get_layout<'tcx>(t: ty::Ty<'tcx>) -> TypeLayout {
     // }
     match t.kind() {
         ty::TyKind::Tuple(_) => {
-            TypeLayout::Tuple(t.tuple_fields().map(|c| get_layout(c)).collect::<Vec<_>>())
+            tuple_layout_or_block(t.tuple_fields().map(|c| get_layout(c)).collect())
         }
         _ => TypeLayout::Block(1),
     }
@@ -243,7 +243,7 @@ impl<'tcx> Transformer<'tcx> {
     /// or a tuple of holy types.
     fn get_holy_type(&mut self, t: ty::Ty<'tcx>) -> Ty<Symbol> {
         match t.kind() {
-            ty::TyKind::Tuple(_) => Ty::Tuple(
+            ty::TyKind::Tuple(substs) if !substs.is_empty() => Ty::Tuple(
                 t.tuple_fields()
                     .enumerate()
                     .map(|(i, f)| {
@@ -254,6 +254,7 @@ impl<'tcx> Transformer<'tcx> {
                     })
                     .collect(),
             ),
+            ty::TyKind::Tuple(_) => Ty::unit(),
             _ => Ty::Refine(get_base_ty(t), Refine::Infer),
         }
     }
@@ -270,7 +271,7 @@ impl<'tcx> Transformer<'tcx> {
         t: ty::Ty<'tcx>,
     ) -> Ty<Symbol> {
         match t.kind() {
-            ty::TyKind::Tuple(_) => Ty::Tuple(
+            ty::TyKind::Tuple(subst) if !subst.is_empty() => Ty::Tuple(
                 t.tuple_fields()
                     .enumerate()
                     .map(|(i, f)| {
@@ -297,6 +298,8 @@ impl<'tcx> Transformer<'tcx> {
 
                 if uninited.contains(mpi) {
                     Ty::Uninit(get_size(t))
+                } else if matches!(t.kind(), ty::TyKind::Tuple(..)) {
+                    Ty::unit()
                 } else {
                     Ty::Refine(get_base_ty(t), Refine::Infer)
                 }
@@ -664,5 +667,13 @@ impl<'tcx> Transformer<'tcx> {
         };
 
         ret
+    }
+}
+
+fn tuple_layout_or_block(tup: Vec<TypeLayout>) -> TypeLayout {
+    if tup.len() == 0 {
+        TypeLayout::Block(1)
+    } else {
+        TypeLayout::Tuple(tup)
     }
 }

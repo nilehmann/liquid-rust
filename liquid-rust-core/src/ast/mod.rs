@@ -147,6 +147,15 @@ pub enum Ty<S = usize> {
     Refine(BaseTy, Refine<S>),
 }
 
+impl<S> Ty<S> {
+    pub fn unit() -> Ty<S> {
+        Ty::Refine(
+            BaseTy::Unit,
+            Refine::Pred(pred::Pred::Constant(pred::Constant::Bool(true))),
+        )
+    }
+}
+
 #[derive(Debug)]
 pub struct FnTy<S = usize> {
     pub in_heap: Heap<S>,

@@ -101,9 +101,10 @@ impl PrettyPrinter {
         f: &mut fmt::Formatter<'_>,
     ) -> fmt::Result {
         match &stmnt.kind {
-            ast::StatementKind::Let(x, _layout) => {
+            ast::StatementKind::Let(x, layout) => {
                 self.print_local(x, f)?;
                 write!(f, " = alloc(")?;
+                self.print_type_layout(layout, f)?;
                 write!(f, ")")?;
             }
             ast::StatementKind::Assign(place, rvalue) => {
@@ -290,6 +291,29 @@ impl PrettyPrinter {
                     ast::Refine::Pred(_) => write!(f, "...")?,
                 }
                 write!(f, " }}")?;
+            }
+        }
+        Ok(())
+    }
+
+    fn print_type_layout(
+        &mut self,
+        layout: &ast::TypeLayout,
+        f: &mut fmt::Formatter<'_>,
+    ) -> fmt::Result {
+        match layout {
+            ast::TypeLayout::Tuple(tup) => {
+                write!(f, "(")?;
+                for (i, layout) in tup.iter().enumerate() {
+                    if i > 0 {
+                        write!(f, ", ")?;
+                    }
+                    self.print_type_layout(layout, f)?;
+                }
+                write!(f, ")")?;
+            }
+            ast::TypeLayout::Block(size) => {
+                write!(f, "{}", size)?;
             }
         }
         Ok(())
