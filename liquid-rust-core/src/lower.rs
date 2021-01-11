@@ -65,9 +65,7 @@ impl<'a> TypeLowerer<'a> {
                 self.tcx.mk_tuple(ty::Tuple::from(vec))
             }
             ast::Ty::Uninit(n) => self.tcx.mk_uninit(*n),
-            ast::Ty::Refine { bty: ty, refine } => {
-                self.tcx.mk_refine(*ty, self.lower_refine(refine))
-            }
+            ast::Ty::Refine(bty, refine) => self.tcx.mk_refine(*bty, self.lower_refine(refine)),
         }
     }
 

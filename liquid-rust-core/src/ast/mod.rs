@@ -144,7 +144,7 @@ pub enum Ty<S = usize> {
     Ref(BorrowKind, Region<S>, Location<S>),
     Tuple(Vec<(Field<S>, Ty<S>)>),
     Uninit(usize),
-    Refine { bty: BaseTy, refine: Refine<S> },
+    Refine(BaseTy, Refine<S>),
 }
 
 #[derive(Debug)]

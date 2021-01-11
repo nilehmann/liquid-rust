@@ -157,4 +157,14 @@ fn main() {
         rustc_driver::RunCompiler::new(&args2, &mut LiquidRustDriver).run()
     })
     .map_err(|e| println!("{:?}", e));
+
+    // let args: Vec<_> = std::env::args_os().flat_map(|s| s.into_string()).collect();
+    // let args = args
+    //     .iter()
+    //     .map(|s| (*s).to_string())
+    //     .chain(sys_root(&args).into_iter())
+    //     .chain(allow_unused_doc_comments().into_iter())
+    //     .collect::<Vec<_>>();
+
+    // liquid_rust_driver::run_compiler(args);
 }
