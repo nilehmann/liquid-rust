@@ -32,6 +32,7 @@ fn main() -> Result<(), codespan_reporting::files::Error> {
             return Ok(());
         }
     };
+    println!("{}", func.body);
 
     println!("{:#?}", check_fn_def(func));
 

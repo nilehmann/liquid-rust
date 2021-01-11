@@ -36,6 +36,7 @@ impl Callbacks for LiquidRustDriver {
                 let body = tcx.optimized_mir(def_id);
                 let mut t = Transformer::new(tcx);
                 let func = t.translate_body(MirSource::item(def_id.to_def_id()), body);
+                println!("{}\n", func.body);
 
                 if check_fn_def(func) == Safeness::Unsafe {
                     compilation = Compilation::Stop;

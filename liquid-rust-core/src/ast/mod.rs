@@ -164,6 +164,12 @@ pub enum Refine<S = usize> {
 #[derive(Debug)]
 pub struct Heap<S = usize>(Vec<(Location<S>, Ty<S>)>);
 
+impl<S> Heap<S> {
+    pub fn iter(&self) -> impl Iterator<Item = &(Location<S>, Ty<S>)> {
+        self.0.iter()
+    }
+}
+
 impl<S> From<Vec<(Location<S>, Ty<S>)>> for Heap<S> {
     fn from(vec: Vec<(Location<S>, Ty<S>)>) -> Self {
         Heap(vec)
