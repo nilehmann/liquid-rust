@@ -298,7 +298,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             let mut params = vec![];
             
             for lix in self.body.args_iter() {
-                let arg = Local(lix.index());
+                let arg = Local::new(lix.index());
 
                 params.push(arg);
             }
@@ -319,7 +319,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             for lix in self.body.args_iter() {
                 let decl = &self.body.local_decls[lix];
 
-                let arg = Local(lix.index());
+                let arg = Local::new(lix.index());
                 let loc = self.fresh_location();
                 let ty = self.get_holy_type(decl.ty);
 
@@ -335,11 +335,15 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             let out_ty = self.get_holy_type(self.body.return_ty());
             out_heap.push((output, out_ty));
 
+            // TODO: regions
+            let regions = vec![];
+
             let fn_ty = FnTy {
                 in_heap: Heap::from_iter(in_heap),
                 inputs,
                 out_heap: Heap::from_iter(out_heap),
                 output,
+                regions,
             };
 
             // TODO: Different out_heap than input heap?

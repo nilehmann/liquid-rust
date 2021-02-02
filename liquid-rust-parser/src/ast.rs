@@ -6,16 +6,30 @@ pub use liquid_rust_core::{
     },
 };
 
-use std::fmt;
+use std::{fmt, hash::{Hash, Hasher}};
 
 /// The span of each AST item, relative to the beginning of the outermost type in the AST.
 pub type Span = std::ops::Range<usize>;
 
 /// The AST representation of an identifier
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone)]
 pub struct Ident<'source> {
     pub symbol: &'source str,
     pub span: Span,
+}
+
+impl<'source> PartialEq for Ident<'source> {
+    fn eq(&self, other: &Self) -> bool {
+        self.symbol == other.symbol
+    }
+}
+
+impl<'source> Eq for Ident<'source> {}
+
+impl<'source> Hash for Ident<'source> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.symbol.hash(state);
+    }
 }
 
 impl<'source> fmt::Display for Ident<'source> {

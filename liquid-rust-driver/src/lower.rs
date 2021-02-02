@@ -28,7 +28,7 @@ impl<'src> LowerCtx<'src> {
 
     pub fn define(&mut self, i: Var<ast::Ident<'src>>) -> usize {
         self.locs += 1;
-        self.vars.define(i, self.locs);
+        self.vars.define(i, self.locs - 1);
         self.locs - 1
     }
 
@@ -85,8 +85,8 @@ impl<'src> Lower<'src> for ast::Predicate<'src> {
             ast::PredicateKind::Place(p) => {
                 let base = match p.place.base {
                     Var::Nu => Var::Nu,
-                    l@Var::Location(_) => Var::Location(Location(lcx.try_get(l))),
-                    f@Var::Field(_) => Var::Field(Field(lcx.try_get(f))),
+                    l@Var::Location(_) => Var::Location(Location::new(lcx.try_get(l))),
+                    f@Var::Field(_) => Var::Field(Field::new(lcx.try_get(f))),
                 };
                 let projs = p.place.projs;
                 Pred::Place(Place { base, projs })
@@ -98,29 +98,32 @@ impl<'src> Lower<'src> for ast::Predicate<'src> {
 }
 
 impl<'src> Lower<'src> for ast::Ty<'src> {
-    type Output = Ty;
+    type Output = (Ty, Option<usize>);
 
     fn lower(self, lcx: &mut LowerCtx<'src>) -> Self::Output {
         match self.kind {
-            ast::TyKind::Base(b) => Ty::Refine(
+            ast::TyKind::Base(b) => (Ty::Refine(
                 b,
                 Refine::Pred(Pred::Constant(ast::Constant::Bool(true))),
-            ),
-            // TODO: do something with ident
-            // We assume it's same as arg
-            ast::TyKind::Refined(_i, b, p) => {
+            ), None),
+            ast::TyKind::Refined(i, b, p) => {
+                lcx.vars.push_layer();
+                // TODO: handle edge case:
+                // a: {a: int | true}, b: {a: int | true}
+                let li = lcx.try_get(Var::Location(Location::new(i)));
                 let lp = p.lower(lcx);
-                Ty::Refine(b, Refine::Pred(lp))
+                lcx.vars.pop_layer();
+                (Ty::Refine(b, Refine::Pred(lp)), Some(li))
             }
             ast::TyKind::Tuple(fs) => {
                 lcx.vars.push_layer();
                 let mut res = Vec::new();
                 for (f, t) in fs {
-                    let nf = Field(lcx.define(Var::Field(f.clone())));
-                    res.push((nf, t.lower(lcx)));
+                    let nf = Field::new(lcx.define(Var::Field(f.clone())));
+                    res.push((nf, t.lower(lcx).0));
                 }
                 lcx.vars.pop_layer();
-                Ty::Tuple(res)
+                (Ty::Tuple(res), None)
             }
         }
     }
@@ -141,10 +144,10 @@ impl<'src> Lower<'src> for ast::FnTy<'src> {
         for (ident, ty) in args {
             // Generate a fresh location which will be used in the input
             // heap
-            let loc = Location(lcx.try_get(Var::Location(Location(ident.clone()))));
+            let loc = Location::new(lcx.try_get(Var::Location(Location::new(ident.clone()))));
 
             // We lower the target type
-            let lty = ty.lower(lcx);
+            let (lty, _) = ty.lower(lcx);
 
             // We then insert the arg into the inputs and the heap.
             inputs.push(loc.clone());
@@ -153,19 +156,23 @@ impl<'src> Lower<'src> for ast::FnTy<'src> {
         }
 
         // Afterwards, we lower the output.
-        // TODO: This is an ugly hack, and at some point
-        // we should change this whole file to generate FnTy<usize>,
-        // handling the location generation ourselves with our own
-        // scopemap.
-        let output = Location(lcx.fresh());
-        let oty = (*out).lower(lcx);
+
+        let (oty, oloc) = (*out).lower(lcx);
+        let output = Location::new(match oloc {
+            Some(l) => l,
+            None => lcx.fresh(),
+        });
         out_heap.push((output.clone(), oty));
+
+        // TODO: regions
+        let regions = vec![];
 
         FnTy {
             in_heap: Heap(in_heap),
             inputs,
             out_heap: Heap(out_heap),
             output,
+            regions,
         }
     }
 }

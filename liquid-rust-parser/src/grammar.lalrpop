@@ -164,11 +164,11 @@ ProjP: usize = {
 
 Var: Var<Ident<'input>> = {
     Field => Var::Field(<>),
-    Ident => Var::Location(Location(<>)),
+    Ident => Var::Location(Location::new(<>)),
     "V"   => Var::Nu
 }
 
-Field: Field<Ident<'input>> = "@" <Ident> => Field(<>);
+Field: Field<Ident<'input>> = "@" <Ident> => Field::new(<>);
 
 Ident: Ident<'input> = {
     <spanned:Spanned<r"[a-z][a-zA-Z0-9_]*">> => {
