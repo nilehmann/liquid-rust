@@ -68,7 +68,7 @@ fn translate_statement(stmt: &mir::Statement) -> Statement<()> {
 
 /// Translates an `mir::Place` to a CPS IR Place.
 fn translate_place(from: &mir::Place) -> Place {
-    let base = Local(from.local.as_usize());
+    let base = Local::new(from.local.as_usize());
     let mut projs = vec![];
 
     for proj in from.projection {
@@ -245,7 +245,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             ty::TyKind::Tuple(substs) if !substs.is_empty() => Ty::Tuple(
                 t.tuple_fields()
                     .enumerate()
-                    .map(|(i, f)| (Field(i), self.get_holy_type(f)))
+                    .map(|(i, f)| (Field::new(i), self.get_holy_type(f)))
                     .collect(),
             ),
             ty::TyKind::Tuple(_) => Ty::unit(),
@@ -258,7 +258,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
         // We then generate a jump instruction to jump to the continuation
         // corresponding to the first/root basic block, bb0.
         let mut nb = FnBody::Jump {
-            target: ContId(0),
+            target: ContId::new(0),
             args: Vec::new(),
         };
 
@@ -284,7 +284,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                 continue;
             }
 
-            let sym = Local(ix.as_usize());
+            let sym = Local::new(ix.as_usize());
             let s = Statement {
                 kind: StatementKind::Let(sym, get_layout(decl.ty)),
                 source_info: (),
@@ -386,7 +386,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             let ty = self
                 .type_lower_ctxt(mir_local, &mut heap)
                 .lower(decl.ty, &mut vec![]);
-            let local = Local(mir_local.index());
+            let local = Local::new(mir_local.index());
             let l = self.fresh_location();
 
             locals.push((local, l));
@@ -400,7 +400,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
         };
 
         ContDef {
-            name: ContId(bb.as_usize()),
+            name: ContId::new(bb.as_usize()),
             ty: cont_ty,
             params: vec![],
             body: box bbod,
@@ -411,12 +411,12 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
     fn translate_terminator(&mut self, terminator: &mir::Terminator<'tcx>) -> FnBody<()> {
         match &terminator.kind {
             TerminatorKind::Goto { target } => FnBody::Jump {
-                target: ContId(target.index()),
+                target: ContId::new(target.index()),
                 args: Vec::new(),
             },
             // TODO: Actually do the asserting
             TerminatorKind::Assert { target, .. } => FnBody::Jump {
-                target: ContId(target.index()),
+                target: ContId::new(target.index()),
                 args: Vec::new(),
             },
             TerminatorKind::SwitchInt {
@@ -430,7 +430,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                 // We first start with the else branch, since that's at the leaf of our
                 // if-else-if-else chain, and build backwards from there.
                 let mut ite = FnBody::Jump {
-                    target: ContId(targets.otherwise().index()),
+                    target: ContId::new(targets.otherwise().index()),
                     args: vec![],
                 };
 
@@ -444,7 +444,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                     let op = translate_op(discr);
 
                     let then = FnBody::Jump {
-                        target: ContId(target.index()),
+                        target: ContId::new(target.index()),
                         args: vec![],
                     };
 
@@ -521,7 +521,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                 // it diverges and never returns (i.e. returns ! and infinitely loops or smth)
                 // TODO: Perhaps handle the diverging case somehow?
                 let ret = match destination {
-                    Some((_, bb)) => ContId(bb.index()),
+                    Some((_, bb)) => ContId::new(bb.index()),
                     None => todo!(),
                 };
 
@@ -544,7 +544,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                                 // FIXME: we need to decide how are we goig
                                 // to reference functions in lrcore
                                 // let fname = self.tcx.def_path_str(*def_id);
-                                let func = Place::from(Local(0));
+                                let func = Place::from(Local::new(0));
 
                                 // Finally, return our FnBody::Call!
                                 FnBody::Call {
@@ -600,11 +600,11 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
     }
 
     fn retk(&self) -> ContId {
-        ContId(self.body.basic_blocks().len())
+        ContId::new(self.body.basic_blocks().len())
     }
 
     fn retv() -> Local {
-        Local(0)
+        Local::new(0)
     }
 }
 
@@ -637,7 +637,7 @@ impl<'a, 'low, 'tcx> TyLowerCtxt<'a, 'low, 'tcx> {
                     .enumerate()
                     .map(|(i, ty)| {
                         projection.push(mir::PlaceElem::Field(mir::Field::from_usize(i), ty));
-                        let r = (Field(i), self.lower(ty, projection));
+                        let r = (Field::new(i), self.lower(ty, projection));
                         projection.pop();
                         r
                     })
@@ -667,7 +667,7 @@ impl<'a, 'low, 'tcx> TyLowerCtxt<'a, 'low, 'tcx> {
             ty::TyKind::Tuple(subst) if !subst.is_empty() => Ty::Tuple(
                 ty.tuple_fields()
                     .enumerate()
-                    .map(|(i, ty)| (Field(i), self.lower_initialized(ty)))
+                    .map(|(i, ty)| (Field::new(i), self.lower_initialized(ty)))
                     .collect(),
             ),
             ty::TyKind::Tuple(_) => Ty::unit(),
@@ -692,7 +692,7 @@ impl<'a, 'low, 'tcx> TyLowerCtxt<'a, 'low, 'tcx> {
                 let tup = ty
                     .tuple_fields()
                     .enumerate()
-                    .map(|(i, ty)| (Field(i), self.lower_uninitialized(ty)))
+                    .map(|(i, ty)| (Field::new(i), self.lower_uninitialized(ty)))
                     .collect();
                 Ty::Tuple(tup)
             }
@@ -735,11 +735,11 @@ impl NameProducer {
 
     fn fresh_local(&mut self) -> Local {
         self.next_local += 1;
-        Local(self.next_local - 1)
+        Local::new(self.next_local - 1)
     }
 
     fn fresh_location(&mut self) -> Location {
         self.next_location += 1;
-        Location(self.next_location - 1)
+        Location::new(self.next_location - 1)
     }
 }

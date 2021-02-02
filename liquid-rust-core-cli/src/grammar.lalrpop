@@ -14,7 +14,9 @@ match {
 }
 
 pub FnDef: FnDef<Span, &'input str> =
- "fn" <name: FnId>
+ "fn"
+ <name: FnId>
+ <regions: UniversalRegions?>
  "(" <in_heap: Heap> ";" <formal: Params> ")"
  "ret" <ret: ContId> "(" <out_heap: Heap> ";" <output: OwnRef> ")"
  "=" <body: FnBody> => {
@@ -24,9 +26,12 @@ pub FnDef: FnDef<Span, &'input str> =
      params.push(local);
      inputs.push(ty);
    }
-   let ty = FnTy { in_heap, inputs, out_heap, output };
+   let ty = FnTy { regions: regions.unwrap_or_default(), in_heap, inputs, out_heap, output };
    FnDef { params, body: *body, ty, ret }
  };
+
+UniversalRegions: Vec<UniversalRegion<&'input str>> =
+  "<" <Comma<UniversalRegion>> ">";
 
 FnBody: Box<FnBody<Span, &'input str>> = {
   "letcont" <defs: And<ContDef>> "in" <rest: FnBody> => Box::new(FnBody::LetCont(defs, rest)),
@@ -71,11 +76,12 @@ StatementKind: StatementKind<&'input str> = {
 }
 
 Rvalue: Rvalue<&'input str> = {
-  Operand                                       => Rvalue::Use(<>),
-  <op1: Operand> <bin_op: BinOp> <op2: Operand> => Rvalue::BinaryOp(bin_op, op1, op2),
-  <un_op: UnOp> <op: Operand>                   => Rvalue::UnaryOp(un_op, op),
-  "&" <p: Place>                                => Rvalue::Ref(BorrowKind::Shared, p),
-  "&" "mut" <p: Place>                          => Rvalue::Ref(BorrowKind::Mut, p),
+  Operand                                                         => Rvalue::Use(<>),
+  <op1: Operand> <bin_op: BinOp> <op2: Operand>                   => Rvalue::BinaryOp(bin_op, op1, op2),
+  "Checked" "(" <op1: Operand> <bin_op: BinOp> <op2: Operand> ")" => Rvalue::CheckedBinaryOp(bin_op, op1, op2),
+  <un_op: UnOp> <op: Operand>                                     => Rvalue::UnaryOp(un_op, op),
+  "&" <p: Place>                                                  => Rvalue::Ref(BorrowKind::Shared, p),
+  "&" "mut" <p: Place>                                            => Rvalue::Ref(BorrowKind::Mut, p),
 }
 
 UnOp: UnOp = {
@@ -122,9 +128,9 @@ Ty: Ty<&'input str> = {
   "own" "(" <Location> ")"                   => Ty::OwnRef(<>),
   "uninit" "(" <r"[0-9]+"> ")"               => Ty::Uninit(usize::from_str(<>).unwrap()),
   "{" <bty: BaseTy> "|" <refine: Refine> "}" => Ty::Refine(<>),
-  "&" "(" <Region> "," <Location> ")"        => Ty::Ref(BorrowKind::Shared, <>),
-  "&" "shrd" "(" <Region> "," <Location> ")" => Ty::Ref(BorrowKind::Shared, <>),
-  "&" "mut" "(" <Region> "," <Location> ")"  => Ty::Ref(BorrowKind::Mut, <>),
+  "&" <Region> <Location>                    => Ty::Ref(BorrowKind::Shared, <>),
+  "&" "shrd" <Region> <Location>             => Ty::Ref(BorrowKind::Shared, <>),
+  "&" "mut" <Region> <Location>              => Ty::Ref(BorrowKind::Mut, <>),
   "(" <Comma<Binding<Field, Ty>>> ")"        => Ty::Tuple(<>)
 }
 
@@ -142,6 +148,7 @@ Refine: Refine<&'input str> = {
 Region: Region<&'input str> = {
   "{" <Comma<Place>> "}" => Region::from(<>),
   "{" "_" "}"            => Region::Infer,
+  UniversalRegion        => Region::Universal(<>)
 }
 
 Place: Place<&'input str> = {
@@ -234,11 +241,12 @@ LeftAssoc<OpGroup, NextExprLevel>: Pred<&'input str> = {
 // | Names
 // -------------------------------------------------------------------------------------------------
 
-Local: Local<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => Local(<>);
-Field: Field<&'input str> = r"@[a-zA-Z][a-zA-Z0-9_]*" => Field(&<>[1..]);
-Location: Location<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => Location(<>);
-ContId: ContId<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => ContId(<>);
-FnId: FnId<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => FnId(<>);
+Local: Local<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => Local::new(<>);
+Field: Field<&'input str> = r"@[a-zA-Z0-9_]+" => Field::new(&<>[1..]);
+Location: Location<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => Location::new(<>);
+ContId: ContId<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => ContId::new(<>);
+FnId: FnId<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => FnId::new(<>);
+UniversalRegion: UniversalRegion<&'input str> = r"'[a-zA-Z0-9]" => UniversalRegion::new(&<>[1..]);
 
 // -------------------------------------------------------------------------------------------------
 // | Misc

@@ -9,7 +9,7 @@ use crate::{
 pub use crate::{
     ast::{
         pred::{BinOp, UnOp, Var},
-        BaseTy, BorrowKind,
+        BaseTy, BorrowKind, UniversalRegion,
     },
     names::{ContId, Field, Location},
 };
@@ -103,13 +103,13 @@ impl fmt::Display for TyS {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.kind() {
             TyKind::Fn(..) => todo!(),
-            TyKind::OwnRef(l) => write!(f, "Own(l${})", l.0),
-            TyKind::Ref(BorrowKind::Shared, r, l) => write!(f, "&({}, $l{})", r, l.0),
-            TyKind::Ref(BorrowKind::Mut, r, l) => write!(f, "&mut ({}, $l{})", r, l.0),
+            TyKind::OwnRef(l) => write!(f, "Own(l${})", l.inner()),
+            TyKind::Ref(BorrowKind::Shared, r, l) => write!(f, "&({}, $l{})", r, l.inner()),
+            TyKind::Ref(BorrowKind::Mut, r, l) => write!(f, "&mut ({}, $l{})", r, l.inner()),
             TyKind::Tuple(tup) => {
                 let tup = tup
                     .iter()
-                    .map(|(f, ty)| format!("$f{}: {}", f.0, ty))
+                    .map(|(f, ty)| format!("$f{}: {}", f.inner(), ty))
                     .collect::<Vec<_>>()
                     .join(", ");
                 write!(f, "({})", tup)
@@ -133,6 +133,7 @@ pub enum TyKind {
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct FnTy {
+    pub regions: Vec<UniversalRegion>,
     pub in_heap: Heap,
     pub inputs: Vec<Location>,
     pub out_heap: Heap,
@@ -233,6 +234,7 @@ impl ContTy {
 pub enum Region {
     Concrete(Vec<Place>),
     Infer(RegionVid),
+    Universal(UniversalRegion),
 }
 
 impl From<Vec<Place>> for Region {
@@ -251,7 +253,7 @@ impl Region {
     pub fn places(&self) -> &[Place] {
         match self {
             Region::Concrete(places) => places,
-            Region::Infer(_) => bug!("places called on a non concrete region"),
+            Region::Infer(_) | Region::Universal(_) => &[],
         }
     }
 }
@@ -267,7 +269,8 @@ impl fmt::Display for Region {
                     .join(", ");
                 write!(f, "{{ {} }}", places)
             }
-            Region::Infer(rvid) => write!(f, "$r{}", rvid.0),
+            Region::Infer(rvid) => write!(f, "r{}", rvid.as_usize()),
+            Region::Universal(param) => write!(f, "'{}", param.as_usize()),
         }
     }
 }
@@ -306,7 +309,7 @@ impl fmt::Display for Kvar {
             .map(|v| format!("{}", v))
             .collect::<Vec<_>>()
             .join(", ");
-        write!(f, "$k{}[{}]", (self.0).0, vars)
+        write!(f, "$k{}[{}]", (self.0).as_usize(), vars)
     }
 }
 
@@ -367,7 +370,7 @@ impl std::fmt::Display for Heap {
             if i > 0 {
                 write!(f, ", ")?;
             }
-            write!(f, "$l{}: {}", l.0, ty)?;
+            write!(f, "$l{}: {}", l.inner(), ty)?;
         }
         write!(f, "]")?;
         Ok(())
@@ -425,13 +428,15 @@ impl Extend<(Local, Location)> for LocalsMap {
     }
 }
 
-/// A **K** **v**ariable **ID**
-#[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]
-pub struct KVid(pub usize);
+newtype_index! {
+    /// A **K** **v**ariable **ID**
+    struct KVid
+}
 
-/// A **Region** **v**ariable **ID**
-#[derive(Debug, Clone, Hash, PartialEq, Eq, Copy)]
-pub struct RegionVid(pub usize);
+newtype_index! {
+    /// A **Region** **v**ariable **ID**
+    struct RegionVid
+}
 
 // Predicates
 

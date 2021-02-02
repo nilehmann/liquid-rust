@@ -1,3 +1,5 @@
+use std::collections::HashMap;
+
 use crate::{
     ast::{
         pred::{Pred, Var},
@@ -9,32 +11,37 @@ use crate::{
 use quickscope::ScopeMap;
 
 pub struct NameFreshener<'a, S> {
-    names: ScopeMap<Name<S>, usize>,
+    conts: ScopeMap<ContId<S>, ContId>,
+    locals: ScopeMap<Local<S>, Local>,
+    locations: ScopeMap<Location<S>, Location>,
+    fields: ScopeMap<Field<S>, Field>,
+    regions: HashMap<UniversalRegion<S>, UniversalRegion>,
     tcx: &'a TyCtxt,
 }
 
 impl<'a, S> NameFreshener<'a, S>
 where
-    S: Eq + Copy + std::hash::Hash,
+    S: Eq + Copy + std::hash::Hash + std::fmt::Debug,
 {
     pub fn new(tcx: &'a TyCtxt) -> Self {
         NameFreshener {
-            names: ScopeMap::new(),
+            conts: ScopeMap::new(),
+            locals: ScopeMap::new(),
+            locations: ScopeMap::new(),
+            fields: ScopeMap::new(),
+            regions: HashMap::new(),
             tcx,
         }
     }
 
-    fn fresh(&self) -> usize {
-        self.tcx.fresh()
-    }
-
     pub fn freshen<I>(mut self, def: FnDef<I, S>) -> FnDef<I> {
-        self.names.define(Name::ContId(def.ret), self.fresh());
+        let tcx = self.tcx;
+        self.conts.define(def.ret, tcx.fresh::<ContId>());
         for local in &def.params {
-            self.names.define(Name::Local(*local), self.fresh())
+            self.locals.define(*local, tcx.fresh::<Local>())
         }
         for (location, _) in &def.ty.in_heap {
-            self.names.define(Name::Location(*location), self.fresh());
+            self.locations.define(*location, tcx.fresh::<Location>());
         }
 
         FnDef {
@@ -47,11 +54,12 @@ where
 
     fn freshen_body<I>(&mut self, body: FnBody<I, S>) -> FnBody<I> {
         use FnBody::*;
+        let tcx = self.tcx;
         match body {
             LetCont(defs, box rest) => {
-                self.names.push_layer();
+                self.conts.push_layer();
                 for def in &defs {
-                    self.names.define(Name::ContId(def.name), self.fresh());
+                    self.conts.define(def.name, tcx.fresh::<ContId>());
                 }
                 let defs = defs
                     .into_iter()
@@ -59,7 +67,7 @@ where
                     .collect();
                 let rest = box self.freshen_body(rest);
 
-                self.names.pop_layer();
+                self.conts.pop_layer();
 
                 LetCont(defs, rest)
             }
@@ -82,12 +90,12 @@ where
                 args: self.freshen_args(args),
             },
             Seq(statement, box rest) => {
-                self.names.push_layer();
+                self.locals.push_layer();
                 let k = Seq(
                     self.freshen_statement(statement),
                     box self.freshen_body(rest),
                 );
-                self.names.pop_layer();
+                self.locals.pop_layer();
                 k
             }
             Abort => Abort,
@@ -95,18 +103,21 @@ where
     }
 
     fn freshen_cont_def<I>(&mut self, cont: ContDef<I, S>) -> ContDef<I> {
-        self.names.push_layer();
+        let tcx = self.tcx;
+        self.locals.push_layer();
         for local in &cont.params {
-            self.names.define(Name::Local(*local), self.fresh());
+            self.locals.define(*local, tcx.fresh::<Local>());
         }
+        self.locations.push_layer();
         for (location, _) in &cont.ty.heap {
-            self.names.define(Name::Location(*location), self.fresh());
+            self.locations.define(*location, tcx.fresh::<Location>());
         }
         let name = self.freshen_cont_id(cont.name);
         let ty = self.freshen_cont_ty(cont.ty);
         let params = self.freshen_params(cont.params);
         let body = box self.freshen_body(*cont.body);
-        self.names.pop_layer();
+        self.locations.pop_layer();
+        self.locals.pop_layer();
         ContDef {
             name,
             ty,
@@ -135,7 +146,7 @@ where
         use StatementKind::*;
         let kind = match statement.kind {
             StatementKind::Let(local, layout) => {
-                self.names.define(Name::Local(local), self.fresh());
+                self.locals.define(local, self.tcx.fresh::<Local>());
                 Let(self.freshen_local(local), layout)
             }
             StatementKind::Assign(place, value) => {
@@ -183,23 +194,33 @@ where
                     .collect(),
             ),
             Region::Infer => Region::Infer,
+            Region::Universal(region) => Region::Universal(self.regions[&region]),
         }
     }
 
     fn freshen_fn_ty(&mut self, ty: FnTy<S>) -> FnTy {
+        let mut regions = vec![];
+        for region in ty.regions {
+            let fresh = self.tcx.fresh::<UniversalRegion>();
+            self.regions.insert(region, fresh);
+            regions.push(fresh);
+        }
+
         let in_heap = self.freshen_heap(ty.in_heap);
         let mut inputs = Vec::new();
         for l in ty.inputs {
             inputs.push(self.freshen_location(l))
         }
-        self.names.push_layer();
+        self.locations.push_layer();
         for (location, _) in &ty.out_heap {
-            self.names.define(Name::Location(*location), self.fresh());
+            self.locations
+                .define(*location, self.tcx.fresh::<Location>());
         }
         let out_heap = self.freshen_heap(ty.out_heap);
         let output = self.freshen_location(ty.output);
-        self.names.pop_layer();
+        self.locations.pop_layer();
         FnTy {
+            regions,
             in_heap,
             inputs,
             out_heap,
@@ -217,15 +238,15 @@ where
                 self.freshen_location(location),
             ),
             Tuple(tup) => {
-                self.names.push_layer();
+                self.fields.push_layer();
                 for (fld, _) in &tup {
-                    self.names.define(Name::Field(*fld), self.fresh());
+                    self.fields.define(*fld, self.tcx.fresh::<Field>());
                 }
                 let tup = tup
                     .into_iter()
                     .map(|(fld, ty)| (self.freshen_field(fld), self.freshen_ty(ty)))
                     .collect();
-                self.names.pop_layer();
+                self.fields.pop_layer();
                 Tuple(tup)
             }
             Uninit(s) => Uninit(s),
@@ -290,35 +311,31 @@ where
     }
 
     fn freshen_cont_id(&mut self, cont_id: ContId<S>) -> ContId {
-        let n = self
-            .names
-            .get(&Name::ContId(cont_id))
-            .expect("NameFreshener: Name not found");
-        ContId(*n)
+        self.conts
+            .get(&cont_id)
+            .copied()
+            .expect("NameFreshener: ContId not found")
     }
 
     fn freshen_local(&mut self, x: Local<S>) -> Local {
-        let n = self
-            .names
-            .get(&Name::Local(x))
-            .expect("NameFreshener: Name not found");
-        Local(*n)
+        self.locals
+            .get(&x)
+            .copied()
+            .expect("NameFreshener: Local not found")
     }
 
     fn freshen_location(&mut self, l: Location<S>) -> Location {
-        let n = self
-            .names
-            .get(&Name::Location(l))
-            .expect("NameFreshener: Name not found");
-        Location(*n)
+        self.locations
+            .get(&l)
+            .copied()
+            .expect("NameFreshener: Location not found")
     }
 
     fn freshen_field(&mut self, f: Field<S>) -> Field {
-        let n = self
-            .names
-            .get(&Name::Field(f))
-            .expect("NameFreshener: Name not found");
-        Field(*n)
+        self.fields
+            .get(&f)
+            .copied()
+            .expect("NameFreshener: Field not found")
     }
 }
 

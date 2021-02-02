@@ -244,7 +244,7 @@ impl Env<'_> {
     }
 
     fn fresh_location(&self) -> Location {
-        self.tcx.fresh_location()
+        self.tcx.fresh::<Location>()
     }
 
     fn update_ty(&mut self, root: &Ty, projs: &[Proj], ty: Ty) -> Ty {
@@ -368,8 +368,7 @@ impl std::cmp::PartialOrd<BorrowKind> for RefKind {
         match (self, other) {
             (RefKind::Shared, BorrowKind::Shared) | (RefKind::Mut, BorrowKind::Mut) => Some(Equal),
             (RefKind::Mut, BorrowKind::Shared)
-            | (RefKind::Owned, BorrowKind::Shared)
-            | (RefKind::Owned, BorrowKind::Mut) => Some(Greater),
+            | (RefKind::Owned, BorrowKind::Shared | BorrowKind::Mut) => Some(Greater),
             (RefKind::Shared, BorrowKind::Mut) => Some(Less),
         }
     }
@@ -394,7 +393,7 @@ impl fmt::Debug for Env<'_> {
             .last()
             .unwrap()
             .iter()
-            .map(|(x, l)| format!("$x{} => $l{}", x.0, l.0))
+            .map(|(x, l)| format!("_{} => l{}", x.as_usize(), l.as_usize()))
             .collect::<Vec<_>>()
             .join(", ");
         write!(f, "[{}]", s)

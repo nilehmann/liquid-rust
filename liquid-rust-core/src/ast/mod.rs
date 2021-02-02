@@ -58,6 +58,7 @@ pub enum StatementKind<S = usize> {
     Nop,
 }
 
+#[derive(Debug)]
 pub enum TypeLayout {
     Tuple(Vec<TypeLayout>),
     Block(usize),
@@ -158,6 +159,7 @@ impl<S> Ty<S> {
 }
 
 pub struct FnTy<S = usize> {
+    pub regions: Vec<UniversalRegion<S>>,
     pub in_heap: Heap<S>,
     pub inputs: Vec<Location<S>>,
     pub out_heap: Heap<S>,
@@ -180,6 +182,11 @@ wrap_iterable! {
 pub enum Region<S = usize> {
     Concrete(Vec<Place<S>>),
     Infer,
+    Universal(UniversalRegion<S>),
+}
+
+newtype_name! {
+    struct UniversalRegion
 }
 
 impl<S> From<Vec<Place<S>>> for Region<S> {
@@ -222,7 +229,7 @@ impl<S: Eq> Place<S> {
 
 impl fmt::Display for Place {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut s = format!("$x{}", self.base.0);
+        let mut s = format!("$x{}", self.base.inner());
         let mut need_parens = false;
         for proj in &self.projs {
             match proj {
