@@ -4,14 +4,14 @@ use super::BaseTy;
 use crate::names::{Field, Location};
 
 #[derive(Clone)]
-pub enum Pred<S = usize> {
+pub enum Pred {
     Constant(Constant),
-    Place(Place<S>),
-    BinaryOp(BinOp, Box<Pred<S>>, Box<Pred<S>>),
-    UnaryOp(UnOp, Box<Pred<S>>),
+    Place(Place),
+    BinaryOp(BinOp, Box<Pred>, Box<Pred>),
+    UnaryOp(UnOp, Box<Pred>),
 }
 
-impl<S> Pred<S> {
+impl Pred {
     pub fn tt() -> Self {
         Self::Constant(Constant::Bool(true))
     }
@@ -45,12 +45,12 @@ impl fmt::Display for Constant {
 }
 
 #[derive(Eq, PartialEq, Clone, Hash)]
-pub struct Place<S = usize> {
-    pub base: Var<S>,
+pub struct Place {
+    pub base: Var,
     pub projs: Vec<usize>,
 }
 
-impl<S: Copy> Place<S> {
+impl Place {
     pub fn extend_path(&self, n: usize) -> Self {
         let mut projs = self.projs.clone();
         projs.push(n);
@@ -61,9 +61,9 @@ impl<S: Copy> Place<S> {
     }
 }
 
-impl<T, S> From<T> for Place<S>
+impl<T> From<T> for Place
 where
-    T: Into<Var<S>>,
+    T: Into<Var>,
 {
     fn from(base: T) -> Self {
         Place {
@@ -74,20 +74,20 @@ where
 }
 
 #[derive(PartialEq, Eq, Copy, Clone, Debug, Hash)]
-pub enum Var<S = usize> {
+pub enum Var {
     Nu,
-    Location(Location<S>),
-    Field(Field<S>),
+    Location(Location),
+    Field(Field),
 }
 
-impl<S> From<Location<S>> for Var<S> {
-    fn from(v: Location<S>) -> Self {
+impl From<Location> for Var {
+    fn from(v: Location) -> Self {
         Var::Location(v)
     }
 }
 
-impl<S> From<Field<S>> for Var<S> {
-    fn from(v: Field<S>) -> Self {
+impl From<Field> for Var {
+    fn from(v: Field) -> Self {
         Var::Field(v)
     }
 }
@@ -95,9 +95,9 @@ impl<S> From<Field<S>> for Var<S> {
 impl fmt::Display for Var {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            Var::Nu => write!(f, "v"),
-            Var::Location(l) => write!(f, "l{}", l.inner()),
-            Var::Field(fld) => write!(f, "f{}", fld.inner()),
+            Var::Nu => write!(f, "V"),
+            Var::Location(l) => write!(f, "{}", l),
+            Var::Field(fld) => write!(f, "{}", fld),
         }
     }
 }

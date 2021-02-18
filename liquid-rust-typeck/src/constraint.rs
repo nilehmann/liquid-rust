@@ -318,7 +318,11 @@ impl Kvar {
 }
 
 fn place_to_string(base: Var, projs: Vec<usize>) -> String {
-    let mut s = format!("{}", base);
+    let mut s = match base {
+        Var::Nu => "V".to_string(),
+        Var::Location(l) => format!("l{}", l.as_usize()),
+        Var::Field(fld) => format!("f{}", fld.as_usize()),
+    };
     for p in projs {
         s.push_str(&format!(".{}", p));
     }

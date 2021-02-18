@@ -102,20 +102,27 @@ impl<T> std::ops::Try for Walk<T> {
 impl fmt::Display for TyS {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.kind() {
-            TyKind::OwnRef(l) => write!(f, "own(l{})", l.inner()),
-            TyKind::Ref(BorrowKind::Shared, r, l) => write!(f, "&{} l{}", r, l.inner()),
-            TyKind::Ref(BorrowKind::Mut, r, l) => write!(f, "&{} mut l{}", r, l.inner()),
+            TyKind::OwnRef(l) => write!(f, "own({})", l),
+            TyKind::Ref(BorrowKind::Shared, r, l) => write!(f, "&{} {}", r, l),
+            TyKind::Ref(BorrowKind::Mut, r, l) => write!(f, "&{} mut {}", r, l),
             TyKind::Tuple(tup) => {
                 let tup = tup
                     .iter()
-                    .map(|(f, ty)| format!("f{}: {}", f.inner(), ty))
+                    .map(|(f, ty)| format!("@{}: {}", f, ty))
                     .collect::<Vec<_>>()
                     .join(", ");
                 write!(f, "({})", tup)
             }
             TyKind::Uninit(size) => write!(f, "uninit({})", size),
             TyKind::Refine(bty, Refine::Infer(k)) => write!(f, "{{ {} | {} }}", bty, k),
-            TyKind::Refine(bty, Refine::Pred(pred)) => write!(f, "{{ {} | {} }}", bty, pred),
+            TyKind::Refine(bty, Refine::Pred(pred)) => match pred.kind() {
+                PredKind::Constant(pred::Constant::Bool(true)) => {
+                    write!(f, "{}", bty)
+                }
+                _ => {
+                    write!(f, "{{ {} | {} }}", bty, pred)
+                }
+            },
         }
     }
 }
@@ -381,7 +388,7 @@ impl std::fmt::Display for Heap {
             if i > 0 {
                 write!(f, ", ")?;
             }
-            write!(f, "l{}: {}", l.inner(), ty)?;
+            write!(f, "l{}: {}", l.as_usize(), ty)?;
         }
         write!(f, "]")?;
         Ok(())

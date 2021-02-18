@@ -7,89 +7,90 @@ pub use self::pred::Pred;
 use crate::names::{ContId, Field, FnId, Local, Location};
 
 #[derive(Default)]
-pub struct Program<I, S = usize> {
-    functions: HashMap<FnId<S>, FnDef<I, S>>,
+pub struct Program<I> {
+    functions: HashMap<FnId, FnDef<I>>,
 }
 
-impl<I, S: Eq + std::hash::Hash> Program<I, S> {
+impl<I> Program<I> {
     pub fn new() -> Self {
         Self {
             functions: HashMap::new(),
         }
     }
 
-    pub fn functions(&self) -> impl Iterator<Item = &FnDef<I, S>> {
+    pub fn functions(&self) -> impl Iterator<Item = &FnDef<I>> {
         self.functions.iter().map(|(_, def)| def)
     }
 
-    pub fn add_fn(&mut self, fn_id: FnId<S>, def: FnDef<I, S>) {
+    pub fn add_fn(&mut self, fn_id: FnId, def: FnDef<I>) {
         self.functions.insert(fn_id, def);
     }
 
-    pub fn iter(&self) -> impl Iterator<Item = (&FnId<S>, &FnDef<I, S>)> {
+    pub fn iter(&self) -> impl Iterator<Item = (&FnId, &FnDef<I>)> {
         self.functions.iter()
     }
 }
 
-impl<I, S> IntoIterator for Program<I, S> {
-    type Item = (FnId<S>, FnDef<I, S>);
+impl<I> IntoIterator for Program<I> {
+    type Item = (FnId, FnDef<I>);
 
-    type IntoIter = std::collections::hash_map::IntoIter<FnId<S>, FnDef<I, S>>;
+    type IntoIter = std::collections::hash_map::IntoIter<FnId, FnDef<I>>;
 
     fn into_iter(self) -> Self::IntoIter {
         self.functions.into_iter()
     }
 }
 
-pub struct FnDef<I, S = usize> {
-    pub ty: FnDecl<S>,
-    pub params: Vec<Local<S>>,
-    pub body: FnBody<I, S>,
-    pub ret: ContId<S>,
+pub struct FnDef<I> {
+    pub name: FnId,
+    pub ty: FnDecl,
+    pub params: Vec<Local>,
+    pub body: FnBody<I>,
+    pub ret: ContId,
 }
 
-pub enum FnBody<I, S = usize> {
-    LetCont(Vec<ContDef<I, S>>, Box<FnBody<I, S>>),
+pub enum FnBody<I> {
+    LetCont(Vec<ContDef<I>>, Box<FnBody<I>>),
     Ite {
-        discr: Place<S>,
-        then: Box<FnBody<I, S>>,
-        else_: Box<FnBody<I, S>>,
+        discr: Place,
+        then: Box<FnBody<I>>,
+        else_: Box<FnBody<I>>,
     },
     Call {
-        func: FnId<S>,
-        args: Vec<Local<S>>,
-        destination: Option<(Place<S>, ContId<S>)>,
+        func: FnId,
+        args: Vec<Local>,
+        destination: Option<(Place, ContId)>,
     },
     Jump {
-        target: ContId<S>,
-        args: Vec<Local<S>>,
+        target: ContId,
+        args: Vec<Local>,
     },
-    Seq(Statement<I, S>, Box<FnBody<I, S>>),
+    Seq(Statement<I>, Box<FnBody<I>>),
     Abort,
 }
 
-pub struct ContDef<I, S = usize> {
-    pub name: ContId<S>,
-    pub params: Vec<Local<S>>,
-    pub body: Box<FnBody<I, S>>,
-    pub ty: ContTy<S>,
+pub struct ContDef<I> {
+    pub name: ContId,
+    pub params: Vec<Local>,
+    pub body: Box<FnBody<I>>,
+    pub ty: ContTy,
 }
 
-pub struct ContTy<S = usize> {
-    pub heap: Heap<S>,
-    pub locals: Vec<(Local<S>, Location<S>)>,
-    pub inputs: Vec<Location<S>>,
+pub struct ContTy {
+    pub heap: Heap,
+    pub locals: Vec<(Local, Location)>,
+    pub inputs: Vec<Location>,
 }
 
-pub struct Statement<I, S = usize> {
+pub struct Statement<I> {
     pub source_info: I,
-    pub kind: StatementKind<S>,
+    pub kind: StatementKind,
 }
 
-pub enum StatementKind<S = usize> {
-    Let(Local<S>, TypeLayout),
-    Assign(Place<S>, Rvalue<S>),
-    Drop(Place<S>),
+pub enum StatementKind {
+    Let(Local, TypeLayout),
+    Assign(Place, Rvalue),
+    Drop(Place),
     Nop,
 }
 
@@ -99,9 +100,9 @@ pub enum TypeLayout {
     Block(usize),
 }
 #[derive(Debug)]
-pub enum Operand<S = usize> {
-    Copy(Place<S>),
-    Move(Place<S>),
+pub enum Operand {
+    Copy(Place),
+    Move(Place),
     Constant(Constant),
 }
 
@@ -123,12 +124,12 @@ impl Constant {
 }
 
 #[derive(Debug)]
-pub enum Rvalue<S = usize> {
-    Use(Operand<S>),
-    Ref(BorrowKind, Place<S>),
-    BinaryOp(BinOp, Operand<S>, Operand<S>),
-    CheckedBinaryOp(BinOp, Operand<S>, Operand<S>),
-    UnaryOp(UnOp, Operand<S>),
+pub enum Rvalue {
+    Use(Operand),
+    Ref(BorrowKind, Place),
+    BinaryOp(BinOp, Operand, Operand),
+    CheckedBinaryOp(BinOp, Operand, Operand),
+    UnaryOp(UnOp, Operand),
 }
 
 #[derive(Copy, Clone, Eq, PartialEq, Debug)]
@@ -177,16 +178,16 @@ impl BorrowKind {
 }
 
 #[derive(Clone)]
-pub enum Ty<S = usize> {
-    OwnRef(Location<S>),
-    Ref(BorrowKind, Region<S>, Location<S>),
-    Tuple(Vec<(Field<S>, Ty<S>)>),
+pub enum Ty {
+    OwnRef(Location),
+    Ref(BorrowKind, Region, Location),
+    Tuple(Vec<(Field, Ty)>),
     Uninit(usize),
-    Refine(BaseTy, Refine<S>),
+    Refine(BaseTy, Refine),
 }
 
-impl<S> Ty<S> {
-    pub fn unit() -> Ty<S> {
+impl Ty {
+    pub fn unit() -> Ty {
         Ty::Refine(
             BaseTy::Unit,
             Refine::Pred(pred::Pred::Constant(pred::Constant::Bool(true))),
@@ -194,40 +195,40 @@ impl<S> Ty<S> {
     }
 }
 
-pub struct FnDecl<S = usize> {
-    pub regions: Vec<UniversalRegion<S>>,
-    pub in_heap: Heap<S>,
-    pub inputs: Vec<(Local<S>, Location<S>)>,
-    pub out_heap: Heap<S>,
-    pub outputs: Vec<(Local<S>, Location<S>)>,
-    pub output: Location<S>,
+pub struct FnDecl {
+    pub regions: Vec<UniversalRegion>,
+    pub in_heap: Heap,
+    pub inputs: Vec<(Local, Location)>,
+    pub out_heap: Heap,
+    pub outputs: Vec<(Local, Location)>,
+    pub output: Location,
 }
 
 #[derive(Clone)]
-pub enum Refine<S = usize> {
+pub enum Refine {
     Infer,
-    Pred(Pred<S>),
+    Pred(Pred),
 }
 
-pub struct Heap<S = usize>(Vec<(Location<S>, Ty<S>)>);
+pub struct Heap(Vec<(Location, Ty)>);
 
 wrap_iterable! {
-    for<S> Heap<S>: Vec<(Location<S>, Ty<S>)>
+    Heap: Vec<(Location, Ty)>
 }
 
 #[derive(Eq, PartialEq, Clone, Debug)]
-pub enum Region<S = usize> {
-    Concrete(Vec<Place<S>>),
+pub enum Region {
+    Concrete(Vec<Place>),
     Infer,
-    Universal(UniversalRegion<S>),
+    Universal(UniversalRegion),
 }
 
-newtype_name! {
+newtype_index! {
     struct UniversalRegion
 }
 
-impl<S> From<Vec<Place<S>>> for Region<S> {
-    fn from(v: Vec<Place<S>>) -> Self {
+impl From<Vec<Place>> for Region {
+    fn from(v: Vec<Place>) -> Self {
         Region::Concrete(v)
     }
 }
@@ -239,19 +240,19 @@ pub enum Proj {
 }
 
 #[derive(Eq, PartialEq, Clone, Debug, Hash)]
-pub struct Place<S = usize> {
-    pub base: Local<S>,
+pub struct Place {
+    pub base: Local,
     pub projs: Vec<Proj>,
 }
 
-impl<S> Place<S> {
-    pub fn new(base: Local<S>, projs: Vec<Proj>) -> Self {
+impl Place {
+    pub fn new(base: Local, projs: Vec<Proj>) -> Self {
         Self { base, projs }
     }
 }
 
-impl<S: Eq> Place<S> {
-    pub fn overlaps(&self, place: &Place<S>) -> bool {
+impl Place {
+    pub fn overlaps(&self, place: &Place) -> bool {
         if self.base != place.base {
             return false;
         }
@@ -266,7 +267,7 @@ impl<S: Eq> Place<S> {
 
 impl fmt::Display for Place {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        let mut s = format!("_{}", self.base.inner());
+        let mut s = format!("{}", self.base);
         let mut need_parens = false;
         for proj in &self.projs {
             match proj {
@@ -288,8 +289,8 @@ impl fmt::Display for Place {
     }
 }
 
-impl<S> From<Local<S>> for Place<S> {
-    fn from(base: Local<S>) -> Self {
+impl From<Local> for Place {
+    fn from(base: Local) -> Self {
         Place {
             base,
             projs: vec![],

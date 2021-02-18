@@ -10,20 +10,17 @@ use crate::{
 };
 use quickscope::ScopeMap;
 
-pub struct NameFreshener<'a, S> {
-    conts: ScopeMap<ContId<S>, ContId>,
-    locals: ScopeMap<Local<S>, Local>,
-    locations: ScopeMap<Location<S>, Location>,
-    fields: ScopeMap<Field<S>, Field>,
-    regions: HashMap<UniversalRegion<S>, UniversalRegion>,
-    fns: HashMap<FnId<S>, FnId>,
+pub struct NameFreshener<'a> {
+    conts: ScopeMap<ContId, ContId>,
+    locals: ScopeMap<Local, Local>,
+    locations: ScopeMap<Location, Location>,
+    fields: ScopeMap<Field, Field>,
+    regions: HashMap<UniversalRegion, UniversalRegion>,
+    fns: HashMap<FnId, FnId>,
     tcx: &'a TyCtxt,
 }
 
-impl<'a, S> NameFreshener<'a, S>
-where
-    S: Eq + Copy + std::hash::Hash + std::fmt::Debug,
-{
+impl<'a> NameFreshener<'a> {
     pub fn new(tcx: &'a TyCtxt) -> Self {
         NameFreshener {
             conts: ScopeMap::new(),
@@ -36,7 +33,7 @@ where
         }
     }
 
-    pub fn freshen<I>(mut self, program: Program<I, S>) -> Program<I> {
+    pub fn freshen<I>(mut self, program: Program<I>) -> Program<I> {
         let mut defs = vec![];
         for (fn_id, def) in program {
             let fresh = self.tcx.fresh::<FnId>();
@@ -50,7 +47,7 @@ where
         program
     }
 
-    fn freshen_fn_def<I>(&mut self, def: FnDef<I, S>) -> FnDef<I> {
+    fn freshen_fn_def<I>(&mut self, def: FnDef<I>) -> FnDef<I> {
         let tcx = self.tcx;
         self.conts.define(def.ret, tcx.fresh::<ContId>());
         for local in &def.params {
@@ -64,6 +61,7 @@ where
         }
 
         FnDef {
+            name: def.name,
             params: self.freshen_args(def.params),
             body: self.freshen_body(def.body),
             ty: self.freshen_fn_ty(def.ty),
@@ -71,7 +69,7 @@ where
         }
     }
 
-    fn freshen_body<I>(&mut self, body: FnBody<I, S>) -> FnBody<I> {
+    fn freshen_body<I>(&mut self, body: FnBody<I>) -> FnBody<I> {
         use FnBody::*;
         let tcx = self.tcx;
         match body {
@@ -126,7 +124,7 @@ where
         }
     }
 
-    fn freshen_cont_def<I>(&mut self, cont: ContDef<I, S>) -> ContDef<I> {
+    fn freshen_cont_def<I>(&mut self, cont: ContDef<I>) -> ContDef<I> {
         let tcx = self.tcx;
         self.locals.push_layer();
         for local in &cont.params {
@@ -150,7 +148,7 @@ where
         }
     }
 
-    fn freshen_cont_ty(&mut self, cont_ty: ContTy<S>) -> ContTy {
+    fn freshen_cont_ty(&mut self, cont_ty: ContTy) -> ContTy {
         let mut inputs = vec![];
         for l in cont_ty.inputs {
             inputs.push(self.freshen_location(l));
@@ -162,11 +160,11 @@ where
         }
     }
 
-    fn freshen_params(&mut self, params: Vec<Local<S>>) -> Vec<Local> {
+    fn freshen_params(&mut self, params: Vec<Local>) -> Vec<Local> {
         params.into_iter().map(|l| self.freshen_local(l)).collect()
     }
 
-    fn freshen_statement<I>(&mut self, statement: Statement<I, S>) -> Statement<I> {
+    fn freshen_statement<I>(&mut self, statement: Statement<I>) -> Statement<I> {
         use StatementKind::*;
         let kind = match statement.kind {
             StatementKind::Let(local, layout) => {
@@ -185,7 +183,7 @@ where
         }
     }
 
-    fn freshen_rvalue(&mut self, rvalue: Rvalue<S>) -> Rvalue {
+    fn freshen_rvalue(&mut self, rvalue: Rvalue) -> Rvalue {
         use Rvalue::*;
         match rvalue {
             Use(op) => Use(self.freshen_operand(op)),
@@ -200,7 +198,7 @@ where
         }
     }
 
-    fn freshen_operand(&mut self, operand: Operand<S>) -> Operand {
+    fn freshen_operand(&mut self, operand: Operand) -> Operand {
         use Operand::*;
         match operand {
             Copy(place) => Copy(self.freshen_place(place)),
@@ -209,7 +207,7 @@ where
         }
     }
 
-    fn freshen_region(&mut self, region: Region<S>) -> Region {
+    fn freshen_region(&mut self, region: Region) -> Region {
         match region {
             Region::Concrete(places) => Region::Concrete(
                 places
@@ -222,7 +220,7 @@ where
         }
     }
 
-    fn freshen_fn_ty(&mut self, ty: FnDecl<S>) -> FnDecl {
+    fn freshen_fn_ty(&mut self, ty: FnDecl) -> FnDecl {
         let mut regions = vec![];
         for region in ty.regions {
             regions.push(self.regions[&region])
@@ -255,7 +253,7 @@ where
         }
     }
 
-    fn freshen_ty(&mut self, ty: Ty<S>) -> Ty {
+    fn freshen_ty(&mut self, ty: Ty) -> Ty {
         use Ty::*;
         match ty {
             OwnRef(location) => OwnRef(self.freshen_location(location)),
@@ -281,14 +279,14 @@ where
         }
     }
 
-    fn freshen_refine(&mut self, refine: Refine<S>) -> Refine {
+    fn freshen_refine(&mut self, refine: Refine) -> Refine {
         match refine {
             Refine::Infer => Refine::Infer,
             Refine::Pred(pred) => Refine::Pred(self.freshen_pred(pred)),
         }
     }
 
-    fn freshen_pred(&mut self, pred: Pred<S>) -> Pred {
+    fn freshen_pred(&mut self, pred: Pred) -> Pred {
         use Pred::*;
         match pred {
             Constant(c) => Constant(c),
@@ -303,7 +301,7 @@ where
         }
     }
 
-    fn freshen_var(&mut self, var: Var<S>) -> Var {
+    fn freshen_var(&mut self, var: Var) -> Var {
         match var {
             Var::Nu => Var::Nu,
             Var::Location(location) => Var::Location(self.freshen_location(location)),
@@ -311,54 +309,54 @@ where
         }
     }
 
-    fn freshen_place(&mut self, place: Place<S>) -> Place {
+    fn freshen_place(&mut self, place: Place) -> Place {
         Place {
             base: self.freshen_local(place.base),
             projs: place.projs,
         }
     }
 
-    fn freshen_args(&mut self, args: Vec<Local<S>>) -> Vec<Local> {
+    fn freshen_args(&mut self, args: Vec<Local>) -> Vec<Local> {
         args.into_iter()
             .map(|local| self.freshen_local(local))
             .collect()
     }
 
-    fn freshen_locals(&mut self, locals: Vec<(Local<S>, Location<S>)>) -> Vec<(Local, Location)> {
+    fn freshen_locals(&mut self, locals: Vec<(Local, Location)>) -> Vec<(Local, Location)> {
         locals
             .into_iter()
             .map(|(x, l)| (self.freshen_local(x), self.freshen_location(l)))
             .collect()
     }
 
-    fn freshen_heap(&mut self, heap: Heap<S>) -> Heap {
+    fn freshen_heap(&mut self, heap: Heap) -> Heap {
         heap.into_iter()
             .map(|(l, ty)| (self.freshen_location(l), self.freshen_ty(ty)))
             .collect()
     }
 
-    fn freshen_cont_id(&mut self, cont_id: ContId<S>) -> ContId {
+    fn freshen_cont_id(&mut self, cont_id: ContId) -> ContId {
         self.conts
             .get(&cont_id)
             .copied()
             .expect("NameFreshener: ContId not found")
     }
 
-    fn freshen_local(&mut self, x: Local<S>) -> Local {
+    fn freshen_local(&mut self, x: Local) -> Local {
         self.locals
             .get(&x)
             .copied()
             .expect("NameFreshener: Local not found")
     }
 
-    fn freshen_location(&mut self, l: Location<S>) -> Location {
+    fn freshen_location(&mut self, l: Location) -> Location {
         self.locations
             .get(&l)
             .copied()
             .expect("NameFreshener: Location not found")
     }
 
-    fn freshen_field(&mut self, f: Field<S>) -> Field {
+    fn freshen_field(&mut self, f: Field) -> Field {
         self.fields
             .get(&f)
             .copied()
@@ -367,9 +365,9 @@ where
 }
 
 #[derive(Debug, PartialEq, Eq, Hash)]
-pub enum Name<S> {
-    Location(Location<S>),
-    Local(Local<S>),
-    Field(Field<S>),
-    ContId(ContId<S>),
+pub enum Name {
+    Location(Location),
+    Local(Local),
+    Field(Field),
+    ContId(ContId),
 }

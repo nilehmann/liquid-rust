@@ -24,24 +24,23 @@ use rustc_mir::dataflow::{
 };
 use rustc_target::abi;
 
-// TODO: This is ugly as hell, but the MoveDataParamEnv struct fields
-// are private, and we want to reuse the MIR dataflow analysis
-// that the compiler provides us
-struct MPDE<'tcx> {
-    pub move_data: MoveData<'tcx>,
-    pub param_env: ParamEnv<'tcx>,
-}
-
 fn create_mpde<'tcx>(
     move_data: MoveData<'tcx>,
     param_env: ParamEnv<'tcx>,
 ) -> MoveDataParamEnv<'tcx> {
-    let res = MPDE {
+    // TODO: This is ugly as hell, but the MoveDataParamEnv struct fields
+    // are private, and we want to reuse the MIR dataflow analysis
+    // that the compiler provides us
+    struct Mpde<'tcx> {
+        pub move_data: MoveData<'tcx>,
+        pub param_env: ParamEnv<'tcx>,
+    }
+    let res = Mpde {
         move_data,
         param_env,
     };
 
-    unsafe { std::mem::transmute::<MPDE<'tcx>, MoveDataParamEnv<'tcx>>(res) }
+    unsafe { std::mem::transmute::<Mpde<'tcx>, MoveDataParamEnv<'tcx>>(res) }
 }
 
 fn translate_statement(stmt: &mir::Statement) -> Statement<()> {
@@ -67,7 +66,7 @@ fn translate_statement(stmt: &mir::Statement) -> Statement<()> {
 
 /// Translates an `mir::Place` to a CPS IR Place.
 fn translate_place(from: &mir::Place) -> Place {
-    let base = Local::new(from.local.as_usize());
+    let base = Local::from_usize(from.local.as_usize());
     let mut projs = vec![];
 
     for proj in from.projection {
@@ -258,7 +257,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             ty::TyKind::Tuple(substs) if !substs.is_empty() => Ty::Tuple(
                 t.tuple_fields()
                     .enumerate()
-                    .map(|(i, f)| (Field::new(i), self.get_holy_type(f)))
+                    .map(|(i, f)| (Field::from_usize(i), self.get_holy_type(f)))
                     .collect(),
             ),
             ty::TyKind::Tuple(_) => Ty::unit(),
@@ -271,7 +270,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
         // We then generate a jump instruction to jump to the continuation
         // corresponding to the first/root basic block, bb0.
         let mut nb = FnBody::Jump {
-            target: ContId::new(0),
+            target: ContId::from_usize(0),
             args: Vec::new(),
         };
 
@@ -297,7 +296,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                 continue;
             }
 
-            let sym = Local::new(ix.as_usize());
+            let sym = Local::from_usize(ix.as_usize());
             let s = Statement {
                 kind: StatementKind::Let(sym, get_layout(decl.ty)),
                 source_info: (),
@@ -307,18 +306,18 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
 
         // For our function type, if we have a provided function type annotation,
         // we use that. Otherwise, we fall back to generating holy types etc.
-        if let Some(ty) = self.annots.remove(&self.body.source.def_id()) {
+        let def_id = self.body.source.def_id();
+        if let Some(ty) = self.annots.remove(&def_id) {
             let mut params = vec![];
 
             for lix in self.body.args_iter() {
-                let arg = Local::new(lix.index());
+                let arg = Local::from_usize(lix.index());
 
                 params.push(arg);
             }
 
-            // TODO: Different out_heap than input heap?
             FnDef {
-                // name: Symbol::intern(self.tcx.def_path_str(source.def_id()).as_str()),
+                name: FnId::from_usize(def_id.as_local().unwrap().index()),
                 ty,
                 params,
                 ret: self.retk(),
@@ -332,7 +331,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             for lix in self.body.args_iter() {
                 let decl = &self.body.local_decls[lix];
 
-                let arg = Local::new(lix.index());
+                let arg = Local::from_usize(lix.index());
                 let loc = self.fresh_location();
                 let ty = self.get_holy_type(decl.ty);
 
@@ -361,9 +360,8 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                 output,
             };
 
-            // TODO: Different out_heap than input heap?
             FnDef {
-                // name: Symbol::intern(self.tcx.def_path_str(source.def_id()).as_str()),
+                name: FnId::from_usize(def_id.as_local().unwrap().index()),
                 ty: fn_ty,
                 params,
                 ret: self.retk(),
@@ -404,7 +402,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
             let ty = self
                 .type_lower_ctxt(mir_local, &mut heap)
                 .lower(decl.ty, &mut vec![]);
-            let local = Local::new(mir_local.index());
+            let local = Local::from_usize(mir_local.index());
             let l = self.fresh_location();
 
             locals.push((local, l));
@@ -418,7 +416,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
         };
 
         ContDef {
-            name: ContId::new(bb.as_usize()),
+            name: ContId::from_usize(bb.as_usize()),
             ty: cont_ty,
             params: vec![],
             body: box bbod,
@@ -429,12 +427,12 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
     fn translate_terminator(&mut self, terminator: &mir::Terminator<'tcx>) -> FnBody<()> {
         match &terminator.kind {
             TerminatorKind::Goto { target } => FnBody::Jump {
-                target: ContId::new(target.index()),
+                target: ContId::from_usize(target.index()),
                 args: Vec::new(),
             },
             // TODO: Actually do the asserting
             TerminatorKind::Assert { target, .. } => FnBody::Jump {
-                target: ContId::new(target.index()),
+                target: ContId::from_usize(target.index()),
                 args: Vec::new(),
             },
             TerminatorKind::SwitchInt {
@@ -448,7 +446,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                 // We first start with the else branch, since that's at the leaf of our
                 // if-else-if-else chain, and build backwards from there.
                 let mut ite = FnBody::Jump {
-                    target: ContId::new(targets.otherwise().index()),
+                    target: ContId::from_usize(targets.otherwise().index()),
                     args: vec![],
                 };
 
@@ -462,7 +460,7 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                     let op = translate_op(discr);
 
                     let then = FnBody::Jump {
-                        target: ContId::new(target.index()),
+                        target: ContId::from_usize(target.index()),
                         args: vec![],
                     };
 
@@ -543,10 +541,10 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
                                     .expect("Calls to non-local function are not supported yet.");
 
                                 FnBody::Call {
-                                    func: FnId::new(def_id.index()),
+                                    func: FnId::from_usize(def_id.index()),
                                     args: args_temp.clone(),
                                     destination: destination.map(|(place, bb)| {
-                                        (translate_place(&place), ContId::new(bb.as_usize()))
+                                        (translate_place(&place), ContId::from_usize(bb.as_usize()))
                                     }),
                                 }
                             }
@@ -597,11 +595,11 @@ impl<'low, 'tcx> Transformer<'low, 'tcx> {
     }
 
     fn retk(&self) -> ContId {
-        ContId::new(self.body.basic_blocks().len())
+        ContId::from_usize(self.body.basic_blocks().len())
     }
 
     fn retv() -> Local {
-        Local::new(0)
+        Local::from_usize(0)
     }
 }
 
@@ -634,7 +632,7 @@ impl<'a, 'low, 'tcx> TyLowerCtxt<'a, 'low, 'tcx> {
                     .enumerate()
                     .map(|(i, ty)| {
                         projection.push(mir::PlaceElem::Field(mir::Field::from_usize(i), ty));
-                        let r = (Field::new(i), self.lower(ty, projection));
+                        let r = (Field::from_usize(i), self.lower(ty, projection));
                         projection.pop();
                         r
                     })
@@ -664,7 +662,7 @@ impl<'a, 'low, 'tcx> TyLowerCtxt<'a, 'low, 'tcx> {
             ty::TyKind::Tuple(subst) if !subst.is_empty() => Ty::Tuple(
                 ty.tuple_fields()
                     .enumerate()
-                    .map(|(i, ty)| (Field::new(i), self.lower_initialized(ty)))
+                    .map(|(i, ty)| (Field::from_usize(i), self.lower_initialized(ty)))
                     .collect(),
             ),
             ty::TyKind::Tuple(_) => Ty::unit(),
@@ -689,7 +687,7 @@ impl<'a, 'low, 'tcx> TyLowerCtxt<'a, 'low, 'tcx> {
                 let tup = ty
                     .tuple_fields()
                     .enumerate()
-                    .map(|(i, ty)| (Field::new(i), self.lower_uninitialized(ty)))
+                    .map(|(i, ty)| (Field::from_usize(i), self.lower_uninitialized(ty)))
                     .collect();
                 Ty::Tuple(tup)
             }
@@ -734,11 +732,11 @@ impl NameProducer {
 
     fn fresh_local(&mut self) -> Local {
         self.next_local += 1;
-        Local::new(self.next_local - 1)
+        Local::from_usize(self.next_local - 1)
     }
 
     fn fresh_location(&mut self) -> Location {
         self.next_location += 1;
-        Location::new(self.next_location - 1)
+        Location::from_usize(self.next_location - 1)
     }
 }

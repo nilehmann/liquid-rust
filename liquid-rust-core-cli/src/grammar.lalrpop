@@ -13,7 +13,7 @@ match {
     _,
 }
 
-pub Program: Program<Span, &'input str> = <FnDef+> => {
+pub Program: Program<Span> = <FnDef+> => {
     let mut program = Program::new();
     for (name, def) in <> {
         program.add_fn(name, def);
@@ -21,7 +21,7 @@ pub Program: Program<Span, &'input str> = <FnDef+> => {
     program
 };
 
-FnDef: (FnId<&'input str>, FnDef<Span, &'input str>) = {
+FnDef: (FnId, FnDef<Span>) = {
     "fn"
     <name: FnId>
     <regions: UniversalRegions?>
@@ -40,14 +40,14 @@ FnDef: (FnId<&'input str>, FnDef<Span, &'input str>) = {
             outputs,
             output
         };
-        (name, FnDef { params, body: *body, ty, ret })
+        (name, FnDef { name, params, body: *body, ty, ret })
     }
 }
 
-UniversalRegions: Vec<UniversalRegion<&'input str>> =
+UniversalRegions: Vec<UniversalRegion> =
     "<" <Comma<UniversalRegion>> ">";
 
-FnBody: Box<FnBody<Span, &'input str>> = {
+FnBody: Box<FnBody<Span>> = {
     "letcont" <defs: And<ContDef>> "in" <rest: FnBody> => Box::new(FnBody::LetCont(defs, rest)),
 
     "if" <discr: Place> "then" <then: FnBody> "else" <else_: FnBody>
@@ -63,7 +63,7 @@ FnBody: Box<FnBody<Span, &'input str>> = {
     "abort" => Box::new(FnBody::Abort)
 }
 
-ContDef: ContDef<Span, &'input str> = {
+ContDef: ContDef<Span> = {
     <name: ContId> "(" <heap: Heap> ";" <locals: LocalsMap> ")" "=" <body: FnBody>  => {
         let inputs = vec![];
         let params = vec![];
@@ -72,18 +72,18 @@ ContDef: ContDef<Span, &'input str> = {
     }
 }
 
-Statement: Statement<Span, &'input str> = {
+Statement: Statement<Span> = {
     <lo:@L> <kind: StatementKind> <hi:@R> =>
         Statement { kind, source_info: Span::new(lo as u32, hi as u32) }
 }
 
-StatementKind: StatementKind<&'input str> = {
+StatementKind: StatementKind = {
     "let" <Local> "=" "alloc" "(" <TypeLayout> ")" => StatementKind::Let(<>),
     <Place> ":=" <Rvalue>                          => StatementKind::Assign(<>),
     "drop" "(" <Place> ")"                         => StatementKind::Drop(<>),
 }
 
-Rvalue: Rvalue<&'input str> = {
+Rvalue: Rvalue = {
     Operand                                                      => Rvalue::Use(<>),
     <op1:Operand> <bin_op:BinOp> <op2:Operand>                   => Rvalue::BinaryOp(bin_op, op1, op2),
     "Checked" "(" <op1:Operand> <bin_op:BinOp> <op2:Operand> ")" => Rvalue::CheckedBinaryOp(bin_op, op1, op2),
@@ -106,7 +106,7 @@ BinOp: BinOp = {
     ">"  => BinOp::Gt,
 }
 
-Operand: Operand<&'input str> = {
+Operand: Operand = {
     <Constant>     => Operand::Constant(<>),
     <Place>        => Operand::Copy(<>),
     "move" <Place> => Operand::Move(<>),
@@ -128,12 +128,12 @@ TypeLayout: TypeLayout = {
 // | Types
 // -------------------------------------------------------------------------------------------------
 
-OwnRef: Location<&'input str> = "own" "(" <Location> ")" => <>;
-Heap: Heap<&'input str> = Comma<Binding<Location, Ty>> => Heap::from_iter(<>);
+OwnRef: Location = "own" "(" <Location> ")" => <>;
+Heap: Heap = Comma<Binding<Location, Ty>> => Heap::from_iter(<>);
 LocalsMap = Comma<Binding<Local, OwnRef>> ;
 
 
-Ty: Ty<&'input str> = {
+Ty: Ty = {
     <BaseTy>                                   => Ty::Refine(<>, Refine::Pred(Pred::tt())),
     "own" "(" <Location> ")"                   => Ty::OwnRef(<>),
     "uninit" "(" <r"[0-9]+"> ")"               => Ty::Uninit(usize::from_str(<>).unwrap()),
@@ -150,22 +150,22 @@ BaseTy: BaseTy = {
     "(" ")" => BaseTy::Unit
 }
 
-Refine: Refine<&'input str> = {
+Refine: Refine = {
    "_"  => Refine::Infer,
    Pred => Refine::Pred(<>)
 }
 
-Region: Region<&'input str> = {
+Region: Region = {
    "{" <Comma<Place>> "}" => Region::from(<>),
    "{" "_" "}"            => Region::Infer,
    UniversalRegion        => Region::Universal(<>)
 }
 
-Place: Place<&'input str> = {
+Place: Place = {
    PlaceLevel1 => Place { base: <>.0, projs: <>.1 }
 }
 
-PlaceLevel1: (Local<&'input str>, Vec<Proj>) = {
+PlaceLevel1: (Local, Vec<Proj>) = {
     "*" <PlaceLevel1>  => {
         let (local, mut projs) = <>;
         projs.push(Proj::Deref);
@@ -174,7 +174,7 @@ PlaceLevel1: (Local<&'input str>, Vec<Proj>) = {
     PlaceLevel2
 }
 
-PlaceLevel2: (Local<&'input str>, Vec<Proj>) = {
+PlaceLevel2: (Local, Vec<Proj>) = {
     <p: PlaceLevel3> <path: Path> => {
         let (local, mut projs) = p;
         projs.extend(path);
@@ -182,7 +182,7 @@ PlaceLevel2: (Local<&'input str>, Vec<Proj>) = {
     },
 }
 
-PlaceLevel3: (Local<&'input str>, Vec<Proj>) = {
+PlaceLevel3: (Local, Vec<Proj>) = {
     <Local>  => (<>, vec![]),
     "(" <PlaceLevel1> ")"
 }
@@ -224,7 +224,7 @@ BinOpGroup4: pred::BinOp = {
 }
 
 
-UnaryOp: Pred<&'input str> = {
+UnaryOp: Pred = {
     <un_op: UnOpP> <op: BasePred> => pred::Pred::UnaryOp(un_op, Box::new(op)),
     BasePred
 }
@@ -234,7 +234,7 @@ UnOpP: pred::UnOp = {
     "-" => pred::UnOp::Neg
 }
 
-BasePred: Pred<&'input str> = {
+BasePred: Pred = {
     ConstantP      => Pred::Constant(<>),
     PlaceP         => Pred::Place(<>),
     "(" <Pred> ")" => <>
@@ -247,7 +247,7 @@ ConstantP: pred::Constant = {
     r"[0-9]+" => pred::Constant::Int(u128::from_str(<>).unwrap()),
 }
 
-PlaceP: pred::Place<&'input str> = {
+PlaceP: pred::Place = {
     <base: Var> <projs: ProjP*> => pred::Place { <> }
 }
 
@@ -255,13 +255,13 @@ ProjP: usize = {
     "." <r"[0-9]+"> => usize::from_str(<>).unwrap()
 }
 
-Var: pred::Var<&'input str> = {
+Var: pred::Var = {
     Location => pred::Var::Location(<>),
     Field    => pred::Var::Field(<>),
     "V"      => pred::Var::Nu
 }
 
-LeftAssoc<OpGroup, NextExprLevel>: Pred<&'input str> = {
+LeftAssoc<OpGroup, NextExprLevel>: Pred = {
     <lhs: LeftAssoc<OpGroup,NextExprLevel>> <op: OpGroup> <rhs: NextExprLevel>
         => Pred::BinaryOp(op, Box::new(lhs), Box::new(rhs)),
     NextExprLevel,
@@ -271,12 +271,12 @@ LeftAssoc<OpGroup, NextExprLevel>: Pred<&'input str> = {
 // | Names
 // -------------------------------------------------------------------------------------------------
 
-Local: Local<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => Local::new(<>);
-Field: Field<&'input str> = r"@[a-zA-Z0-9_]+" => Field::new(&<>[1..]);
-Location: Location<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => Location::new(<>);
-ContId: ContId<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => ContId::new(<>);
-FnId: FnId<&'input str> = r"[_a-zA-Z][a-zA-Z0-9_]*" => FnId::new(<>);
-UniversalRegion: UniversalRegion<&'input str> = r"'[a-zA-Z0-9]" => UniversalRegion::new(&<>[1..]);
+Local: Local = r"_[0-9]+" => Local::from_usize(usize::from_str(&<>[1..]).unwrap());
+Field: Field = r"@[0-9]+" => Field::from_usize(usize::from_str(&<>[1..]).unwrap());
+Location: Location = r"l[0-9]+" => Location::from_usize(usize::from_str(&<>[1..]).unwrap());
+ContId: ContId = r"k[0-9]+" => ContId::from_usize(usize::from_str(&<>[1..]).unwrap());
+FnId: FnId = r"f[0-9]+" => FnId::from_usize(usize::from_str(&<>[1..]).unwrap());
+UniversalRegion: UniversalRegion = r"'[0-9]+" => UniversalRegion::from_usize(usize::from_str(&<>[1..]).unwrap());
 
 // -------------------------------------------------------------------------------------------------
 // | Misc

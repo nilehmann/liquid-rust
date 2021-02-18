@@ -1,75 +1,79 @@
-fn abs(n0: int; n: own(n0)) ret k(r: {int | V >= 0}; ;own(r)) =
-  let b = alloc(1);
-  letcont b0(n2: {int | _ }; n: own(n2)) =
-    jump k(n)
+// fn sum(n: int) -> {int | V >= 0}
+fn f0(l0: int; _0: own(l0)) ret k0(l1: {int | V >= 0}; ;own(l1)) =
+  letcont k1(l2: {int | _ }; _0: own(l2)) =
+    jump k0(_0)
   in
-  b := n < 0;
-  if b then
-    n := 0 - n;
-    jump b0()
+  let _1 = alloc(1);
+  _1 := _0 < 0;
+  if _1 then
+    _0 := 0 - _0;
+    jump k1()
   else
-    jump b0()
+    jump k1()
 
-fn length(p0: (@x: int, @y: {int | V >= @x}); p: own(p0))
-    ret k(r: {int | V >= 0}; ; own(r)) =
-  let t = alloc(1);
-  t := p.1 - p.0;
-  jump k(t)
+// fn length(p: (a: int, {int | V >= a})) -> {int | V >= 0}
+fn f1(l0: (@0: int, @1: {int | V >= @0}); _0: own(l0))
+    ret k0(l1: {int | V >= 0}; ; own(l1)) =
+  let _1 = alloc(1);
+  _1 := _0.1 - _0.0;
+  jump k0(_1)
 
-fn sum(n0: {int | V >= 0}; n: own(n0)) ret k(r: {int | V >= n0}; ;own(r)) =
-  let i = alloc(1);
-  let r = alloc(1);
-  letcont loop( n1: {int | _ }, i1: {int | _ }, r1: {int | _ }
-              ; i: own(i1), r: own(r1), n: own(n1)
-              ) =
-    let t0 = alloc(1);
-    t0 := i <= n;
-    if t0 then
-      r := r + i;
-      i := i + 1;
-      jump loop()
+fn f2(l0: {int | V >= 0}; _0: own(l0)) ret k0(l1: {int | V >= l0}; ; own(l1)) =
+  let _1 = alloc(1);
+  let _2 = alloc(1);
+  letcont k1( l0: {int | _ }, l1: {int | _ }, l2: {int | _ }
+            ; _1: own(l0), _2: own(l1), _0: own(l2)
+            ) =
+    let _3 = alloc(1);
+    _3 := _1 <= _0;
+    if _3 then
+      _2 := _2 + _1;
+      _1 := _1 + 1;
+      jump k1()
     else
-      jump k(r)
+      jump k0(_2)
   in
-  i := 0;
-  r := 0;
-  jump loop()
+  _1 := 0;
+  _2 := 0;
+  jump k1()
 
-fn inc<'a>( l0: int, l1: &'a mut l0
-          ; n: own(l1)
-          ) ret k( l2: {int | V == l0 + 1}, l3: &'a mut l2, l4: ()
-                 ; n: own(l3)
+// fn inc<'a>(n: &'a mut int) -> () / n: {int | V == old(*n) + 1}
+fn f3<'0>( l0: int, l1: &'0 mut l0
+         ; _0: own(l1)
+         ) ret k0( l2: {int | V == l0 + 1}, l3: &'0 mut l2, l4: ()
+                 ; _0: own(l3)
                  ; own(l4)
                  ) =
-  *n := *n + 1;
-  let r = alloc(1);
-  r := ();
-  jump k(r)
+  *_0 := *_0 + 1;
+  let _1 = alloc(1);
+  _1 := ();
+  jump k0(_1)
 
-fn inc2<'a>( l0: int, l1: &'a mut l0
-           ; n: own(l1)
-           ) ret k( l2: {int | V == l0 + 2}, l3: &'a mut l2, l4: ()
-                  ; n: own(l3)
-                  ; own(l4)
-                  ) =
-  let t1 = alloc(1);
-  let t2 = alloc(1);
+// fn inc2<'a>(n: &'a mut int) -> () / n: {int | V == old(*n) + 2}
+fn f4<'0>( l0: int, l1: &'0 mut l0
+           ; _0: own(l1)
+           ) ret k0( l2: {int | V == l0 + 2}, l3: &'0 mut l2, l4: ()
+                   ; _0: own(l3)
+                   ; own(l4)
+                   ) =
+  let _1 = alloc(1);
+  let _2 = alloc(1);
 
-  letcont bb0( l0: {int | _ }, l1: &'a mut l0, l2: uninit(1), l3: uninit(1)
-             ; n: own(l1), t1: own(l2), t2: own(l3)
-             ) =
-    t1 := &mut *n;
-    call t2 := inc(t1) ret bb1
+  letcont k1( l0: {int | _ }, l1: &'0 mut l0, l2: uninit(1), l3: uninit(1)
+            ; _0: own(l1), _1: own(l2), _2: own(l3)
+            ) =
+    _1 := &mut *_0;
+    call _2 := f3(_1) ret k2
 
-  and bb1( l0: {int | _ }, l1: &'a mut l0, l2: uninit(1), l3: uninit(1)
-         ; n: own(l1), t1: own(l2), t2: own(l3)
-         ) =
-    t1 := &mut *n;
-    call t2 := inc(t1) ret bb2
+  and k2( l0: {int | _ }, l1: &'0 mut l0, l2: uninit(1), l3: uninit(1)
+        ; _0: own(l1), _1: own(l2), _2: own(l3)
+        ) =
+    _1 := &mut *_0;
+    call _2 := f3(_1) ret k3
 
-  and bb2( l0: {int | _ }, l1: &'a mut l0, l2: uninit(1), l3: ()
-         ; n: own(l1), t1: own(l2), t2: own(l3)
-         ) =
-    jump k(t2)
+  and k3( l0: {int | _ }, l1: &'0 mut l0, l2: uninit(1), l3: ()
+        ; _0: own(l1), _1: own(l2), _2: own(l3)
+        ) =
+    jump k0(_2)
   in
-  jump bb0()
+  jump k1()

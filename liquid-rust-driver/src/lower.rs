@@ -32,17 +32,17 @@ impl<'src> LowerCtx<'src> {
 
     fn fresh_location(&mut self) -> Location {
         self.locations += 1;
-        Location::new(self.locations - 1)
+        Location::from_usize(self.locations - 1)
     }
 
     fn fresh_field(&mut self) -> Field {
         self.fields += 1;
-        Field::new(self.fields - 1)
+        Field::from_usize(self.fields - 1)
     }
 
     fn fresh_local(&mut self) -> Local {
         self.locals += 1;
-        Local::new(self.locals - 1)
+        Local::from_usize(self.locals - 1)
     }
 }
 

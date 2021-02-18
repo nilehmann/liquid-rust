@@ -20,10 +20,7 @@ extern crate liquid_rust_common;
 #[macro_use]
 extern crate liquid_rust_core;
 
-pub fn check_program<I, S>(program: Program<I, S>)
-where
-    S: Eq + Copy + std::hash::Hash + std::fmt::Debug + std::fmt::Display,
-{
+pub fn check_program<I>(program: Program<I>) {
     let tcx = TyCtxt::new();
     // println!("{}\n", program);
     let program = NameFreshener::new(&tcx).freshen(program);
@@ -38,11 +35,13 @@ where
     }
 
     for (fn_id, fn_def) in program.iter() {
+        println!("{}", fn_def);
         let constraint = RefineChecker::new(&tcx, &glob_env, *fn_id).check(fn_def);
         match constraint {
             Ok(constraint) => {
-                let safeness = constraint.lower().solve().unwrap().tag;
-                println!("{:?}", safeness);
+                // let safeness = constraint.lower().solve().unwrap().tag;
+                // println!("{:?}", safeness);
+                println!("{:?}", constraint.lower().solve());
             }
             Err(err) => {
                 println!("{:?}", err)

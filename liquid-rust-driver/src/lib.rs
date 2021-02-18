@@ -61,7 +61,7 @@ impl Callbacks for LiquidRustDriver {
                 let def_id = tcx.hir().body_owner_def_id(body_id);
                 let body = tcx.optimized_mir(def_id);
                 let func = Transformer::translate(tcx, &mut annotations, body);
-                program.add_fn(FnId::new(def_id.index()), func);
+                program.add_fn(FnId::from_usize(def_id.index()), func);
             }
             check_program(program);
         });
