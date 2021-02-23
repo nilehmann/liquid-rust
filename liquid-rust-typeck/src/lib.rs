@@ -11,7 +11,9 @@ pub mod region_inference;
 use crate::{refineck::RefineChecker, region_inference::infer_regions};
 
 use glob_env::GlobEnv;
-use liquid_rust_core::{ast::Program, freshen::NameFreshener, lower::TypeLowerer, ty::TyCtxt};
+use liquid_rust_core::{
+    ast::Program, freshen::NameFreshener, lower::TypeLowerer, name_check::NameChecker, ty::TyCtxt,
+};
 pub use liquid_rust_fixpoint::solver::Safeness;
 
 #[macro_use]
@@ -26,6 +28,7 @@ where
 {
     let tcx = TyCtxt::new();
     // println!("{}\n", program);
+    NameChecker::new().check(&program);
     let program = NameFreshener::new(&tcx).freshen(program);
 
     let mut glob_env = GlobEnv::new();
